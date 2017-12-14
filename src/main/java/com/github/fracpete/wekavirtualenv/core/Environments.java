@@ -21,10 +21,8 @@
 package com.github.fracpete.wekavirtualenv.core;
 
 import java.io.File;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 /**
  * Helper class for environments.
@@ -34,16 +32,7 @@ import java.util.Properties;
 public class Environments {
 
   /** The properties file containing the information about an environment. */
-  public final static String INFO_PROPS = "env.props";
-
-  /** the name of the environment. */
-  public final static String KEY_NAME = "name";
-
-  /** the java binary of the environment. */
-  public final static String KEY_JAVA = "java";
-
-  /** the heap of the environment. */
-  public final static String KEY_HEAP = "heap";
+  public final static String SETUP = "env.props";
 
   /**
    * Turns the environment name into a directory name.
@@ -85,38 +74,13 @@ public class Environments {
    * @return		the information, null if nothing available
    */
   protected static Environment readEnv(File dir) {
-    Environment result;
     File	file;
-    FileReader	freader;
-    Properties	props;
 
-    result = null;
-
-    file = new File(dir.getAbsolutePath() + File.separator + INFO_PROPS);
+    file = new File(dir.getAbsolutePath() + File.separator + SETUP);
     if (!file.exists())
       return null;
 
-    freader = null;
-    try {
-      freader = new FileReader(file);
-      props   = new Properties();
-      props.load(freader);
-      if (props.getProperty(KEY_NAME) != null) {
-        result = new Environment();
-        result.name = props.getProperty(KEY_NAME);
-        result.java = props.getProperty(KEY_JAVA);
-        result.heap = props.getProperty(KEY_HEAP);
-      }
-    }
-    catch (Exception e) {
-      System.err.println("Failed to read: " + file);
-      e.printStackTrace();
-    }
-    finally {
-      FileUtils.closeQuietly(freader);
-    }
-
-    return result;
+    return Environment.read(file);
   }
 
   /**
@@ -130,6 +94,44 @@ public class Environments {
 
     env = new File(Project.getEnvsDir() + File.separator + nameToDir(name));
     return readEnv(env);
+  }
+
+  /**
+   * Creates the environment.
+   *
+   * @param env		the environment setup
+   * @return		null if successful, otherwise error message
+   */
+  public static String create(Environment env) {
+    File	dir;
+
+    dir = new File(Project.getEnvsDir() + File.separator + nameToDir(env.name));
+    if (dir.exists())
+      return "Environment already exists!\n" + "environment dir: " + dir;
+
+    if (!dir.mkdirs())
+      return "Failed to set up environment dir: " + dir;
+
+    return Environment.save(env, new File(dir.getAbsolutePath() + File.separator + SETUP));
+  }
+
+  /**
+   * Deletes the environment.
+   *
+   * @param name	the environment name
+   * @return		null if successful, otherwise error message
+   */
+  public static String delete(String name) {
+    File	dir;
+
+    dir = new File(Project.getEnvsDir() + File.separator + nameToDir(name));
+    if (!dir.exists())
+      return "Environment does not exist!\n" + "environment dir: " + dir;
+
+    if (FileUtils.delete(dir))
+      return null;
+    else
+      return "Failed to delete environment directory: " + dir;
   }
 
   /**

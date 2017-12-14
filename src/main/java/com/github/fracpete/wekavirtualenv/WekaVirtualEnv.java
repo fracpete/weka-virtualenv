@@ -39,6 +39,7 @@ public class WekaVirtualEnv {
    */
   public static void main(String[] args) throws Exception {
     AbstractCommand 	cmd;
+    String[]		options;
 
     if (args.length == 0) {
       new Help().execute(new String[0]);
@@ -58,7 +59,8 @@ public class WekaVirtualEnv {
       System.exit(1);
     }
 
-    args[0] = "";
-    cmd.execute(args);
+    options = new String[args.length - 1];
+    System.arraycopy(args, 1, options, 0, args.length - 1);
+    cmd.execute(options);
   }
 }

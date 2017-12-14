@@ -14,7 +14,7 @@
  */
 
 /*
- * ListCommands.java
+ * Create.java
  * Copyright (C) 2017 University of Waikato, Hamilton, NZ
  */
 
@@ -22,17 +22,16 @@ package com.github.fracpete.wekavirtualenv.action;
 
 import com.github.fracpete.wekavirtualenv.core.Environment;
 import com.github.fracpete.wekavirtualenv.core.Environments;
+import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.Namespace;
 
-import java.util.List;
-
 /**
- * Lists all the environments.
+ * Creates a new environment.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
-public class ListEnvs
+public class Create
   extends AbstractCommand {
 
   /**
@@ -42,7 +41,7 @@ public class ListEnvs
    */
   @Override
   public String getName() {
-    return "list_envs";
+    return "create";
   }
 
   /**
@@ -51,7 +50,7 @@ public class ListEnvs
    * @return		the help string
    */
   public String getHelp() {
-    return "Lists all available environments.";
+    return "Creates a new environment.";
   }
 
   /**
@@ -61,7 +60,23 @@ public class ListEnvs
    */
   @Override
   protected ArgumentParser getParser() {
-    return null;
+    ArgumentParser 	result;
+
+    result = ArgumentParsers.newArgumentParser(getName());
+    result.addArgument("-n", "--name")
+      .dest("name")
+      .help("the name of the environment")
+      .required(true);
+    result.addArgument("-j", "--java")
+      .dest("java")
+      .help("the full path of the java binary to use for launching Weka")
+      .setDefault("");
+    result.addArgument("-m", "--memory")
+      .dest("memory")
+      .help("the heap size to use for launching Weka (eg '1024m' or '2g')")
+      .setDefault("");
+
+    return result;
   }
 
   /**
@@ -72,20 +87,20 @@ public class ListEnvs
    */
   @Override
   protected boolean doExecute(Namespace ns) {
-    List<Environment>	envs;
+    Environment		env;
+    String		msg;
 
-    envs = Environments.list();
-    if (envs.size() == 0) {
-      System.out.println("No environments available");
-    }
-    else {
-      System.out.println("Available environments:\n");
-      for (Environment env : envs) {
-	System.out.println(env);
-	System.out.println();
-      }
-    }
+    env        = new Environment();
+    env.name   = ns.getString("name");
+    env.java   = ns.getString("java");
+    env.memory = ns.getString("memory");
 
-    return true;
+    msg = Environments.create(env);
+    if (msg != null)
+      System.err.println("Failed to create environment:\n" + msg);
+    else
+      System.out.println("Created environment:\n\n" + env);
+
+    return (msg == null);
   }
 }

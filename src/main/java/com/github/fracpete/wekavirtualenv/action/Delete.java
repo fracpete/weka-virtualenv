@@ -14,25 +14,23 @@
  */
 
 /*
- * ListCommands.java
+ * Delete.java
  * Copyright (C) 2017 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.action;
 
-import com.github.fracpete.wekavirtualenv.core.Environment;
 import com.github.fracpete.wekavirtualenv.core.Environments;
+import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.Namespace;
 
-import java.util.List;
-
 /**
- * Lists all the environments.
+ * Deletes an existing environment.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
-public class ListEnvs
+public class Delete
   extends AbstractCommand {
 
   /**
@@ -42,7 +40,7 @@ public class ListEnvs
    */
   @Override
   public String getName() {
-    return "list_envs";
+    return "delete";
   }
 
   /**
@@ -51,7 +49,7 @@ public class ListEnvs
    * @return		the help string
    */
   public String getHelp() {
-    return "Lists all available environments.";
+    return "Deletes an existing environment.";
   }
 
   /**
@@ -61,7 +59,15 @@ public class ListEnvs
    */
   @Override
   protected ArgumentParser getParser() {
-    return null;
+    ArgumentParser 	result;
+
+    result = ArgumentParsers.newArgumentParser(getName());
+    result.addArgument("-n", "--name")
+      .dest("name")
+      .help("the name of the environment to delete")
+      .required(true);
+
+    return result;
   }
 
   /**
@@ -72,20 +78,14 @@ public class ListEnvs
    */
   @Override
   protected boolean doExecute(Namespace ns) {
-    List<Environment>	envs;
+    String	msg;
 
-    envs = Environments.list();
-    if (envs.size() == 0) {
-      System.out.println("No environments available");
-    }
-    else {
-      System.out.println("Available environments:\n");
-      for (Environment env : envs) {
-	System.out.println(env);
-	System.out.println();
-      }
-    }
+    msg = Environments.delete(ns.getString("name"));
+    if (msg != null)
+      System.err.println("Failed to delete environment '" + ns.getString("name") + "':\n" + msg);
+    else
+      System.out.println("Environment successfully deleted: " + ns.getString("name"));
 
-    return true;
+    return (msg == null);
   }
 }
