@@ -60,13 +60,4 @@ public class Project {
     return getHomeDir() + File.separator + "envs";
   }
 
-  /**
-   * Returns the directory for the given environment.
-   *
-   * @param env 	the name of the environment sub-dir
-   * @return 		the environment directory
-   */
-  public static String getEnvDir(String env) {
-    return getHomeDir() + File.separator + "envs" + File.separator + env;
-  }
 }

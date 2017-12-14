@@ -156,4 +156,14 @@ public class Environments {
 
     return result;
   }
+
+  /**
+   * Returns the directory for the given environment.
+   *
+   * @param env 	the name of the environment sub-dir
+   * @return 		the environment directory
+   */
+  public static String getEnvDir(String env) {
+    return Project.getHomeDir() + File.separator + "envs" + File.separator + env;
+  }
 }

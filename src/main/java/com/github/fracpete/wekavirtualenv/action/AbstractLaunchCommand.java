@@ -23,7 +23,6 @@ package com.github.fracpete.wekavirtualenv.action;
 import com.github.fracpete.processoutput4j.output.ConsoleOutputProcessOutput;
 import com.github.fracpete.wekavirtualenv.core.Environment;
 import com.github.fracpete.wekavirtualenv.core.Environments;
-import com.github.fracpete.wekavirtualenv.core.Project;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.Namespace;
@@ -92,7 +91,7 @@ public abstract class AbstractLaunchCommand
     result = new ProcessBuilder();
     result.command(cmd);
     vars = result.environment();
-    vars.put("WEKA_HOME", Project.getEnvDir(env.name) + File.separator + "wekafiles");
+    vars.put("WEKA_HOME", Environments.getEnvDir(env.name) + File.separator + "wekafiles");
 
     return result;
   }
