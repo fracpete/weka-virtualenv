@@ -29,6 +29,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Ancestor for virtual environment commands.
+ *
+ * @author FracPete (fracpete at waikato dot ac dot nz)
+ */
 public abstract class AbstractCommand
   implements Comparable<AbstractCommand> {
 
