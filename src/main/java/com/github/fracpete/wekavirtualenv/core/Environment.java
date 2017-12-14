@@ -34,5 +34,5 @@ public class Environment {
   public String java;
 
   /** the heap size. */
-  public String heap;
+  public String memory;
 }
