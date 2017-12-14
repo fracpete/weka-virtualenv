@@ -22,6 +22,7 @@ package com.github.fracpete.wekavirtualenv.core;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.io.Writer;
 
 /**
  * File related utilities.
@@ -37,10 +38,27 @@ public class FileUtils {
    */
   public static void closeQuietly(Reader reader) {
     try {
-      if (reader != null) {
+      if (reader != null)
 	reader.close();
+    }
+    catch (IOException e) {
+      // ignore
+    }
+  }
+
+  /**
+   * Closes the writer.
+   *
+   * @param writer	the writer to close
+   */
+  public static void closeQuietly(Writer writer) {
+    try {
+      if (writer != null) {
+        writer.flush();
+	writer.close();
       }
-    } catch (final IOException ioe) {
+    }
+    catch (IOException e) {
       // ignore
     }
   }
