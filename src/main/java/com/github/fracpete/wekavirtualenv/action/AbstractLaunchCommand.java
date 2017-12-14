@@ -50,16 +50,22 @@ public abstract class AbstractLaunchCommand
    */
   protected String getJava(Environment env) {
     String	result;
+    String	path;
+    String	binary;
 
     if (!env.java.isEmpty()) {
       result = env.java;
     }
     else {
-      // TODO use the one used for stating this process?
+      path = System.getProperty("java.home") + File.separator + "bin" + File.separator;
       if (SystemUtils.IS_OS_WINDOWS)
-        result = "java.exe";
+        binary = "java.exe";
       else
-        result = "java";
+        binary = "java";
+      if (new File(path + binary).exists())
+        result = path + binary;
+      else
+        result = binary;
     }
 
     return result;
