@@ -75,6 +75,10 @@ public class Create
       .dest("memory")
       .help("the heap size to use for launching Weka (eg '1024m' or '2g')")
       .setDefault("");
+    result.addArgument("-w", "--weka")
+      .dest("weka")
+      .help("the full path to the weka.jar to use")
+      .required(true);
 
     return result;
   }
@@ -94,6 +98,7 @@ public class Create
     env.name   = ns.getString("name");
     env.java   = ns.getString("java");
     env.memory = ns.getString("memory");
+    env.weka   = ns.getString("weka");
 
     msg = Environments.create(env);
     if (msg != null)

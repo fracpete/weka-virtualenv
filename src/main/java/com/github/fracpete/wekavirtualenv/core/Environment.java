@@ -36,20 +36,26 @@ public class Environment {
   /** the name of the environment. */
   public final static String KEY_NAME = "name";
 
-  /** the java binary of the environment. */
+  /** the java binary (full path). */
   public final static String KEY_JAVA = "java";
 
-  /** the heap of the environment. */
+  /** the heap size. */
   public final static String KEY_MEMORY = "memory";
+
+  /** the weka jar to use. */
+  public final static String KEY_WEKA = "weka";
 
   /** the name of the environment. */
   public String name;
 
-  /** the java binary (null if default). */
+  /** the java binary ("" if default). */
   public String java;
 
-  /** the heap size. */
+  /** the heap size ("" if default). */
   public String memory;
+
+  /** the weka jar (full path). */
+  public String weka;
 
   /**
    * Returns the environment in simple string representation.
@@ -73,6 +79,7 @@ public class Environment {
     result.append(prefix).append("Name: ").append(name).append("\n");
     result.append(prefix).append("Java: ").append(java.isEmpty() ? "<default>" : java).append("\n");
     result.append(prefix).append("Memory: ").append(memory.isEmpty() ? "<default>" : memory).append("\n");
+    result.append(prefix).append("Weka: ").append(weka).append("\n");
 
     return result.toString();
   }
@@ -98,11 +105,12 @@ public class Environment {
       freader = new FileReader(file);
       props   = new Properties();
       props.load(freader);
-      if (props.getProperty(KEY_NAME) != null) {
+      if ((props.getProperty(KEY_NAME) != null) && (props.getProperty(KEY_WEKA) != null)) {
         result = new Environment();
         result.name = props.getProperty(KEY_NAME);
         result.java = props.getProperty(KEY_JAVA);
         result.memory = props.getProperty(KEY_MEMORY);
+        result.weka = props.getProperty(KEY_WEKA);
       }
     }
     catch (Exception e) {
@@ -135,6 +143,7 @@ public class Environment {
     props.setProperty(KEY_NAME, env.name);
     props.setProperty(KEY_JAVA, (env.java == null ? "" : env.java));
     props.setProperty(KEY_MEMORY, (env.memory == null ? "" : env.memory));
+    props.setProperty(KEY_WEKA, env.weka);
 
     fwriter = null;
     bwriter = null;
