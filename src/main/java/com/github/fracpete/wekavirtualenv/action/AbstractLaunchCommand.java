@@ -23,14 +23,17 @@ package com.github.fracpete.wekavirtualenv.action;
 import com.github.fracpete.processoutput4j.output.ConsoleOutputProcessOutput;
 import com.github.fracpete.wekavirtualenv.core.Environment;
 import com.github.fracpete.wekavirtualenv.core.Environments;
+import com.github.fracpete.wekavirtualenv.core.Project;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.Namespace;
 import org.apache.commons.lang3.SystemUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Ancestor for commands that.
@@ -74,6 +77,7 @@ public abstract class AbstractLaunchCommand
   protected ProcessBuilder build(Environment env, String cls, String[] options) {
     ProcessBuilder	result;
     List<String>	cmd;
+    Map<String, String> vars;
 
     cmd = new ArrayList<>();
     cmd.add(getJava(env));
@@ -87,6 +91,8 @@ public abstract class AbstractLaunchCommand
 
     result = new ProcessBuilder();
     result.command(cmd);
+    vars = result.environment();
+    vars.put("WEKA_HOME", Project.getEnvDir(env.name) + File.separator + "wekafiles");
 
     return result;
   }
