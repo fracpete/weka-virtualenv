@@ -46,6 +46,39 @@ public class Environments {
   public final static String KEY_HEAP = "heap";
 
   /**
+   * Turns the environment name into a directory name.
+   *
+   * @param name	the name to convert
+   * @return		the directory name
+   */
+  public static String nameToDir(String name) {
+    StringBuilder	result;
+    int			i;
+    char		c;
+
+    result = new StringBuilder();
+    for (i = 0; i < name.length(); i++) {
+      c = name.charAt(i);
+      if ((c >= 'a') && (c <= 'z'))
+        result.append(c);
+      else if ((c >= 'A') && (c <= 'Z'))
+        result.append(c);
+      else if ((c >= '0') && (c <= '9'))
+        result.append(c);
+      else if (c == '.')
+        result.append(c);
+      else if (c == '-')
+        result.append(c);
+      else if (c == '_')
+        result.append("_");
+      else
+        result.append("_");
+    }
+
+    return result.toString();
+  }
+
+  /**
    * Reads the environment.
    *
    * @param dir		the directory of the environment
@@ -84,6 +117,19 @@ public class Environments {
     }
 
     return result;
+  }
+
+  /**
+   * Reads the environment with the given name.
+   *
+   * @param name	the name of the environment
+   * @return		the environment, null if failed to read
+   */
+  public static Environment readEnv(String name) {
+    File	env;
+
+    env = new File(Project.getEnvsDir() + File.separator + nameToDir(name));
+    return readEnv(env);
   }
 
   /**
