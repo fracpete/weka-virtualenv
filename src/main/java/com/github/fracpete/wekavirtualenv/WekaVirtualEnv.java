@@ -58,6 +58,7 @@ public class WekaVirtualEnv {
       System.exit(1);
     }
 
+    args[0] = "";
     cmd.execute(args);
   }
 }
