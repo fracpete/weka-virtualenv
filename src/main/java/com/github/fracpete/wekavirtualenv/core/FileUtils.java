@@ -20,6 +20,7 @@
 
 package com.github.fracpete.wekavirtualenv.core;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
@@ -61,5 +62,36 @@ public class FileUtils {
     catch (IOException e) {
       // ignore
     }
+  }
+
+  /**
+   * Deletes the specified file. If the file represents a directory, then this
+   * will get deleted recursively.
+   *
+   * @param file	the file/dir to delete
+   * @return		true if successfully deleted
+   */
+  public static boolean delete(File file) {
+    boolean	result;
+    File[]	files;
+
+    result = true;
+
+    if (file.isDirectory()) {
+      files = file.listFiles();
+      if (files != null) {
+	for (File f : files) {
+	  if (f.getName().equals(".") || f.getName().equals(".."))
+	    continue;
+	  result = delete(f);
+	  if (!result)
+	    return false;
+	}
+      }
+    }
+
+    result = file.delete();
+
+    return result;
   }
 }
