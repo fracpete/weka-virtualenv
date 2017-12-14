@@ -14,25 +14,34 @@
  */
 
 /*
- * AbstractAction.java
+ * FileUtils.java
  * Copyright (C) 2017 University of Waikato, Hamilton, NZ
  */
 
-package com.github.fracpete.wekavirtualenv.action;
+package com.github.fracpete.wekavirtualenv.core;
 
-public abstract class AbstractAction {
+import java.io.IOException;
+import java.io.Reader;
+
+/**
+ * File related utilities.
+ *
+ * @author FracPete (fracpete at waikato dot ac dot nz)
+ */
+public class FileUtils {
 
   /**
-   * The name of the action.
+   * Closes the reader.
    *
-   * @return		the name
+   * @param reader	the reader to close
    */
-  public abstract String getName();
-
-  /**
-   * Executes the action.
-   *
-   * @return		null if successful, otherwise error message
-   */
-  public abstract String execute();
+  public static void closeQuietly(Reader reader) {
+    try {
+      if (reader != null) {
+	reader.close();
+      }
+    } catch (final IOException ioe) {
+      // ignore
+    }
+  }
 }
