@@ -52,6 +52,16 @@ wekavirtualenv.sh create \
   -m 4g
 ```
 
+Launch the GUIChooser from the `weka381` environment:
+```bash
+wekavirtualenv.sh guichooser -n weka381
+```
+
+Launch the Explorer from the `weka391` environment:
+```bash
+wekavirtualenv.sh explorer -n weka391
+```
+
 For Windows users, use `wekavirtualenv.bat` instead of `wekavirtualenv.sh`
 from the `bin` directory.
 
