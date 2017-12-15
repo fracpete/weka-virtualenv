@@ -73,6 +73,8 @@ public class ListCommands
       System.out.println(cmd.getName());
       System.out.println("\t" + cmd.getHelp());
     }
+    System.out.println();
+    System.out.println("Use -h/--help as argument to specific command to see further details.");
 
     return true;
   }
