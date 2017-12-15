@@ -60,4 +60,4 @@ from the `bin` directory.
 
 The following releases are available:
 
-* [0.0.1](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.1/weka-virtualenv-0.0.1-bin.zip)
+* [0.0.2](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.2/weka-virtualenv-0.0.2-bin.zip)
