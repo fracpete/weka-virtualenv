@@ -51,3 +51,13 @@ wekavirtualenv.sh create \
   -j /home/fracpete/programs/jdk/jdk1.8.0_144-64bit/bin/java \
   -m 4g
 ```
+
+For Windows users, use `wekavirtualenv.bat` instead of `wekavirtualenv.sh`
+from the `bin` directory.
+
+
+## Releases
+
+The following releases are available:
+
+* [0.0.1](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.1/weka-virtualenv-0.0.1-bin.zip)
