@@ -3,7 +3,7 @@
 Virtual environment manager for Weka, inspired by the extremely useful virtual 
 environments that Python supports.
 
-*weka-virtualenv* be used for launching the GUI or arbitrary Weka classes. 
+*weka-virtualenv* can be used for launching the GUI or arbitrary Weka classes.
 
 Since *weka-virtualenv* uses options starting with double-dashes (`--`), clashes with 
 Weka options are avoided. Any option that wasn't consumed by *weka-virtualenv* 
@@ -14,6 +14,11 @@ will get passed to the Weka class.
 
 At this stage, no graphical user interface available for managing or launching 
 environments.
+
+**Note**
+You still need to install Weka yourself, *weka-virtualenv* only helps you
+separating your various Weka installations. It is mainly aimed at separating
+packages.
 
 
 ## Commands
