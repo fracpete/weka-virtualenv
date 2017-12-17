@@ -33,7 +33,8 @@ import java.util.Properties;
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
-public class Environment {
+public class Environment
+  implements Cloneable {
 
   /** the name of the environment. */
   public final static String KEY_NAME = "name";
@@ -58,6 +59,23 @@ public class Environment {
 
   /** the weka jar (full path). */
   public String weka;
+
+  /**
+   * Returns a clone.
+   *
+   * @return		the clone
+   */
+  public Environment clone() {
+    Environment	result;
+
+    result        = new Environment();
+    result.name   = name;
+    result.java   = java;
+    result.memory = memory;
+    result.weka   = weka;
+
+    return result;
+  }
 
   /**
    * Returns the environment in simple string representation.
