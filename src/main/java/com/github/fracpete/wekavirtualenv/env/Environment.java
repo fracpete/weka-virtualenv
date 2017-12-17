@@ -83,7 +83,7 @@ public class Environment
    * @return		the generated string
    */
   public String toString() {
-    return toString("");
+    return toString("", false);
   }
 
   /**
@@ -92,7 +92,7 @@ public class Environment
    * @param prefix	the prefix to use, eg indentation
    * @return		the generated string
    */
-  public String toString(String prefix) {
+  public String toString(String prefix, boolean verbose) {
     StringBuilder	result;
 
     result = new StringBuilder();
@@ -100,6 +100,8 @@ public class Environment
     result.append(prefix).append("Java: ").append(java.isEmpty() ? "<default>" : java).append("\n");
     result.append(prefix).append("Memory: ").append(memory.isEmpty() ? "<default>" : memory).append("\n");
     result.append(prefix).append("Weka: ").append(weka).append("\n");
+    if (verbose)
+      result.append(prefix).append("Dir: ").append(Environments.getEnvDir(name)).append("\n");
 
     return result.toString();
   }
