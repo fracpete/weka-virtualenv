@@ -163,10 +163,20 @@ public class Environments {
   /**
    * Returns the directory for the given environment.
    *
-   * @param env 	the name of the environment sub-dir
+   * @param env 	the name of the environment
    * @return 		the environment directory
    */
   public static String getEnvDir(String env) {
-    return Project.getHomeDir() + File.separator + "envs" + File.separator + env;
+    return Project.getHomeDir() + File.separator + "envs" + File.separator + nameToDir(env);
+  }
+
+  /**
+   * Returns the "wekafiles" dir in the environment.
+   *
+   * @param env		the name of the environment
+   * @return		the "wekafiles" dir of the environment
+   */
+  public static String getWekaFilesDir(String env) {
+    return getEnvDir(env) + File.separator + "wekafiles";
   }
 }
