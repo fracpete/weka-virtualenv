@@ -14,49 +14,33 @@
  */
 
 /*
- * Explorer.java
+ * InvalidEnvironmentException.java
  * Copyright (C) 2017 University of Waikato, Hamilton, NZ
  */
 
-package com.github.fracpete.wekavirtualenv.action;
-
-import com.github.fracpete.wekavirtualenv.parser.Namespace;
+package com.github.fracpete.wekavirtualenv.parser;
 
 /**
- * Launches the Weka Explorer.
+ * Gets thrown if no or invalid environment specified.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
-public class Explorer
-  extends AbstractLaunchCommand {
+public class InvalidEnvironmentException
+  extends RuntimeException {
 
   /**
-   * The name of the command (used on the commandline).
-   *
-   * @return		the name
+   * Initializes the exception with 'missing env'.
    */
-  @Override
-  public String getName() {
-    return "explorer";
+  public InvalidEnvironmentException() {
+    super("Missing environment!");
   }
 
   /**
-   * Returns a short help string.
+   * Initializes the exception.
    *
-   * @return		the help string
+   * @param env 	the invalid environment
    */
-  public String getHelp() {
-    return "Launches the Weka Explorer.";
-  }
-
-  /**
-   * Executes the command.
-   *
-   * @param ns		the namespace of the parsed options, null if no options to parse
-   * @param options	additional command-line options
-   * @return		true if successful
-   */
-  protected boolean doExecute(Namespace ns, String[] options) {
-    return launch(build("weka.gui.explorer.Explorer", options));
+  public InvalidEnvironmentException(String env) {
+    super("Invalid environment: " + env);
   }
 }

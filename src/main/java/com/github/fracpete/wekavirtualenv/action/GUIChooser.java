@@ -20,7 +20,6 @@
 
 package com.github.fracpete.wekavirtualenv.action;
 
-import com.github.fracpete.wekavirtualenv.env.Environment;
 import com.github.fracpete.wekavirtualenv.parser.Namespace;
 
 /**
@@ -53,12 +52,11 @@ public class GUIChooser
   /**
    * Executes the command.
    *
-   * @param env		the environment to use
    * @param ns		the namespace of the parsed options, null if no options to parse
    * @param options	additional command-line options
    * @return		true if successful
    */
-  protected boolean doExecute(Environment env, Namespace ns, String[] options) {
-    return launch(build(env, "weka.gui.GUIChooser", options));
+  protected boolean doExecute(Namespace ns, String[] options) {
+    return launch(build("weka.gui.GUIChooser", options));
   }
 }

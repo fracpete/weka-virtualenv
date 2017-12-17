@@ -22,7 +22,6 @@ package com.github.fracpete.wekavirtualenv.action;
 
 import com.github.fracpete.wekavirtualenv.core.Project;
 import com.github.fracpete.wekavirtualenv.env.Environments;
-import com.github.fracpete.wekavirtualenv.parser.ArgumentParser;
 import com.github.fracpete.wekavirtualenv.parser.Namespace;
 
 /**
@@ -50,16 +49,6 @@ public class Status
    */
   public String getHelp() {
     return "Outputs some status information.";
-  }
-
-  /**
-   * Returns the parser to use for the arguments.
-   *
-   * @return		always null
-   */
-  @Override
-  protected ArgumentParser getParser() {
-    return null;
   }
 
   /**

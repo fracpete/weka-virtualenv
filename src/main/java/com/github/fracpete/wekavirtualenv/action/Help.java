@@ -20,7 +20,6 @@
 
 package com.github.fracpete.wekavirtualenv.action;
 
-import com.github.fracpete.wekavirtualenv.parser.ArgumentParser;
 import com.github.fracpete.wekavirtualenv.parser.Namespace;
 
 /**
@@ -48,16 +47,6 @@ public class Help
    */
   public String getHelp() {
     return "Outputs help information.";
-  }
-
-  /**
-   * Returns the parser to use for the arguments.
-   *
-   * @return		always null
-   */
-  @Override
-  protected ArgumentParser getParser() {
-    return null;
   }
 
   /**

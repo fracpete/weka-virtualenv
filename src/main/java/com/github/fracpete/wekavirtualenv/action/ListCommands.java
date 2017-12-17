@@ -20,7 +20,6 @@
 
 package com.github.fracpete.wekavirtualenv.action;
 
-import com.github.fracpete.wekavirtualenv.parser.ArgumentParser;
 import com.github.fracpete.wekavirtualenv.parser.Namespace;
 
 /**
@@ -51,16 +50,6 @@ public class ListCommands
   }
 
   /**
-   * Returns the parser to use for the arguments.
-   *
-   * @return		always null
-   */
-  @Override
-  protected ArgumentParser getParser() {
-    return null;
-  }
-
-  /**
    * Executes the command.
    *
    * @param ns		the namespace of the parsed options, null if no options to parse
@@ -69,13 +58,18 @@ public class ListCommands
    */
   @Override
   protected boolean doExecute(Namespace ns, String[] options) {
-    System.out.println("Available commands:");
+    System.out.println("Available commands:\n");
     for (AbstractCommand cmd: AbstractCommand.getCommands()) {
-      System.out.println(cmd.getName());
+      System.out.println(cmd.getName() + (cmd.requiresEnvironment() ? " <env>" : "") + (cmd.getParser() != null ? " <options>" : ""));
       System.out.println("\t" + cmd.getHelp());
     }
     System.out.println();
-    System.out.println("Use --help as argument to specific command to see further details.");
+    System.out.println("Notes:");
+    System.out.println("<env>");
+    System.out.println("\tthe name of the environment to use for the command.");
+    System.out.println("<options>");
+    System.out.println("\tthe command supports additional options,");
+    System.out.println("\tyou can use --help as argument to see further details.");
 
     return true;
   }

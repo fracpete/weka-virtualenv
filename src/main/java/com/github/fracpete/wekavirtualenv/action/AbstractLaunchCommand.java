@@ -21,10 +21,7 @@
 package com.github.fracpete.wekavirtualenv.action;
 
 import com.github.fracpete.processoutput4j.output.ConsoleOutputProcessOutput;
-import com.github.fracpete.wekavirtualenv.env.Environment;
 import com.github.fracpete.wekavirtualenv.env.Environments;
-import com.github.fracpete.wekavirtualenv.parser.ArgumentParser;
-import com.github.fracpete.wekavirtualenv.parser.Namespace;
 import org.apache.commons.lang3.SystemUtils;
 
 import java.io.File;
@@ -42,18 +39,26 @@ public abstract class AbstractLaunchCommand
   extends AbstractCommand {
 
   /**
+   * Returns whether it requires an environment.
+   *
+   * @return		true if required
+   */
+  public boolean requiresEnvironment() {
+    return true;
+  }
+
+  /**
    * Returns the java command to use.
    *
-   * @param env		the environment to use
    * @return		the java command
    */
-  protected String getJava(Environment env) {
+  protected String getJava() {
     String	result;
     String	path;
     String	binary;
 
-    if (!env.java.isEmpty()) {
-      result = env.java;
+    if (!m_Env.java.isEmpty()) {
+      result = m_Env.java;
     }
     else {
       path = System.getProperty("java.home") + File.separator + "bin" + File.separator;
@@ -73,22 +78,21 @@ public abstract class AbstractLaunchCommand
   /**
    * Builds the commands.
    *
-   * @param env		the environment to use
    * @param cls		the class to launch
    * @param options	optional arguments for the class (null to ignore)
    * @return		the process builder
    */
-  protected ProcessBuilder build(Environment env, String cls, String[] options) {
+  protected ProcessBuilder build(String cls, String[] options) {
     ProcessBuilder	result;
     List<String>	cmd;
     Map<String, String> vars;
 
     cmd = new ArrayList<>();
-    cmd.add(getJava(env));
-    if (!env.memory.isEmpty())
-      cmd.add("-Xmx" + env.memory);
+    cmd.add(getJava());
+    if (!m_Env.memory.isEmpty())
+      cmd.add("-Xmx" + m_Env.memory);
     cmd.add("-classpath");
-    cmd.add(env.weka);
+    cmd.add(m_Env.weka);
     cmd.add(cls);
     if (options != null)
       cmd.addAll(Arrays.asList(options));
@@ -96,7 +100,7 @@ public abstract class AbstractLaunchCommand
     result = new ProcessBuilder();
     result.command(cmd);
     vars = result.environment();
-    vars.put("WEKA_HOME", Environments.getEnvDir(env.name) + File.separator + "wekafiles");
+    vars.put("WEKA_HOME", Environments.getEnvDir(m_Env.name) + File.separator + "wekafiles");
 
     return result;
   }
@@ -117,53 +121,5 @@ public abstract class AbstractLaunchCommand
       System.err.println("Failed to launch command:\n" + builder.command());
       return false;
     }
-  }
-
-  /**
-   * Returns the parser to use for the arguments.
-   *
-   * @return		always null
-   */
-  @Override
-  protected ArgumentParser getParser() {
-    ArgumentParser 	result;
-
-    result = new ArgumentParser(getName());
-    result.addOption("--name")
-      .name("name")
-      .help("the name of the environment to use")
-      .required(true);
-
-    return result;
-  }
-
-  /**
-   * Executes the command.
-   *
-   * @param env        the environment to use
-   * @param ns		the namespace of the parsed options, null if no options to parse
-   * @param options	additional commandline options
-   * @return		true if successful
-   */
-  protected abstract boolean doExecute(Environment env, Namespace ns, String[] options);
-
-  /**
-   * Executes the command.
-   *
-   * @param ns		the namespace of the parsed options, null if no options to parse
-   * @param options	additional command-line options
-   * @return		true if successful
-   */
-  @Override
-  protected boolean doExecute(Namespace ns, String[] options) {
-    Environment		env;
-
-    env = Environments.readEnv(ns.getString("name"));
-    if (env == null) {
-      System.err.println("Environment '" + ns.getString("name") + "' does not exist or failed to read!");
-      return false;
-    }
-
-    return doExecute(env, ns, compress(options));
   }
 }

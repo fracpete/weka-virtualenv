@@ -18,19 +18,18 @@ environments.
 
 ## Commands
 
-Available commands:
-
 ```
 Available commands:
-create
+
+create <options>
 	Creates a new environment.
-delete
+delete <options>
 	Deletes an existing environment.
-experimenter
+experimenter <env>
 	Launches the Weka Experimenter.
-explorer
+explorer <env>
 	Launches the Weka Explorer.
-guichooser
+guichooser <env>
 	Launches the Weka GUIChooser.
 help
 	Outputs help information.
@@ -38,12 +37,17 @@ list_cmds
 	Lists all available commands.
 list_envs
 	Lists all available environments.
-run
+run <env> <options>
 	Executes an arbitrary class with the left-over command-line options.
 status
 	Outputs some status information.
 
-Use --help as argument to specific command to see further details.
+Notes:
+<env>
+	the name of the environment to use for the command.
+<options>
+	the command supports additional options,
+	you can use --help as argument to see further details.
 ```
 
 ## Examples
@@ -67,22 +71,34 @@ wenv.sh create \
 
 Launch the GUIChooser from the `weka381` environment:
 ```bash
-wenv.sh guichooser --name weka381
+wenv.sh guichooser weka381
 ```
 
 Launch the Explorer from the `weka391` environment:
 ```bash
-wenv.sh explorer --name weka391
+wenv.sh explorer weka391
 ```
 
-Cross-validate J48 from the `weka381` environment on a dataset:
+Cross-validate J48 from the `weka381` environment on the *iris* dataset:
 ```bash
-wenv.sh run --name weka381 --class weka.classifiers.trees.J48 \
+wenv.sh run weka381 --class weka.classifiers.trees.J48 \
   -t /home/fracpete/development/datasets/uci/nominal/iris.arff
 ```
 
-For Windows users, use `wenv.bat` instead of `wenv.sh`
-from the `bin` directory.
+For Windows users, use `wenv.bat` instead of `wenv.sh` from the `bin` directory.
+
+
+## Environment locations
+
+The environments get created in the following directory:
+
+* Unix (Linux, Mac)
+
+  `$HOME/.local/share/wekavirtualenv`
+
+* Windows
+
+  `%USERPROFILE%\wekavirtualenv`
 
 
 ## Releases

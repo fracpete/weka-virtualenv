@@ -20,7 +20,6 @@
 
 package com.github.fracpete.wekavirtualenv.action;
 
-import com.github.fracpete.wekavirtualenv.env.Environment;
 import com.github.fracpete.wekavirtualenv.parser.ArgumentParser;
 import com.github.fracpete.wekavirtualenv.parser.Namespace;
 
@@ -60,7 +59,7 @@ public class Run
   protected ArgumentParser getParser() {
     ArgumentParser 	result;
 
-    result = super.getParser();
+    result = new ArgumentParser(getName());
     result.addOption("--class")
       .name("class")
       .help("the class to execute")
@@ -72,12 +71,11 @@ public class Run
   /**
    * Executes the command.
    *
-   * @param env        the environment to use
    * @param ns		the namespace of the parsed options, null if no options to parse
    * @param options	additional command-line options
    * @return		true if successful
    */
-  protected boolean doExecute(Environment env, Namespace ns, String[] options) {
-    return launch(build(env, ns.getString("class"), options));
+  protected boolean doExecute(Namespace ns, String[] options) {
+    return launch(build(ns.getString("class"), options));
   }
 }

@@ -41,11 +41,13 @@ public class WekaVirtualEnv {
     AbstractCommand 	cmd;
     String[]		options;
 
+    // output help if no options supplied
     if (args.length == 0) {
       new Help().execute(new String[0]);
       System.exit(0);
     }
 
+    // locate command
     cmd = null;
     for (AbstractCommand c: AbstractCommand.getCommands()) {
       if (c.getName().equals(args[0])) {
@@ -59,8 +61,17 @@ public class WekaVirtualEnv {
       System.exit(1);
     }
 
-    options = new String[args.length - 1];
-    System.arraycopy(args, 1, options, 0, args.length - 1);
+    // remove command from array
+    args[0] = "";
+    options = AbstractCommand.compress(args);
+
+    // environment name?
+    if (cmd.requiresEnvironment()) {
+      cmd.loadEnv(options);
+      options = AbstractCommand.compress(options);
+    }
+
+    // execute
     cmd.execute(options);
   }
 }

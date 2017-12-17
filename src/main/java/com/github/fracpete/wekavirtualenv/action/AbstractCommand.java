@@ -20,8 +20,11 @@
 
 package com.github.fracpete.wekavirtualenv.action;
 
+import com.github.fracpete.wekavirtualenv.env.Environment;
+import com.github.fracpete.wekavirtualenv.env.Environments;
 import com.github.fracpete.wekavirtualenv.parser.ArgumentParser;
 import com.github.fracpete.wekavirtualenv.parser.ArgumentParserException;
+import com.github.fracpete.wekavirtualenv.parser.InvalidEnvironmentException;
 import com.github.fracpete.wekavirtualenv.parser.Namespace;
 import nz.ac.waikato.cms.locator.ClassLocator;
 
@@ -36,6 +39,9 @@ import java.util.List;
  */
 public abstract class AbstractCommand
   implements Comparable<AbstractCommand> {
+
+  /** the environment to use. */
+  protected Environment m_Env;
 
   /**
    * The name of the command (used on the commandline).
@@ -52,22 +58,50 @@ public abstract class AbstractCommand
   public abstract String getHelp();
 
   /**
-   * Removes any empty strings from the array.
+   * Returns whether it requires an environment.
    *
-   * @param options 	the options to compress
-   * @return		the compressed options
+   * @return		true if required
    */
-  protected String[] compress(String[] options) {
-    List<String>	result;
-    int			i;
+  public boolean requiresEnvironment() {
+    return false;
+  }
 
-    result = new ArrayList<>();
-    for (i = 0; i < options.length; i++) {
-      if (!options[i].isEmpty())
-        result.add(options[i]);
+  /**
+   * Hook method for loading the environment.
+   * <br>
+   * Instantiates the environment from the first parameter and removes this
+   * parameter.
+   *
+   * @param options	the options to parse
+   */
+  public void loadEnv(String[] options) {
+    if (options.length > 0) {
+      m_Env = Environments.readEnv(options[0]);
+      if (m_Env == null)
+        throw new InvalidEnvironmentException(options[0]);
+      options[0] = "";
     }
+    else {
+      throw new InvalidEnvironmentException();
+    }
+  }
 
-    return result.toArray(new String[result.size()]);
+  /**
+   * Sets the environment.
+   *
+   * @param value	the environment
+   */
+  public void setEnv(Environment value) {
+    m_Env = value;
+  }
+
+  /**
+   * Returns the environment, if any.
+   *
+   * @return		the environment, null if none set
+   */
+  public Environment getEnv() {
+    return m_Env;
   }
 
   /**
@@ -75,7 +109,9 @@ public abstract class AbstractCommand
    *
    * @return		the parser, null if no arguments to parse
    */
-  protected abstract ArgumentParser getParser();
+  protected ArgumentParser getParser() {
+    return null;
+  }
 
   /**
    * Executes the command.
@@ -162,5 +198,24 @@ public abstract class AbstractCommand
     Collections.sort(result);
 
     return result;
+  }
+
+  /**
+   * Removes any empty strings from the array.
+   *
+   * @param options 	the options to compress
+   * @return		the compressed options
+   */
+  public static String[] compress(String[] options) {
+    List<String>	result;
+    int			i;
+
+    result = new ArrayList<>();
+    for (i = 0; i < options.length; i++) {
+      if (!options[i].isEmpty())
+	result.add(options[i]);
+    }
+
+    return result.toArray(new String[result.size()]);
   }
 }

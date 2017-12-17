@@ -22,7 +22,6 @@ package com.github.fracpete.wekavirtualenv.action;
 
 import com.github.fracpete.wekavirtualenv.env.Environment;
 import com.github.fracpete.wekavirtualenv.env.Environments;
-import com.github.fracpete.wekavirtualenv.parser.ArgumentParser;
 import com.github.fracpete.wekavirtualenv.parser.Namespace;
 
 import java.util.List;
@@ -52,16 +51,6 @@ public class ListEnvs
    */
   public String getHelp() {
     return "Lists all available environments.";
-  }
-
-  /**
-   * Returns the parser to use for the arguments.
-   *
-   * @return		always null
-   */
-  @Override
-  protected ArgumentParser getParser() {
-    return null;
   }
 
   /**
