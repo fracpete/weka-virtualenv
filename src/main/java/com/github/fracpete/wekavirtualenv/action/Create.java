@@ -20,13 +20,17 @@
 
 package com.github.fracpete.wekavirtualenv.action;
 
+import com.github.fracpete.wekavirtualenv.core.FileUtils;
 import com.github.fracpete.wekavirtualenv.env.Environment;
 import com.github.fracpete.wekavirtualenv.env.Environments;
 import com.github.fracpete.wekavirtualenv.parser.ArgumentParser;
 import com.github.fracpete.wekavirtualenv.parser.Namespace;
 
+import java.io.File;
+
 /**
- * Creates a new environment.
+ * Creates a new environment. Can be initialized with the content of an
+ * existing 'wekafiles' directory.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
@@ -49,7 +53,9 @@ public class Create
    * @return		the help string
    */
   public String getHelp() {
-    return "Creates a new environment.";
+    return
+      "Creates a new environment.\n"
+      + "Can be initialized with the content of an existing 'wekafiles' directory.";
   }
 
   /**
@@ -78,6 +84,10 @@ public class Create
       .name("weka")
       .help("the full path to the weka.jar to use")
       .required(true);
+    result.addOption("--wekafiles")
+      .name("wekafiles")
+      .help("the full path to the 'wekafiles' directory to initialize the environment with")
+      .setDefault("");
 
     return result;
   }
@@ -93,6 +103,8 @@ public class Create
   protected boolean doExecute(Namespace ns, String[] options) {
     Environment		env;
     String		msg;
+    File		from;
+    File		to;
 
     env        = new Environment();
     env.name   = ns.getString("name");
@@ -105,6 +117,27 @@ public class Create
       System.err.println("Failed to create environment:\n" + msg);
     else
       System.out.println("Created environment:\n\n" + env);
+
+    // copy wekafiles?
+    if ((msg == null) && !ns.getString("wekafiles").isEmpty()) {
+      from = new File(ns.getString("wekafiles"));
+      to   = new File(Environments.getWekaFilesDir(env.name));
+      if (!from.exists())
+        msg = "'wekafiles' directory does not exist: " + from;
+      else if (!from.isDirectory())
+        msg = "'wekafiles' parameter does not point to a directory: " + from;
+      if (msg == null) {
+        try {
+	  if (!FileUtils.copyOrMove(from, to, false, false))
+	    msg = "Failed to copy directory '" + from + "' to '" + to + "'!";
+	}
+	catch (Exception e) {
+          msg = "Failed to copy directory '" + from + "' to '" + to + "':\n" + e;
+	}
+	if (msg != null)
+	  System.err.println(msg);
+      }
+    }
 
     return (msg == null);
   }
