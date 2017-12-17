@@ -21,7 +21,7 @@
 package com.github.fracpete.wekavirtualenv.action;
 
 import com.github.fracpete.wekavirtualenv.env.Environment;
-import net.sourceforge.argparse4j.inf.Namespace;
+import com.github.fracpete.wekavirtualenv.parser.Namespace;
 
 /**
  * Launches the Weka Experimenter.
@@ -53,11 +53,12 @@ public class Experimenter
   /**
    * Executes the command.
    *
-   * @param env 	the environment to use
+   * @param env        the environment to use
    * @param ns		the namespace of the parsed options, null if no options to parse
+   * @param options	additional command-line options
    * @return		true if successful
    */
-  protected boolean doExecute(Environment env, Namespace ns) {
-    return launch(build(env, "weka.gui.experiment.Experimenter", null));
+  protected boolean doExecute(Environment env, Namespace ns, String[] options) {
+    return launch(build(env, "weka.gui.experiment.Experimenter", options));
   }
 }

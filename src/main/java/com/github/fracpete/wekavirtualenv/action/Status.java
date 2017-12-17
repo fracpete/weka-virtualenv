@@ -20,10 +20,10 @@
 
 package com.github.fracpete.wekavirtualenv.action;
 
-import com.github.fracpete.wekavirtualenv.env.Environments;
 import com.github.fracpete.wekavirtualenv.core.Project;
-import net.sourceforge.argparse4j.inf.ArgumentParser;
-import net.sourceforge.argparse4j.inf.Namespace;
+import com.github.fracpete.wekavirtualenv.env.Environments;
+import com.github.fracpete.wekavirtualenv.parser.ArgumentParser;
+import com.github.fracpete.wekavirtualenv.parser.Namespace;
 
 /**
  * Outputs some status information.
@@ -66,10 +66,11 @@ public class Status
    * Executes the command.
    *
    * @param ns		the namespace of the parsed options, null if no options to parse
+   * @param options	additional command-line options
    * @return		true if successful
    */
   @Override
-  protected boolean doExecute(Namespace ns) {
+  protected boolean doExecute(Namespace ns, String[] options) {
     System.out.println("Home directory: " + Project.getHomeDir());
     System.out.println("# envs: " + Environments.list().size());
 

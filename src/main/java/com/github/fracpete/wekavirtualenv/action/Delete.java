@@ -21,9 +21,8 @@
 package com.github.fracpete.wekavirtualenv.action;
 
 import com.github.fracpete.wekavirtualenv.env.Environments;
-import net.sourceforge.argparse4j.ArgumentParsers;
-import net.sourceforge.argparse4j.inf.ArgumentParser;
-import net.sourceforge.argparse4j.inf.Namespace;
+import com.github.fracpete.wekavirtualenv.parser.ArgumentParser;
+import com.github.fracpete.wekavirtualenv.parser.Namespace;
 
 /**
  * Deletes an existing environment.
@@ -61,9 +60,9 @@ public class Delete
   protected ArgumentParser getParser() {
     ArgumentParser 	result;
 
-    result = ArgumentParsers.newArgumentParser(getName());
-    result.addArgument("-n", "--name")
-      .dest("name")
+    result = new ArgumentParser(getName());
+    result.addOption("--name")
+      .name("name")
       .help("the name of the environment to delete")
       .required(true);
 
@@ -74,10 +73,11 @@ public class Delete
    * Executes the command.
    *
    * @param ns		the namespace of the parsed options, null if no options to parse
+   * @param options	additional command-line options
    * @return		true if successful
    */
   @Override
-  protected boolean doExecute(Namespace ns) {
+  protected boolean doExecute(Namespace ns, String[] options) {
     String	msg;
 
     msg = Environments.delete(ns.getString("name"));

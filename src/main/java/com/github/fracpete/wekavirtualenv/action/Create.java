@@ -22,9 +22,8 @@ package com.github.fracpete.wekavirtualenv.action;
 
 import com.github.fracpete.wekavirtualenv.env.Environment;
 import com.github.fracpete.wekavirtualenv.env.Environments;
-import net.sourceforge.argparse4j.ArgumentParsers;
-import net.sourceforge.argparse4j.inf.ArgumentParser;
-import net.sourceforge.argparse4j.inf.Namespace;
+import com.github.fracpete.wekavirtualenv.parser.ArgumentParser;
+import com.github.fracpete.wekavirtualenv.parser.Namespace;
 
 /**
  * Creates a new environment.
@@ -62,21 +61,21 @@ public class Create
   protected ArgumentParser getParser() {
     ArgumentParser 	result;
 
-    result = ArgumentParsers.newArgumentParser(getName());
-    result.addArgument("-n", "--name")
-      .dest("name")
+    result = new ArgumentParser(getName());
+    result.addOption("--name")
+      .name("name")
       .help("the name of the environment")
       .required(true);
-    result.addArgument("-j", "--java")
-      .dest("java")
+    result.addOption("--java")
+      .name("java")
       .help("the full path of the java binary to use for launching Weka")
       .setDefault("");
-    result.addArgument("-m", "--memory")
-      .dest("memory")
+    result.addOption("--memory")
+      .name("memory")
       .help("the heap size to use for launching Weka (eg '1024m' or '2g')")
       .setDefault("");
-    result.addArgument("-w", "--weka")
-      .dest("weka")
+    result.addOption("--weka")
+      .name("weka")
       .help("the full path to the weka.jar to use")
       .required(true);
 
@@ -86,11 +85,12 @@ public class Create
   /**
    * Executes the command.
    *
-   * @param ns		the namespace of the parsed options, null if no options to parse
+   * @param ns 		the namespace of the parsed options, null if no options to parse
+   * @param options	additional command-line options
    * @return		true if successful
    */
   @Override
-  protected boolean doExecute(Namespace ns) {
+  protected boolean doExecute(Namespace ns, String[] options) {
     Environment		env;
     String		msg;
 

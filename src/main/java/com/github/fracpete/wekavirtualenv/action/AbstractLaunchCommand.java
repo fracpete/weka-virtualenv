@@ -23,9 +23,8 @@ package com.github.fracpete.wekavirtualenv.action;
 import com.github.fracpete.processoutput4j.output.ConsoleOutputProcessOutput;
 import com.github.fracpete.wekavirtualenv.env.Environment;
 import com.github.fracpete.wekavirtualenv.env.Environments;
-import net.sourceforge.argparse4j.ArgumentParsers;
-import net.sourceforge.argparse4j.inf.ArgumentParser;
-import net.sourceforge.argparse4j.inf.Namespace;
+import com.github.fracpete.wekavirtualenv.parser.ArgumentParser;
+import com.github.fracpete.wekavirtualenv.parser.Namespace;
 import org.apache.commons.lang3.SystemUtils;
 
 import java.io.File;
@@ -129,9 +128,9 @@ public abstract class AbstractLaunchCommand
   protected ArgumentParser getParser() {
     ArgumentParser 	result;
 
-    result = ArgumentParsers.newArgumentParser(getName());
-    result.addArgument("-n", "--name")
-      .dest("name")
+    result = new ArgumentParser(getName());
+    result.addOption("--name")
+      .name("name")
       .help("the name of the environment to use")
       .required(true);
 
@@ -141,20 +140,22 @@ public abstract class AbstractLaunchCommand
   /**
    * Executes the command.
    *
-   * @param env 	the environment to use
+   * @param env        the environment to use
    * @param ns		the namespace of the parsed options, null if no options to parse
+   * @param options	additional commandline options
    * @return		true if successful
    */
-  protected abstract boolean doExecute(Environment env, Namespace ns);
+  protected abstract boolean doExecute(Environment env, Namespace ns, String[] options);
 
   /**
    * Executes the command.
    *
    * @param ns		the namespace of the parsed options, null if no options to parse
+   * @param options	additional command-line options
    * @return		true if successful
    */
   @Override
-  protected boolean doExecute(Namespace ns) {
+  protected boolean doExecute(Namespace ns, String[] options) {
     Environment		env;
 
     env = Environments.readEnv(ns.getString("name"));
@@ -163,6 +164,6 @@ public abstract class AbstractLaunchCommand
       return false;
     }
 
-    return doExecute(env, ns);
+    return doExecute(env, ns, compress(options));
   }
 }

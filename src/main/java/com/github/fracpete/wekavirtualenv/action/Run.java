@@ -14,21 +14,22 @@
  */
 
 /*
- * Explorer.java
+ * Run.java
  * Copyright (C) 2017 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.action;
 
 import com.github.fracpete.wekavirtualenv.env.Environment;
+import com.github.fracpete.wekavirtualenv.parser.ArgumentParser;
 import com.github.fracpete.wekavirtualenv.parser.Namespace;
 
 /**
- * Launches the Weka Explorer.
+ * Executes an arbitrary class.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
-public class Explorer
+public class Run
   extends AbstractLaunchCommand {
 
   /**
@@ -38,7 +39,7 @@ public class Explorer
    */
   @Override
   public String getName() {
-    return "explorer";
+    return "run";
   }
 
   /**
@@ -47,18 +48,36 @@ public class Explorer
    * @return		the help string
    */
   public String getHelp() {
-    return "Launches the Weka Explorer.";
+    return "Executes an arbitrary class with the left-over command-line options.";
+  }
+
+  /**
+   * Returns the parser to use for the arguments.
+   *
+   * @return		always null
+   */
+  @Override
+  protected ArgumentParser getParser() {
+    ArgumentParser 	result;
+
+    result = super.getParser();
+    result.addOption("--class")
+      .name("class")
+      .help("the class to execute")
+      .required(true);
+
+    return result;
   }
 
   /**
    * Executes the command.
    *
-   * @param env		the environment to use
+   * @param env        the environment to use
    * @param ns		the namespace of the parsed options, null if no options to parse
    * @param options	additional command-line options
    * @return		true if successful
    */
   protected boolean doExecute(Environment env, Namespace ns, String[] options) {
-    return launch(build(env, "weka.gui.explorer.Explorer", options));
+    return launch(build(env, ns.getString("class"), options));
   }
 }

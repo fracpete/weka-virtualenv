@@ -20,9 +20,9 @@
 
 package com.github.fracpete.wekavirtualenv.action;
 
-import net.sourceforge.argparse4j.inf.ArgumentParser;
-import net.sourceforge.argparse4j.inf.ArgumentParserException;
-import net.sourceforge.argparse4j.inf.Namespace;
+import com.github.fracpete.wekavirtualenv.parser.ArgumentParser;
+import com.github.fracpete.wekavirtualenv.parser.ArgumentParserException;
+import com.github.fracpete.wekavirtualenv.parser.Namespace;
 import nz.ac.waikato.cms.locator.ClassLocator;
 
 import java.util.ArrayList;
@@ -52,6 +52,25 @@ public abstract class AbstractCommand
   public abstract String getHelp();
 
   /**
+   * Removes any empty strings from the array.
+   *
+   * @param options 	the options to compress
+   * @return		the compressed options
+   */
+  protected String[] compress(String[] options) {
+    List<String>	result;
+    int			i;
+
+    result = new ArrayList<>();
+    for (i = 0; i < options.length; i++) {
+      if (!options[i].isEmpty())
+        result.add(options[i]);
+    }
+
+    return result.toArray(new String[result.size()]);
+  }
+
+  /**
    * Returns the parser to use for the arguments.
    *
    * @return		the parser, null if no arguments to parse
@@ -62,9 +81,10 @@ public abstract class AbstractCommand
    * Executes the command.
    *
    * @param ns		the namespace of the parsed options, null if no options to parse
+   * @param options	additional command-line options
    * @return		true if successful
    */
-  protected abstract boolean doExecute(Namespace ns);
+  protected abstract boolean doExecute(Namespace ns, String[] options);
 
   /**
    * Executes the command.
@@ -74,13 +94,13 @@ public abstract class AbstractCommand
    */
   public boolean execute(String[] options) {
     ArgumentParser	parser;
-    Namespace		ns;
+    Namespace ns;
 
     parser = getParser();
     ns     = null;
     if (parser != null) {
       try {
-	ns = parser.parseArgs(options);
+	ns = parser.parseArgs(options, true);
       }
       catch (ArgumentParserException e) {
 	parser.handleError(e);
@@ -88,7 +108,7 @@ public abstract class AbstractCommand
       }
     }
 
-    return doExecute(ns);
+    return doExecute(ns, options);
   }
 
   /**

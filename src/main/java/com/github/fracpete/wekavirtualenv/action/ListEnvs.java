@@ -22,8 +22,8 @@ package com.github.fracpete.wekavirtualenv.action;
 
 import com.github.fracpete.wekavirtualenv.env.Environment;
 import com.github.fracpete.wekavirtualenv.env.Environments;
-import net.sourceforge.argparse4j.inf.ArgumentParser;
-import net.sourceforge.argparse4j.inf.Namespace;
+import com.github.fracpete.wekavirtualenv.parser.ArgumentParser;
+import com.github.fracpete.wekavirtualenv.parser.Namespace;
 
 import java.util.List;
 
@@ -68,10 +68,11 @@ public class ListEnvs
    * Executes the command.
    *
    * @param ns		the namespace of the parsed options, null if no options to parse
+   * @param options	additional command-line options
    * @return		true if successful
    */
   @Override
-  protected boolean doExecute(Namespace ns) {
+  protected boolean doExecute(Namespace ns, String[] options) {
     List<Environment>	envs;
 
     envs = Environments.list();

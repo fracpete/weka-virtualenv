@@ -20,8 +20,8 @@
 
 package com.github.fracpete.wekavirtualenv.action;
 
-import net.sourceforge.argparse4j.inf.ArgumentParser;
-import net.sourceforge.argparse4j.inf.Namespace;
+import com.github.fracpete.wekavirtualenv.parser.ArgumentParser;
+import com.github.fracpete.wekavirtualenv.parser.Namespace;
 
 /**
  * Lists all the commands.
@@ -64,17 +64,18 @@ public class ListCommands
    * Executes the command.
    *
    * @param ns		the namespace of the parsed options, null if no options to parse
+   * @param options	additional command-line options
    * @return		true if successful
    */
   @Override
-  protected boolean doExecute(Namespace ns) {
+  protected boolean doExecute(Namespace ns, String[] options) {
     System.out.println("Available commands:");
     for (AbstractCommand cmd: AbstractCommand.getCommands()) {
       System.out.println(cmd.getName());
       System.out.println("\t" + cmd.getHelp());
     }
     System.out.println();
-    System.out.println("Use -h/--help as argument to specific command to see further details.");
+    System.out.println("Use --help as argument to specific command to see further details.");
 
     return true;
   }

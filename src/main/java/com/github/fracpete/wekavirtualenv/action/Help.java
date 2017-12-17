@@ -20,8 +20,8 @@
 
 package com.github.fracpete.wekavirtualenv.action;
 
-import net.sourceforge.argparse4j.inf.ArgumentParser;
-import net.sourceforge.argparse4j.inf.Namespace;
+import com.github.fracpete.wekavirtualenv.parser.ArgumentParser;
+import com.github.fracpete.wekavirtualenv.parser.Namespace;
 
 /**
  * Outputs some status information.
@@ -64,10 +64,11 @@ public class Help
    * Executes the command.
    *
    * @param ns		the namespace of the parsed options, null if no options to parse
+   * @param options	additional command-line options
    * @return		true if successful
    */
   @Override
-  protected boolean doExecute(Namespace ns) {
+  protected boolean doExecute(Namespace ns, String[] options) {
     new ListCommands().execute(new String[0]);
     System.out.println();
     new ListEnvs().execute(new String[0]);
