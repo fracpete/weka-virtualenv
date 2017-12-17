@@ -100,7 +100,7 @@ public abstract class AbstractLaunchCommand
     result = new ProcessBuilder();
     result.command(cmd);
     vars = result.environment();
-    vars.put("WEKA_HOME", Environments.getEnvDir(m_Env.name) + File.separator + "wekafiles");
+    vars.put("WEKA_HOME", Environments.getWekaFilesDir(m_Env.name));
 
     return result;
   }
