@@ -119,6 +119,22 @@ public class Environments {
   }
 
   /**
+   * Updates the environment.
+   *
+   * @param env		the environment setup
+   * @return		null if successful, otherwise error message
+   */
+  public static String update(Environment env) {
+    File	dir;
+
+    dir = new File(Project.getEnvsDir() + File.separator + nameToDir(env.name));
+    if (!dir.exists())
+      return "Environment does not exist!\n" + "environment dir: " + dir;
+
+    return Environment.save(env, new File(dir.getAbsolutePath() + File.separator + SETUP));
+  }
+
+  /**
    * Deletes the environment.
    *
    * @param name	the environment name
