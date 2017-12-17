@@ -26,26 +26,44 @@ packages.
 ```
 Available commands:
 
+clone <options>
+	Clones an existing environment.
+	Allows adjusting of environment parameters.
+
 create <options>
 	Creates a new environment.
+	Can be initialized with the content of an existing 'wekafiles' directory.
+
 delete <options>
 	Deletes an existing environment.
+
 experimenter <env>
 	Launches the Weka Experimenter.
+
 explorer <env>
 	Launches the Weka Explorer.
+
 guichooser <env>
 	Launches the Weka GUIChooser.
+
 help
 	Outputs help information.
+
 list_cmds
 	Lists all available commands.
-list_envs
+
+list_envs <options>
 	Lists all available environments.
+
 run <env> <options>
 	Executes an arbitrary class with the left-over command-line options.
+
 status
 	Outputs some status information.
+
+update <env> <options>
+	Allows adjusting of parameters of an existing environment.
+
 
 Notes:
 <env>
@@ -110,5 +128,6 @@ The environments get created in the following directory:
 
 The following releases are available:
 
+* [0.0.4](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.4/weka-virtualenv-0.0.4-bin.zip)
 * [0.0.3](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.3/weka-virtualenv-0.0.3-bin.zip)
 * [0.0.2](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.2/weka-virtualenv-0.0.2-bin.zip)
