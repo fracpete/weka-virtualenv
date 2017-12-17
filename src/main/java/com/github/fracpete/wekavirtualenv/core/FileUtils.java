@@ -24,6 +24,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 /**
  * File related utilities.
@@ -93,5 +97,64 @@ public class FileUtils {
     result = file.delete();
 
     return result;
+  }
+
+  /**
+   * Copies or moves files and directories (recursively).
+   * If targetLocation does not exist, it will be created.
+   * <br><br>
+   * Original code from <a href="http://www.java-tips.org/java-se-tips/java.io/how-to-copy-a-directory-from-one-location-to-another-loc.html" target="_blank">Java-Tips.org</a>.
+   *
+   * @param sourceLocation	the source file/dir
+   * @param targetLocation	the target file/dir
+   * @param move		if true then the source files/dirs get deleted
+   * 				as soon as copying finished
+   * @param atomic		whether to perform an atomic move operation
+   * @return			false if failed to delete when moving or failed to create target directory
+   * @throws IOException	if copying/moving fails
+   */
+  public static boolean copyOrMove(File sourceLocation, File targetLocation, boolean move, boolean atomic) throws IOException {
+    String[] 		children;
+    int 		i;
+    Path source;
+    Path 		target;
+
+    if (sourceLocation.isDirectory()) {
+      if (!targetLocation.exists()) {
+	if (!targetLocation.mkdir())
+	  return false;
+      }
+
+      children = sourceLocation.list();
+      for (i = 0; i < children.length; i++) {
+        if (!copyOrMove(
+            new File(sourceLocation.getAbsoluteFile(), children[i]),
+            new File(targetLocation.getAbsoluteFile(), children[i]),
+            move, atomic))
+          return false;
+      }
+
+      if (move)
+        return sourceLocation.delete();
+      else
+	return true;
+    }
+    else {
+      source = FileSystems.getDefault().getPath(sourceLocation.getAbsolutePath());
+      if (targetLocation.isDirectory())
+        target = FileSystems.getDefault().getPath(targetLocation.getAbsolutePath() + File.separator + sourceLocation.getName());
+      else
+        target = FileSystems.getDefault().getPath(targetLocation.getAbsolutePath());
+      if (move) {
+	if (atomic)
+	  Files.move(source, target, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+	else
+	  Files.move(source, target, StandardCopyOption.REPLACE_EXISTING);
+      }
+      else {
+	Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
+      }
+      return true;
+    }
   }
 }
