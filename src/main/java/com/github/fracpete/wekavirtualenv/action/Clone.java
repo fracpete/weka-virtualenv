@@ -78,11 +78,13 @@ public class Clone
       .required(true);
     result.addOption("--java")
       .name("java")
-      .help("the full path of the java binary to use for launching Weka")
+      .help("the full path of the java binary to use for launching Weka\n"
+	+ "Use " + Environment.DEFAULT + " to reset to default")
       .setDefault("");
     result.addOption("--memory")
       .name("memory")
-      .help("the heap size to use for launching Weka (eg '1024m' or '2g')")
+      .help("the heap size to use for launching Weka (eg '1024m' or '2g')\n"
+	+ "Use " + Environment.DEFAULT + " to reset to default")
       .setDefault("");
     result.addOption("--weka")
       .name("weka")
@@ -104,6 +106,11 @@ public class Clone
     Environment 	oldEnv;
     Environment 	newEnv;
     String		msg;
+    File		from;
+    File		to;
+    File		file;
+
+    msg = null;
 
     oldEnv = Environments.readEnv(ns.getString("old"));
     if (oldEnv == null) {
@@ -115,43 +122,56 @@ public class Clone
     newEnv.name = ns.getString("new");
 
     // overrides?
-    if (!ns.getString("java").isEmpty())
-      newEnv.java = ns.getString("java");
-    if (!ns.getString("memory").isEmpty())
-      newEnv.java = ns.getString("memory");
-    if (!ns.getString("weka").isEmpty())
-      newEnv.java = ns.getString("weka");
+    if (!ns.getString("java").isEmpty()) {
+      if (ns.getString("java").equals(Environment.DEFAULT))
+        newEnv.java = "";
+      else
+        newEnv.java = ns.getString("java");
+    }
+    if (!ns.getString("memory").isEmpty()) {
+      if (ns.getString("memory").equals(Environment.DEFAULT))
+        newEnv.memory = "";
+      else
+        newEnv.memory = ns.getString("memory");
+    }
+    if (!ns.getString("weka").isEmpty()) {
+      file = new File(ns.getString("weka"));
+      if (!file.exists())
+        msg = "Weka jar does not exist: " + file;
+      else
+	newEnv.weka = ns.getString("weka");
+    }
 
     // create empty environment
-    msg = Environments.create(newEnv);
+    if (msg == null)
+      msg = Environments.create(newEnv);
+
+    // copy "wekafiles" across
+    if (msg == null) {
+      from = new File(Environments.getWekaFilesDir(oldEnv.name));
+      to   = new File(Environments.getWekaFilesDir(newEnv.name));
+      if (from.exists() && from.isDirectory()) {
+	try {
+	  if (!FileUtils.copyOrMove(from, to, false, false)) {
+	    msg = "Failed to copy 'wekafiles' from old to new environment:\n"
+	      + "- old: " + Environments.getWekaFilesDir(oldEnv.name) + "\n"
+	      + "- new: " + Environments.getWekaFilesDir(newEnv.name);
+	  }
+	}
+	catch (Exception e) {
+	  msg = "Failed to copy 'wekafiles' from old to new environment:\n"
+	    + "- old: " + Environments.getWekaFilesDir(oldEnv.name) + "\n"
+	    + "- new: " + Environments.getWekaFilesDir(newEnv.name) + "\n"
+	    + "- exception:\n"
+	    + e;
+	}
+      }
+    }
+
     if (msg != null)
       System.err.println("Failed to create environment:\n" + msg);
     else
       System.out.println("Created environment:\n\n" + newEnv);
-
-    // copy "wekafiles" across
-    if (msg == null) {
-      try {
-	if (!FileUtils.copyOrMove(
-	  new File(Environments.getWekaFilesDir(oldEnv.name)),
-	  new File(Environments.getWekaFilesDir(newEnv.name)),
-	  false,
-	  false)) {
-	  msg = "Failed to copy 'wekafiles' from old to new environment:\n"
-	    + "- old: " + Environments.getWekaFilesDir(oldEnv.name) + "\n"
-	    + "- new: " + Environments.getWekaFilesDir(newEnv.name);
-	}
-      }
-      catch (Exception e) {
-	msg = "Failed to copy 'wekafiles' from old to new environment:\n"
-	  + "- old: " + Environments.getWekaFilesDir(oldEnv.name) + "\n"
-	  + "- new: " + Environments.getWekaFilesDir(newEnv.name) + "\n"
-	  + "- exception:\n"
-	  + e;
-      }
-      if (msg != null)
-        System.err.println(msg);
-    }
 
     return (msg == null);
   }
