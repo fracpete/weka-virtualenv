@@ -105,6 +105,9 @@ public class Create
     String		msg;
     File		from;
     File		to;
+    File		file;
+
+    msg = null;
 
     env        = new Environment();
     env.name   = ns.getString("name");
@@ -112,11 +115,16 @@ public class Create
     env.memory = ns.getString("memory");
     env.weka   = ns.getString("weka");
 
-    msg = Environments.create(env);
-    if (msg != null)
-      System.err.println("Failed to create environment:\n" + msg);
-    else
-      System.out.println("Created environment:\n\n" + env);
+    // check weka.jar
+    file = new File(env.weka);
+    if (!file.exists())
+      msg = "Weka jar does not exist: " + file;
+    else if (file.isDirectory())
+      msg = "Weka jar points to a directory: " + file;
+
+    // create env
+    if (msg == null)
+      msg = Environments.create(env);
 
     // copy wekafiles?
     if ((msg == null) && !ns.getString("wekafiles").isEmpty()) {
@@ -134,10 +142,13 @@ public class Create
 	catch (Exception e) {
           msg = "Failed to copy directory '" + from + "' to '" + to + "':\n" + e;
 	}
-	if (msg != null)
-	  System.err.println(msg);
       }
     }
+
+    if (msg != null)
+      System.err.println("Failed to create environment:\n" + msg);
+    else
+      System.out.println("Created environment:\n\n" + env);
 
     return (msg == null);
   }
