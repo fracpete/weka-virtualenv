@@ -22,6 +22,7 @@ package com.github.fracpete.wekavirtualenv.action;
 
 import com.github.fracpete.wekavirtualenv.env.Environment;
 import com.github.fracpete.wekavirtualenv.env.Environments;
+import com.github.fracpete.wekavirtualenv.parser.ArgumentParser;
 import com.github.fracpete.wekavirtualenv.parser.Namespace;
 
 import java.util.List;
@@ -54,6 +55,24 @@ public class ListEnvs
   }
 
   /**
+   * Returns the parser to use for the arguments.
+   *
+   * @return		always null
+   */
+  @Override
+  protected ArgumentParser getParser() {
+    ArgumentParser 	result;
+
+    result = new ArgumentParser(getName());
+    result.addOption("--verbose")
+      .name("verbose")
+      .help("outputs more information if enabled")
+      .argument(false);
+
+    return result;
+  }
+
+  /**
    * Executes the command.
    *
    * @param ns		the namespace of the parsed options, null if no options to parse
@@ -71,7 +90,7 @@ public class ListEnvs
     else {
       System.out.println("Available environments:\n");
       for (Environment env : envs) {
-	System.out.println(env);
+	System.out.println(env.toString("", ns.getBoolean("verbose")));
 	System.out.println();
       }
     }
