@@ -20,7 +20,7 @@
 
 package com.github.fracpete.wekavirtualenv.action;
 
-import com.github.fracpete.wekavirtualenv.core.Environment;
+import com.github.fracpete.wekavirtualenv.env.Environment;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.Namespace;
 

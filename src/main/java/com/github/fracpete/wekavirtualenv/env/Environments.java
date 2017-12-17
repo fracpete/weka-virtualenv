@@ -18,7 +18,10 @@
  * Copyright (C) 2017 University of Waikato, Hamilton, NZ
  */
 
-package com.github.fracpete.wekavirtualenv.core;
+package com.github.fracpete.wekavirtualenv.env;
+
+import com.github.fracpete.wekavirtualenv.core.FileUtils;
+import com.github.fracpete.wekavirtualenv.core.Project;
 
 import java.io.File;
 import java.util.ArrayList;
