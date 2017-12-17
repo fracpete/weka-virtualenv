@@ -61,7 +61,9 @@ public class ListCommands
     System.out.println("Available commands:\n");
     for (AbstractCommand cmd: AbstractCommand.getCommands()) {
       System.out.println(cmd.getName() + (cmd.requiresEnvironment() ? " <env>" : "") + (cmd.getParser() != null ? " <options>" : ""));
-      System.out.println("\t" + cmd.getHelp());
+      for (String line: cmd.getHelp().split("\n"))
+	System.out.println("\t" + line);
+      System.out.println();
     }
     System.out.println();
     System.out.println("Notes:");
