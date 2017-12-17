@@ -48,6 +48,8 @@ public class Environment
   /** the weka jar to use. */
   public final static String KEY_WEKA = "weka";
 
+  public static final String DEFAULT = "<default>";
+
   /** the name of the environment. */
   public String name;
 
@@ -97,8 +99,8 @@ public class Environment
 
     result = new StringBuilder();
     result.append(prefix).append("Name: ").append(name).append("\n");
-    result.append(prefix).append("Java: ").append(java.isEmpty() ? "<default>" : java).append("\n");
-    result.append(prefix).append("Memory: ").append(memory.isEmpty() ? "<default>" : memory).append("\n");
+    result.append(prefix).append("Java: ").append(java.isEmpty() ? DEFAULT : java).append("\n");
+    result.append(prefix).append("Memory: ").append(memory.isEmpty() ? DEFAULT : memory).append("\n");
     result.append(prefix).append("Weka: ").append(weka).append("\n");
     if (verbose)
       result.append(prefix).append("Dir: ").append(Environments.getEnvDir(name)).append("\n");
