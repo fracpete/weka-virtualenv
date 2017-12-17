@@ -29,7 +29,8 @@ import com.github.fracpete.wekavirtualenv.parser.Namespace;
 import java.io.File;
 
 /**
- * Clones a existing environment. Allows to adjust parameters.
+ * Clones a existing environment.
+ * Allows adjusting of environment parameters
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
@@ -52,7 +53,9 @@ public class Clone
    * @return		the help string
    */
   public String getHelp() {
-    return "Clones an existing environment. Allows to adjust parameters.";
+    return
+      "Clones an existing environment.\n"
+      + "Allows adjusting of environment parameters.";
   }
 
   /**
