@@ -20,6 +20,17 @@ You still need to install Weka yourself, *weka-virtualenv* only helps you
 separating your various Weka installations. It is mainly aimed at separating
 packages.
 
+## How it works
+
+The tool simply uses existing Weka functionality, namely the `WEKA_HOME`
+environment variable, for separating the various environments. 
+When launching a class or GUI tool, it launches a new Java process with the
+`WEKA_HOME` environment variable pointing to the current environment's
+`wekafiles` directory. 
+
+If an environment has no Java or heap size configure (`<default>`), then it 
+just uses the system's default settings for launching the new process.
+
 
 ## Commands
 
