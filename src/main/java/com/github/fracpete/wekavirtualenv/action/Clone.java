@@ -90,6 +90,10 @@ public class Clone
       .name("weka")
       .help("the full path to the weka.jar to use")
       .setDefault("");
+    result.addOption("--setup-only")
+      .name("setuponly")
+      .help("if set, does not copy the 'wekafiles' directory of the environment")
+      .argument(false);
 
     return result;
   }
@@ -147,24 +151,26 @@ public class Clone
       msg = Environments.create(newEnv);
 
     // copy "wekafiles" across
-    if (msg == null) {
-      from = new File(Environments.getWekaFilesDir(oldEnv.name));
-      to   = new File(Environments.getWekaFilesDir(newEnv.name));
-      if (from.exists() && from.isDirectory()) {
-	try {
-	  if (!FileUtils.copyOrMove(from, to, false, false)) {
-	    msg = "Failed to copy 'wekafiles' from old to new environment:\n"
-	      + "- old: " + Environments.getWekaFilesDir(oldEnv.name) + "\n"
-	      + "- new: " + Environments.getWekaFilesDir(newEnv.name);
-	  }
-	}
-	catch (Exception e) {
-	  msg = "Failed to copy 'wekafiles' from old to new environment:\n"
-	    + "- old: " + Environments.getWekaFilesDir(oldEnv.name) + "\n"
-	    + "- new: " + Environments.getWekaFilesDir(newEnv.name) + "\n"
-	    + "- exception:\n"
-	    + e;
-	}
+    if (!ns.getBoolean("setuponly")) {
+      if (msg == null) {
+        from = new File(Environments.getWekaFilesDir(oldEnv.name));
+        to = new File(Environments.getWekaFilesDir(newEnv.name));
+        if (from.exists() && from.isDirectory()) {
+          try {
+            if (!FileUtils.copyOrMove(from, to, false, false)) {
+              msg = "Failed to copy 'wekafiles' from old to new environment:\n"
+                + "- old: " + Environments.getWekaFilesDir(oldEnv.name) + "\n"
+                + "- new: " + Environments.getWekaFilesDir(newEnv.name);
+            }
+          }
+          catch (Exception e) {
+            msg = "Failed to copy 'wekafiles' from old to new environment:\n"
+              + "- old: " + Environments.getWekaFilesDir(oldEnv.name) + "\n"
+              + "- new: " + Environments.getWekaFilesDir(newEnv.name) + "\n"
+              + "- exception:\n"
+              + e;
+          }
+        }
       }
     }
 
