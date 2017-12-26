@@ -66,6 +66,9 @@ list_cmds
 list_envs <options>
 	Lists all available environments.
 
+reset <options>
+	Deletes an existing environment, i.e., deletes the "wekafiles" sub-directory.
+
 run <env> <options>
 	Executes an arbitrary class with the left-over command-line options.
 
