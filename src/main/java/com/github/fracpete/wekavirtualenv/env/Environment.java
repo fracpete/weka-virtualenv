@@ -26,7 +26,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.InputStream;
 import java.util.Properties;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 /**
  * Setup information of an environment.
@@ -96,14 +99,20 @@ public class Environment
    */
   public String toString(String prefix, boolean verbose) {
     StringBuilder	result;
+    String		version;
 
     result = new StringBuilder();
     result.append(prefix).append("Name: ").append(name).append("\n");
     result.append(prefix).append("Java: ").append(java.isEmpty() ? DEFAULT : java).append("\n");
     result.append(prefix).append("Memory: ").append(memory.isEmpty() ? DEFAULT : memory).append("\n");
     result.append(prefix).append("Weka: ").append(weka).append("\n");
-    if (verbose)
+    if (verbose) {
+      version = getVersion(weka);
+      if (version == null)
+        version = "?.?.?";
+      result.append(prefix).append("Version: ").append(version).append("\n");
       result.append(prefix).append("Dir: ").append(Environments.getEnvDir(name)).append("\n");
+    }
 
     return result.toString();
   }
@@ -182,6 +191,54 @@ public class Environment
     finally {
       FileUtils.closeQuietly(bwriter);
       FileUtils.closeQuietly(fwriter);
+    }
+
+    return result;
+  }
+
+  /**
+   * Extracts the version from the Weka jar, if possible.
+   *
+   * @param jar		the jar to analyze
+   * @return		the version, null if failed to extract
+   */
+  public static String getVersion(String jar) {
+    return getVersion(jar, false);
+  }
+
+  /**
+   * Extracts the version from the Weka jar, if possible.
+   *
+   * @param jar		the jar to analyze
+   * @return		the version, null if failed to extract
+   */
+  public static String getVersion(String jar, boolean verbose) {
+    String		result;
+    JarFile		jfile;
+    JarEntry 		entry;
+    InputStream		in;
+    StringBuilder	content;
+    int 		c;
+
+    in = null;
+    try {
+      jfile   = new JarFile(jar);
+      entry   = jfile.getJarEntry("weka/core/version.txt");
+      in      = jfile.getInputStream(entry);
+      content = new StringBuilder();
+      while ((c = in.read()) != -1)
+	content.append((char) c);
+      result = content.toString().trim();
+    }
+    catch (Exception e) {
+      if (verbose) {
+        System.err.println("Failed to read: " + jar);
+        e.printStackTrace();
+      }
+      result = null;
+    }
+    finally {
+      FileUtils.closeQuietly(in);
     }
 
     return result;
