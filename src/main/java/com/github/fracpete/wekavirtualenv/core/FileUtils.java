@@ -22,6 +22,8 @@ package com.github.fracpete.wekavirtualenv.core;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.file.FileSystems;
@@ -61,6 +63,38 @@ public class FileUtils {
       if (writer != null) {
         writer.flush();
 	writer.close();
+      }
+    }
+    catch (IOException e) {
+      // ignore
+    }
+  }
+
+  /**
+   * Closes the input stream.
+   *
+   * @param istream	the stream to close
+   */
+  public static void closeQuietly(InputStream istream) {
+    try {
+      if (istream != null)
+	istream.close();
+    }
+    catch (IOException e) {
+      // ignore
+    }
+  }
+
+  /**
+   * Closes the output stream.
+   *
+   * @param ostream	the stream to close
+   */
+  public static void closeQuietly(OutputStream ostream) {
+    try {
+      if (ostream != null) {
+        ostream.flush();
+	ostream.close();
       }
     }
     catch (IOException e) {
