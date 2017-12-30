@@ -26,10 +26,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * File related utilities.
@@ -190,5 +194,40 @@ public class FileUtils {
       }
       return true;
     }
+  }
+
+  /**
+   * Writes the given object to the specified file. The message is either
+   * appended or replaces the current content of the file.
+   *
+   * @param filename	the file to write to
+   * @param obj		the object to write
+   * @param append	whether to append the message or not
+   * @param encoding	the encoding to use, null for default
+   * @return		true if writing was successful
+   */
+  public static String writeToFileMsg(String filename, Object obj, boolean append, String encoding) {
+    String			result;
+    List<String> lines;
+    StandardOpenOption[]	options;
+
+    result = null;
+    lines = new ArrayList<>();
+    lines.add("" + obj);
+    if (append)
+      options = new StandardOpenOption[]{StandardOpenOption.CREATE, StandardOpenOption.APPEND, StandardOpenOption.WRITE};
+    else
+      options = new StandardOpenOption[]{StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE};
+    try {
+      if (encoding == null)
+	Files.write(new File(filename).toPath(), lines, options);
+      else
+	Files.write(new File(filename).toPath(), lines, Charset.forName(encoding), options);
+    }
+    catch (Exception e) {
+      result = "Failed to write to '" + filename + "'\n" + e;
+    }
+
+    return result;
   }
 }
