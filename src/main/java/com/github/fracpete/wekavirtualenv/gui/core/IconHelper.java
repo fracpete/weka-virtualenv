@@ -42,7 +42,7 @@ public class IconHelper {
   public static ImageIcon getIcon(String filename) {
     URL		resource;
 
-    resource = ClassLoader.getSystemClassLoader().getResource(filename + ".png");
+    resource = ClassLoader.getSystemClassLoader().getResource(IMAGE_DIR + filename + ".png");
     if (resource != null)
       return new ImageIcon(resource);
     else
