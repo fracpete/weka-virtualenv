@@ -60,13 +60,14 @@ public class EnvironmentsPanel
   /** the scroll pane. */
   protected JScrollPane m_ScrollPaneEnvs;
 
+  /** the panel for the buttons. */
+  protected JPanel m_PanelButtons;
+
   /**
    * Initializes the widgets.
    */
   @Override
   protected void initGUI() {
-    JPanel	panel;
-
     super.initGUI();
 
     setLayout(new BorderLayout());
@@ -78,15 +79,15 @@ public class EnvironmentsPanel
     add(m_ScrollPaneEnvs, BorderLayout.CENTER);
 
     // buttons
-    panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    add(panel, BorderLayout.SOUTH);
+    m_PanelButtons = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    add(m_PanelButtons, BorderLayout.SOUTH);
     m_ButtonCreate = new JButton(IconHelper.getIcon("Create"));
     m_ButtonCreate.addActionListener((ActionEvent e) -> create());
-    panel.add(m_ButtonCreate);
+    m_PanelButtons.add(m_ButtonCreate);
 
     m_ButtonReload = new JButton(IconHelper.getIcon("Reload"));
     m_ButtonReload.addActionListener((ActionEvent e) -> reload());
-    panel.add(m_ButtonReload);
+    m_PanelButtons.add(m_ButtonReload);
   }
 
   /**
@@ -96,6 +97,24 @@ public class EnvironmentsPanel
   protected void finishInit() {
     super.finishInit();
     reload();
+  }
+
+  /**
+   * Sets whether the buttons panel is visible.
+   *
+   * @param value	true if visible
+   */
+  public void setButtonsPanelVisible(boolean value) {
+    m_PanelButtons.setVisible(value);
+  }
+
+  /**
+   * Returns whether the buttons panel is visible.
+   *
+   * @return		true if visible
+   */
+  public boolean isButtonsPanelVisible() {
+    return m_PanelButtons.isVisible();
   }
 
   /**
@@ -119,14 +138,14 @@ public class EnvironmentsPanel
   /**
    * Creates an environment.
    */
-  protected void create() {
+  public void create() {
     // TODO
   }
 
   /**
    * Reloads all environments.
    */
-  protected void reload() {
+  public void reload() {
     EnvironmentPanel	panel;
 
     m_PanelEnvs.removeAll();
