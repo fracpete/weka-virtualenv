@@ -72,7 +72,7 @@ public abstract class AbstractAction
       }
     };
     result.putValue(javax.swing.AbstractAction.NAME, getName());
-    icon = GUIHelper.getIcon(IMAGE_DIR + getClass().getName());
+    icon = GUIHelper.getIcon(IMAGE_DIR + getClass().getSimpleName() + ".png");
     if (icon != null)
       result.putValue(javax.swing.AbstractAction.SMALL_ICON, icon);
 
