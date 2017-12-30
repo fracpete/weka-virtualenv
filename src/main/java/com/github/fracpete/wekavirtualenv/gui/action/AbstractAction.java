@@ -20,6 +20,7 @@
 
 package com.github.fracpete.wekavirtualenv.gui.action;
 
+import com.github.fracpete.wekavirtualenv.gui.core.IconHelper;
 import nz.ac.waikato.cms.gui.core.GUIHelper;
 import nz.ac.waikato.cms.locator.ClassLocator;
 
@@ -36,9 +37,6 @@ import java.util.List;
  */
 public abstract class AbstractAction
   implements Comparable<AbstractAction> {
-
-  /** the image directory. */
-  public final static String IMAGE_DIR = "com/github/fracpete/wekavirtualenv/gui/images/";
 
   /**
    * Returns the name of the action (displayed in GUI).
@@ -71,8 +69,8 @@ public abstract class AbstractAction
           GUIHelper.showErrorMessage(null, "Failed to execute " + getName() + ":\n" + msg);
       }
     };
+    icon = IconHelper.getIcon(getClass().getSimpleName());
     result.putValue(javax.swing.AbstractAction.NAME, getName());
-    icon = GUIHelper.getIcon(IMAGE_DIR + getClass().getSimpleName() + ".png");
     if (icon != null)
       result.putValue(javax.swing.AbstractAction.SMALL_ICON, icon);
 
