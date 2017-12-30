@@ -49,17 +49,27 @@ public class GUIChooser
   }
 
   /**
+   * Returns whether the action generates console output.
+   *
+   * @return		true if the action generates console output
+   */
+  public boolean generatesOutput() {
+    return true;
+  }
+
+  /**
    * Performs the actual execution.
    *
    * @return		null if successful, otherwise error message
    */
   @Override
   protected String doExecute() {
-    com.github.fracpete.wekavirtualenv.action.GUIChooser	explorer;
+    com.github.fracpete.wekavirtualenv.action.GUIChooser guichooser;
 
-    explorer = new com.github.fracpete.wekavirtualenv.action.GUIChooser();
-    explorer.setEnv(m_Environment);
-    if (!explorer.execute(new String[0]))
+    guichooser = new com.github.fracpete.wekavirtualenv.action.GUIChooser();
+    guichooser.setEnv(m_Environment);
+    transferOutputListeners(guichooser);
+    if (!guichooser.execute(new String[0]))
       return "Failed to launch GUIChooser!";
     else
       return null;

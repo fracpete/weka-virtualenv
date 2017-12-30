@@ -49,6 +49,15 @@ public class Explorer
   }
 
   /**
+   * Returns whether the action generates console output.
+   *
+   * @return		true if the action generates console output
+   */
+  public boolean generatesOutput() {
+    return true;
+  }
+
+  /**
    * Performs the actual execution.
    *
    * @return		null if successful, otherwise error message
@@ -59,6 +68,7 @@ public class Explorer
 
     explorer = new com.github.fracpete.wekavirtualenv.action.Explorer();
     explorer.setEnv(m_Environment);
+    transferOutputListeners(explorer);
     if (!explorer.execute(new String[0]))
       return "Failed to launch Explorer!";
     else

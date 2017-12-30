@@ -20,23 +20,59 @@
 
 package com.github.fracpete.wekavirtualenv.action;
 
-import com.github.fracpete.processoutput4j.output.ConsoleOutputProcessOutput;
+import com.github.fracpete.processoutput4j.core.StreamingProcessOutputType;
+import com.github.fracpete.processoutput4j.core.StreamingProcessOwner;
+import com.github.fracpete.processoutput4j.output.StreamingProcessOutput;
 import com.github.fracpete.wekavirtualenv.env.Environments;
 import org.apache.commons.lang3.SystemUtils;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
- * Ancestor for commands that.
+ * Ancestor for commands that launch commands.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public abstract class AbstractLaunchCommand
-  extends AbstractCommand {
+  extends AbstractCommand
+  implements StreamingProcessOwner {
+
+  /** the output listeners. */
+  protected Set<OutputListener> m_OutputListeners;
+
+  /** the output. */
+  protected StreamingProcessOutput m_Output;
+
+  /**
+   * Initializes the command.
+   */
+  public AbstractLaunchCommand() {
+    m_OutputListeners = new HashSet<>();
+  }
+
+  /**
+   * Adds the output listener.
+   *
+   * @param l		the listener
+   */
+  public void addOutputListener(OutputListener l) {
+    m_OutputListeners.add(l);
+  }
+
+  /**
+   * Removes the output listener.
+   *
+   * @param l		the listener
+   */
+  public void removeOutputListener(OutputListener l) {
+    m_OutputListeners.remove(l);
+  }
 
   /**
    * Returns whether it requires an environment.
@@ -106,6 +142,31 @@ public abstract class AbstractLaunchCommand
   }
 
   /**
+   * Returns what output from the process to forward.
+   *
+   * @return 		the output type
+   */
+  public StreamingProcessOutputType getOutputType() {
+    return StreamingProcessOutputType.BOTH;
+  }
+
+  /**
+   * Processes the incoming line.
+   *
+   * @param line	the line to process
+   * @param stdout	whether stdout or stderr
+   */
+  public synchronized void processOutput(String line, boolean stdout) {
+    if (stdout)
+      System.out.println(line);
+    else
+      System.err.println(line);
+
+    for (OutputListener l: m_OutputListeners)
+      l.outputOccurred(line, stdout);
+  }
+
+  /**
    * Launches the process.
    *
    * @param builder	the builder to use
@@ -113,13 +174,21 @@ public abstract class AbstractLaunchCommand
    */
   protected boolean launch(ProcessBuilder builder) {
     try {
-      ConsoleOutputProcessOutput output = new ConsoleOutputProcessOutput();
-      output.monitor(builder);
+      m_Output = new StreamingProcessOutput(this);
+      m_Output.monitor(builder);
       return true;
     }
     catch (Exception e) {
       System.err.println("Failed to launch command:\n" + builder.command());
       return false;
     }
+  }
+
+  /**
+   * Destroys the process if possible.
+   */
+  public void destroy() {
+    if (m_Output != null)
+      m_Output.destroy();
   }
 }

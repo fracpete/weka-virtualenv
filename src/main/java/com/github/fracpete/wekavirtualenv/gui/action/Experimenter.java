@@ -49,17 +49,27 @@ public class Experimenter
   }
 
   /**
+   * Returns whether the action generates console output.
+   *
+   * @return		true if the action generates console output
+   */
+  public boolean generatesOutput() {
+    return true;
+  }
+
+  /**
    * Performs the actual execution.
    *
    * @return		null if successful, otherwise error message
    */
   @Override
   protected String doExecute() {
-    com.github.fracpete.wekavirtualenv.action.Experimenter	explorer;
+    com.github.fracpete.wekavirtualenv.action.Experimenter experimenter;
 
-    explorer = new com.github.fracpete.wekavirtualenv.action.Experimenter();
-    explorer.setEnv(m_Environment);
-    if (!explorer.execute(new String[0]))
+    experimenter = new com.github.fracpete.wekavirtualenv.action.Experimenter();
+    experimenter.setEnv(m_Environment);
+    transferOutputListeners(experimenter);
+    if (!experimenter.execute(new String[0]))
       return "Failed to launch Experimenter!";
     else
       return null;

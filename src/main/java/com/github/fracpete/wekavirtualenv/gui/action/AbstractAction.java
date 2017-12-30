@@ -20,15 +20,18 @@
 
 package com.github.fracpete.wekavirtualenv.gui.action;
 
+import com.github.fracpete.wekavirtualenv.action.AbstractLaunchCommand;
+import com.github.fracpete.wekavirtualenv.action.OutputListener;
 import com.github.fracpete.wekavirtualenv.gui.core.IconHelper;
-import nz.ac.waikato.cms.gui.core.GUIHelper;
+import com.github.fracpete.wekavirtualenv.gui.env.EnvironmentAction;
 import nz.ac.waikato.cms.locator.ClassLocator;
 
 import javax.swing.ImageIcon;
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Ancestor for actions.
@@ -37,6 +40,34 @@ import java.util.List;
  */
 public abstract class AbstractAction
   implements Comparable<AbstractAction> {
+
+  /** the output listeners. */
+  protected Set<OutputListener> m_OutputListeners;
+
+  /**
+   * Initializes the command.
+   */
+  public AbstractAction() {
+    m_OutputListeners = new HashSet<>();
+  }
+
+  /**
+   * Adds the output listener.
+   *
+   * @param l		the listener
+   */
+  public void addOutputListener(OutputListener l) {
+    m_OutputListeners.add(l);
+  }
+
+  /**
+   * Removes the output listener.
+   *
+   * @param l		the listener
+   */
+  public void removeOutputListener(OutputListener l) {
+    m_OutputListeners.remove(l);
+  }
 
   /**
    * Returns the name of the action (displayed in GUI).
@@ -57,18 +88,12 @@ public abstract class AbstractAction
    *
    * @return		the action
    */
-  public javax.swing.AbstractAction getAction() {
-    javax.swing.AbstractAction  result;
-    ImageIcon			icon;
+  public EnvironmentAction getAction() {
+    EnvironmentAction  result;
+    ImageIcon		icon;
 
-    result = new javax.swing.AbstractAction() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        String msg = execute();
-        if (msg != null)
-          GUIHelper.showErrorMessage(null, "Failed to execute " + getName() + ":\n" + msg);
-      }
-    };
+    result = new EnvironmentAction();
+    result.setOwner(this);
     icon = IconHelper.getIcon(getClass().getSimpleName());
     result.putValue(javax.swing.AbstractAction.NAME, getName());
     if (icon != null)
@@ -78,12 +103,29 @@ public abstract class AbstractAction
   }
 
   /**
+   * Returns whether the action generates console output.
+   *
+   * @return		true if the action generates console output
+   */
+  public abstract boolean generatesOutput();
+
+  /**
    * Hook method for checking before executing the action.
    *
    * @return		null if successful, otherwise error message
    */
   protected String check() {
     return null;
+  }
+
+  /**
+   * For transferring listeners.
+   *
+   * @param cmd		the command to receive the listeners
+   */
+  protected void transferOutputListeners(AbstractLaunchCommand cmd) {
+    for (OutputListener l: m_OutputListeners)
+      cmd.addOutputListener(l);
   }
 
   /**
