@@ -48,4 +48,13 @@ public class IconHelper {
     else
       return null;
   }
+
+  /**
+   * Loads and returns the empty icon.
+   *
+   * @return		the icon, null if failed to load
+   */
+  public static ImageIcon getEmptyIcon() {
+    return getIcon("Empty");
+  }
 }
