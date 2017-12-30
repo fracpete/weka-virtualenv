@@ -35,6 +35,8 @@ import javax.swing.JTabbedPane;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  * Main gui for managing virtual environments for Weka.
@@ -110,7 +112,7 @@ public class WekaVirtualEnv
   /**
    * Closes the application.
    */
-  protected void close() {
+  public void close() {
     int			i;
     ActionOutputPanel	panel;
 
@@ -128,7 +130,7 @@ public class WekaVirtualEnv
    * @param args	ignored
    */
   public static void main(String[] args) {
-    WekaVirtualEnv panel = new WekaVirtualEnv();
+    final WekaVirtualEnv panel = new WekaVirtualEnv();
     BaseFrame frame = new BaseFrame("Weka virtualenv");
     frame.setIconImage(IconHelper.getIcon("wenv").getImage());
     frame.setDefaultCloseOperation(BaseFrame.EXIT_ON_CLOSE);
@@ -137,6 +139,13 @@ public class WekaVirtualEnv
     frame.setJMenuBar(panel.getMenuBar());
     frame.setSize(new Dimension(1024, 768));
     frame.setLocationRelativeTo(null);
+    frame.addWindowListener(new WindowAdapter() {
+      @Override
+      public void windowClosing(WindowEvent e) {
+        panel.close();
+      }
+    });
+
     frame.setVisible(true);
   }
 }
