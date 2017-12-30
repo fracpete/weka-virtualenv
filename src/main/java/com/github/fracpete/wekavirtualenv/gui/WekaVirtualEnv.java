@@ -21,15 +21,20 @@
 package com.github.fracpete.wekavirtualenv.gui;
 
 import com.github.fracpete.wekavirtualenv.gui.core.IconHelper;
+import com.github.fracpete.wekavirtualenv.gui.env.ActionOutputPanel;
 import com.github.fracpete.wekavirtualenv.gui.env.EnvironmentsPanel;
 import nz.ac.waikato.cms.gui.core.BaseFrame;
 import nz.ac.waikato.cms.gui.core.BasePanel;
+import nz.ac.waikato.cms.gui.core.GUIHelper;
 
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 
 /**
  * Main gui for managing virtual environments for Weka.
@@ -65,6 +70,7 @@ public class WekaVirtualEnv
     m_SplitPane.setRightComponent(m_TabbedPaneOutputs);
 
     m_PanelEnvs = new EnvironmentsPanel();
+    m_PanelEnvs.setButtonsPanelVisible(false);
     m_PanelEnvs.setTabbedPane(m_TabbedPaneOutputs);
     m_SplitPane.setLeftComponent(m_PanelEnvs);
   }
@@ -75,8 +81,45 @@ public class WekaVirtualEnv
    * @return		the menu bar
    */
   public JMenuBar getMenuBar() {
-    // TODO
-    return null;
+    JMenuBar	result;
+    JMenu	menu;
+    JMenuItem	menuitem;
+
+    result = new JMenuBar();
+
+    menu = new JMenu("Environments");
+    result.add(menu);
+
+    menuitem = new JMenuItem("Create", IconHelper.getIcon("Create"));
+    menuitem.addActionListener((ActionEvent e) -> m_PanelEnvs.create());
+    menu.add(menuitem);
+
+    menuitem = new JMenuItem("Reload", IconHelper.getIcon("Reload"));
+    menuitem.addActionListener((ActionEvent e) -> m_PanelEnvs.reload());
+    menu.add(menuitem);
+
+    menu.addSeparator();
+
+    menuitem = new JMenuItem("Exit", IconHelper.getIcon("Close"));
+    menuitem.addActionListener((ActionEvent e) -> close());
+    menu.add(menuitem);
+
+    return result;
+  }
+
+  /**
+   * Closes the application.
+   */
+  protected void close() {
+    int			i;
+    ActionOutputPanel	panel;
+
+    for (i = m_TabbedPaneOutputs.getTabCount() - 1; i >= 0; i--) {
+      panel = (ActionOutputPanel) m_TabbedPaneOutputs.getComponentAt(i);
+      panel.close();
+    }
+
+    GUIHelper.closeParent(this);
   }
 
   /**
