@@ -165,14 +165,14 @@ public class ActionOutputPanel
   /**
    * Clears the output.
    */
-  protected void clear() {
+  public void clear() {
     m_TextArea.setText("");
   }
 
   /**
    * Saves the output.
    */
-  protected void save() {
+  public void save() {
     int		retVal;
     String	msg;
 
@@ -194,14 +194,14 @@ public class ActionOutputPanel
   /**
    * Stops the process.
    */
-  protected void stop() {
+  public void stop() {
     m_Action.getOwner().destroy();
   }
 
   /**
    * Removes itself from the tabbed pane.
    */
-  protected void close() {
+  public void close() {
     stop();
     m_TabbedPane.remove(this);
   }
