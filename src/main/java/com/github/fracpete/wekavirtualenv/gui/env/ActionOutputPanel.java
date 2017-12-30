@@ -20,7 +20,7 @@
 
 package com.github.fracpete.wekavirtualenv.gui.env;
 
-import com.github.fracpete.wekavirtualenv.action.OutputListener;
+import com.github.fracpete.wekavirtualenv.command.OutputListener;
 import com.github.fracpete.wekavirtualenv.gui.core.ScrollPane;
 import nz.ac.waikato.cms.gui.core.BasePanel;
 
@@ -42,7 +42,10 @@ public class ActionOutputPanel
   implements OutputListener {
 
   /** the tabbed pane this panel belongs to. */
-  protected JTabbedPane m_Owner;
+  protected JTabbedPane m_TabbedPane;
+
+  /** the action that generated the output. */
+  protected EnvironmentAction m_Action;
 
   /** the text area. */
   protected JTextArea m_TextArea;
@@ -77,8 +80,8 @@ public class ActionOutputPanel
    *
    * @param value	the owner
    */
-  public void setOwner(JTabbedPane value) {
-    m_Owner = value;
+  public void setTabbedPane(JTabbedPane value) {
+    m_TabbedPane = value;
   }
 
   /**
@@ -86,8 +89,26 @@ public class ActionOutputPanel
    *
    * @return		the owner
    */
-  public JTabbedPane getOwner() {
-    return m_Owner;
+  public JTabbedPane getTabbedPane() {
+    return m_TabbedPane;
+  }
+
+  /**
+   * Sets the action that generated the output.
+   *
+   * @param value	the action
+   */
+  public void setAction(EnvironmentAction value) {
+    m_Action = value;
+  }
+
+  /**
+   * Returns the action that generated the output.
+   *
+   * @return		the action
+   */
+  public EnvironmentAction getAction() {
+    return m_Action;
   }
 
   /**
@@ -101,10 +122,17 @@ public class ActionOutputPanel
   }
 
   /**
+   * Stops the process.
+   */
+  protected void stop() {
+    m_Action.getOwner().destroy();
+  }
+
+  /**
    * Removes itself from the tabbed pane.
    */
   protected void close() {
-    // TODO stop process
-    m_Owner.remove(this);
+    stop();
+    m_TabbedPane.remove(this);
   }
 }

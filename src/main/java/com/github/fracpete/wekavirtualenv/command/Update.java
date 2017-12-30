@@ -14,13 +14,12 @@
  */
 
 /*
- * Create.java
+ * Update.java
  * Copyright (C) 2017 University of Waikato, Hamilton, NZ
  */
 
-package com.github.fracpete.wekavirtualenv.action;
+package com.github.fracpete.wekavirtualenv.command;
 
-import com.github.fracpete.wekavirtualenv.core.FileUtils;
 import com.github.fracpete.wekavirtualenv.env.Environment;
 import com.github.fracpete.wekavirtualenv.env.Environments;
 import com.github.fracpete.wekavirtualenv.parser.ArgumentParser;
@@ -29,12 +28,11 @@ import com.github.fracpete.wekavirtualenv.parser.Namespace;
 import java.io.File;
 
 /**
- * Creates a new environment. Can be initialized with the content of an
- * existing 'wekafiles' directory.
+ * Allows adjusting of parameters of an existing environment.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
-public class Create
+public class Update
   extends AbstractCommand {
 
   /**
@@ -44,7 +42,7 @@ public class Create
    */
   @Override
   public String getName() {
-    return "create";
+    return "update";
   }
 
   /**
@@ -53,9 +51,17 @@ public class Create
    * @return		the help string
    */
   public String getHelp() {
-    return
-      "Creates a new environment.\n"
-      + "Can be initialized with the content of an existing 'wekafiles' directory.";
+    return "Allows adjusting of parameters of an existing environment.";
+  }
+
+  /**
+   * Returns whether it requires an environment.
+   *
+   * @return		true if required
+   */
+  @Override
+  public boolean requiresEnvironment() {
+    return true;
   }
 
   /**
@@ -68,25 +74,19 @@ public class Create
     ArgumentParser 	result;
 
     result = new ArgumentParser(getName());
-    result.addOption("--name")
-      .name("name")
-      .help("the name of the environment")
-      .required(true);
     result.addOption("--java")
       .name("java")
-      .help("the full path of the java binary to use for launching Weka")
+      .help("the full path of the java binary to use for launching Weka\n"
+        + "Use " + Environment.DEFAULT + " to reset to default")
       .setDefault("");
     result.addOption("--memory")
       .name("memory")
-      .help("the heap size to use for launching Weka (eg '1024m' or '2g')")
+      .help("the heap size to use for launching Weka (eg '1024m' or '2g')\n"
+        + "Use " + Environment.DEFAULT + " to reset to default")
       .setDefault("");
     result.addOption("--weka")
       .name("weka")
       .help("the full path to the weka.jar to use")
-      .required(true);
-    result.addOption("--wekafiles")
-      .name("wekafiles")
-      .help("the full path to the 'wekafiles' directory to initialize the environment with")
       .setDefault("");
 
     return result;
@@ -101,54 +101,42 @@ public class Create
    */
   @Override
   protected boolean doExecute(Namespace ns, String[] options) {
-    Environment		env;
+    Environment 	newEnv;
     String		msg;
-    File		from;
-    File		to;
     File		file;
 
-    msg = null;
+    msg    = null;
+    newEnv = m_Env.clone();
 
-    env        = new Environment();
-    env.name   = ns.getString("name");
-    env.java   = ns.getString("java");
-    env.memory = ns.getString("memory");
-    env.weka   = ns.getString("weka");
-
-    // check weka.jar
-    file = new File(env.weka);
-    if (!file.exists())
-      msg = "Weka jar does not exist: " + file;
-    else if (file.isDirectory())
-      msg = "Weka jar points to a directory: " + file;
-
-    // create env
-    if (msg == null)
-      msg = Environments.create(env);
-
-    // copy wekafiles?
-    if ((msg == null) && !ns.getString("wekafiles").isEmpty()) {
-      from = new File(ns.getString("wekafiles"));
-      to   = new File(Environments.getWekaFilesDir(env.name));
-      if (!from.exists())
-        msg = "'wekafiles' directory does not exist: " + from;
-      else if (!from.isDirectory())
-        msg = "'wekafiles' parameter does not point to a directory: " + from;
-      if (msg == null) {
-        try {
-	  if (!FileUtils.copyOrMove(from, to, false, false))
-	    msg = "Failed to copy directory '" + from + "' to '" + to + "'!";
-	}
-	catch (Exception e) {
-          msg = "Failed to copy directory '" + from + "' to '" + to + "':\n" + e;
-	}
-      }
+    // overrides?
+    if (!ns.getString("java").isEmpty()) {
+      if (ns.getString("java").equals(Environment.DEFAULT))
+        newEnv.java = "";
+      else
+        newEnv.java = ns.getString("java");
+    }
+    if (!ns.getString("memory").isEmpty()) {
+      if (ns.getString("memory").equals(Environment.DEFAULT))
+        newEnv.memory = "";
+      else
+        newEnv.memory = ns.getString("memory");
+    }
+    if (!ns.getString("weka").isEmpty()) {
+      file = new File(ns.getString("weka"));
+      if (!file.exists())
+        msg = "Weka jar does not exist: " + file;
+      else
+	newEnv.weka = ns.getString("weka");
     }
 
+    // save setup
+    if (msg == null)
+      msg = Environments.update(newEnv);
+
     if (msg != null)
-      System.err.println("Failed to create environment:\n" + msg);
+      System.err.println(msg);
     else
-      System.out.println("Created environment:\n\n" + env);
+      System.out.println("Updated environment:\n" + newEnv);
 
     return (msg == null);
   }

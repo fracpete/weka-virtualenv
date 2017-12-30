@@ -14,21 +14,21 @@
  */
 
 /*
- * ListCommands.java
+ * Experimenter.java
  * Copyright (C) 2017 University of Waikato, Hamilton, NZ
  */
 
-package com.github.fracpete.wekavirtualenv.action;
+package com.github.fracpete.wekavirtualenv.command;
 
 import com.github.fracpete.wekavirtualenv.parser.Namespace;
 
 /**
- * Lists all the commands.
+ * Launches the Weka Experimenter.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
-public class ListCommands
-  extends AbstractCommand {
+public class Experimenter
+  extends AbstractLaunchCommand {
 
   /**
    * The name of the command (used on the commandline).
@@ -37,7 +37,7 @@ public class ListCommands
    */
   @Override
   public String getName() {
-    return "list_cmds";
+    return "experimenter";
   }
 
   /**
@@ -46,7 +46,7 @@ public class ListCommands
    * @return		the help string
    */
   public String getHelp() {
-    return "Lists all available commands.";
+    return "Launches the Weka Experimenter.";
   }
 
   /**
@@ -56,23 +56,7 @@ public class ListCommands
    * @param options	additional command-line options
    * @return		true if successful
    */
-  @Override
   protected boolean doExecute(Namespace ns, String[] options) {
-    System.out.println("Available commands:\n");
-    for (AbstractCommand cmd: AbstractCommand.getCommands()) {
-      System.out.println(cmd.getName() + (cmd.requiresEnvironment() ? " <env>" : "") + (cmd.getParser() != null ? " <options>" : ""));
-      for (String line: cmd.getHelp().split("\n"))
-	System.out.println("\t" + line);
-      System.out.println();
-    }
-    System.out.println();
-    System.out.println("Notes:");
-    System.out.println("<env>");
-    System.out.println("\tthe name of the environment to use for the command.");
-    System.out.println("<options>");
-    System.out.println("\tthe command supports additional options,");
-    System.out.println("\tyou can use --help as argument to see further details.");
-
-    return true;
+    return launch(build("weka.gui.experiment.Experimenter", options));
   }
 }

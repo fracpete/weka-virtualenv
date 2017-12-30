@@ -28,6 +28,9 @@ package com.github.fracpete.wekavirtualenv.gui.action;
 public class Explorer
   extends AbstractEnvironmentAction {
 
+  /** the command. */
+  protected com.github.fracpete.wekavirtualenv.command.Explorer m_Command;
+
   /**
    * Returns the name of the action (displayed in GUI).
    *
@@ -64,14 +67,23 @@ public class Explorer
    */
   @Override
   protected String doExecute() {
-    com.github.fracpete.wekavirtualenv.action.Explorer	explorer;
+    String	result;
 
-    explorer = new com.github.fracpete.wekavirtualenv.action.Explorer();
-    explorer.setEnv(m_Environment);
-    transferOutputListeners(explorer);
-    if (!explorer.execute(new String[0]))
-      return "Failed to launch Explorer!";
-    else
-      return null;
+    result    = null;
+    m_Command = new com.github.fracpete.wekavirtualenv.command.Explorer();
+    m_Command.setEnv(m_Environment);
+    transferOutputListeners(m_Command);
+    if (!m_Command.execute(new String[0]))
+      result = "Failed to launch Explorer!";
+    m_Command = null;
+    return result;
+  }
+
+  /**
+   * Destroys the process if possible.
+   */
+  public void destroy() {
+    if (m_Command != null)
+      m_Command.destroy();
   }
 }

@@ -28,6 +28,9 @@ package com.github.fracpete.wekavirtualenv.gui.action;
 public class Experimenter
   extends AbstractEnvironmentAction {
 
+  /** the command. */
+  protected com.github.fracpete.wekavirtualenv.command.Experimenter m_Command;
+
   /**
    * Returns the name of the action (displayed in GUI).
    *
@@ -64,14 +67,23 @@ public class Experimenter
    */
   @Override
   protected String doExecute() {
-    com.github.fracpete.wekavirtualenv.action.Experimenter experimenter;
+    String	result;
 
-    experimenter = new com.github.fracpete.wekavirtualenv.action.Experimenter();
-    experimenter.setEnv(m_Environment);
-    transferOutputListeners(experimenter);
-    if (!experimenter.execute(new String[0]))
-      return "Failed to launch Experimenter!";
-    else
-      return null;
+    result    = null;
+    m_Command = new com.github.fracpete.wekavirtualenv.command.Experimenter();
+    m_Command.setEnv(m_Environment);
+    transferOutputListeners(m_Command);
+    if (!m_Command.execute(new String[0]))
+      result = "Failed to launch Experimenter!";
+    m_Command = null;
+    return result;
+  }
+
+  /**
+   * Destroys the process if possible.
+   */
+  public void destroy() {
+    if (m_Command != null)
+      m_Command.destroy();
   }
 }

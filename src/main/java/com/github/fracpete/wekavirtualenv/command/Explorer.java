@@ -14,20 +14,20 @@
  */
 
 /*
- * Experimenter.java
+ * Explorer.java
  * Copyright (C) 2017 University of Waikato, Hamilton, NZ
  */
 
-package com.github.fracpete.wekavirtualenv.action;
+package com.github.fracpete.wekavirtualenv.command;
 
 import com.github.fracpete.wekavirtualenv.parser.Namespace;
 
 /**
- * Launches the Weka Experimenter.
+ * Launches the Weka Explorer.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
-public class Experimenter
+public class Explorer
   extends AbstractLaunchCommand {
 
   /**
@@ -37,7 +37,7 @@ public class Experimenter
    */
   @Override
   public String getName() {
-    return "experimenter";
+    return "explorer";
   }
 
   /**
@@ -46,7 +46,7 @@ public class Experimenter
    * @return		the help string
    */
   public String getHelp() {
-    return "Launches the Weka Experimenter.";
+    return "Launches the Weka Explorer.";
   }
 
   /**
@@ -57,6 +57,6 @@ public class Experimenter
    * @return		true if successful
    */
   protected boolean doExecute(Namespace ns, String[] options) {
-    return launch(build("weka.gui.experiment.Experimenter", options));
+    return launch(build("weka.gui.explorer.Explorer", options));
   }
 }

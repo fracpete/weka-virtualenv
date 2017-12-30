@@ -28,6 +28,8 @@ import nz.ac.waikato.cms.gui.core.GUIHelper;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingWorker;
 import java.awt.event.ActionEvent;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Actions for environments.
@@ -40,8 +42,22 @@ public class EnvironmentAction
   /** the owner. */
   protected AbstractAction m_Owner;
 
+  /** the environment. */
+  protected Environment m_Environment;
+
   /** the tabbed pane for output. */
   protected JTabbedPane m_TabbedPane;
+
+  /** the launch counter. */
+  protected Map<String,Integer> m_Counter;
+
+  public EnvironmentAction() {
+    super();
+    m_Owner       = null;
+    m_TabbedPane  = null;
+    m_Counter     = new HashMap<>();
+    m_Environment = null;
+  }
 
   /**
    * Sets the owner.
@@ -82,11 +98,21 @@ public class EnvironmentAction
   /**
    * Sets the environment.
    *
-   * @param env		the environment to use
+   * @param value	the environment to use
    */
-  public void setEnvironment(Environment env) {
+  public void setEnvironment(Environment value) {
+    m_Environment = value;
     if (m_Owner instanceof AbstractEnvironmentAction)
-      ((AbstractEnvironmentAction) m_Owner).setEnvironment(env);
+      ((AbstractEnvironmentAction) m_Owner).setEnvironment(value);
+  }
+
+  /**
+   * Returns the environment.
+   *
+   * @return		the environment
+   */
+  public Environment getEnvironment() {
+    return m_Environment;
   }
 
   /**
@@ -96,6 +122,25 @@ public class EnvironmentAction
    */
   public boolean generatesOutput() {
     return m_Owner.generatesOutput();
+  }
+
+  /**
+   * Generates the tab name.
+   *
+   * @return		the tab name
+   */
+  protected String getTabName() {
+    String	result;
+    String	key;
+
+    key = getEnvironment().name + ":" + m_Owner.getName();
+    if (!m_Counter.containsKey(key))
+      m_Counter.put(key, 0);
+    m_Counter.put(key, m_Counter.get(key) + 1);
+
+    result = key + " (" + m_Counter.get(key) + ")";
+
+    return result;
   }
 
   /**
@@ -110,8 +155,9 @@ public class EnvironmentAction
 
     if (m_Owner.generatesOutput()) {
       panel = new ActionOutputPanel();
-      panel.setOwner(m_TabbedPane);
-      m_TabbedPane.addTab(m_Owner.getName(), panel);  // TODO increment counter?
+      panel.setTabbedPane(m_TabbedPane);
+      panel.setAction(this);
+      m_TabbedPane.addTab(getTabName(), panel);
       m_Owner.addOutputListener(panel);
     }
 

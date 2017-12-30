@@ -14,20 +14,21 @@
  */
 
 /*
- * Explorer.java
+ * Run.java
  * Copyright (C) 2017 University of Waikato, Hamilton, NZ
  */
 
-package com.github.fracpete.wekavirtualenv.action;
+package com.github.fracpete.wekavirtualenv.command;
 
+import com.github.fracpete.wekavirtualenv.parser.ArgumentParser;
 import com.github.fracpete.wekavirtualenv.parser.Namespace;
 
 /**
- * Launches the Weka Explorer.
+ * Executes an arbitrary class.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
-public class Explorer
+public class Run
   extends AbstractLaunchCommand {
 
   /**
@@ -37,7 +38,7 @@ public class Explorer
    */
   @Override
   public String getName() {
-    return "explorer";
+    return "run";
   }
 
   /**
@@ -46,7 +47,25 @@ public class Explorer
    * @return		the help string
    */
   public String getHelp() {
-    return "Launches the Weka Explorer.";
+    return "Executes an arbitrary class with the left-over command-line options.";
+  }
+
+  /**
+   * Returns the parser to use for the arguments.
+   *
+   * @return		always null
+   */
+  @Override
+  protected ArgumentParser getParser() {
+    ArgumentParser 	result;
+
+    result = new ArgumentParser(getName());
+    result.addOption("--class")
+      .name("class")
+      .help("the class to execute")
+      .required(true);
+
+    return result;
   }
 
   /**
@@ -57,6 +76,6 @@ public class Explorer
    * @return		true if successful
    */
   protected boolean doExecute(Namespace ns, String[] options) {
-    return launch(build("weka.gui.explorer.Explorer", options));
+    return launch(build(ns.getString("class"), options));
   }
 }

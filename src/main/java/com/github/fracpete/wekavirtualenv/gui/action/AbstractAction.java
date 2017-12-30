@@ -20,8 +20,8 @@
 
 package com.github.fracpete.wekavirtualenv.gui.action;
 
-import com.github.fracpete.wekavirtualenv.action.AbstractLaunchCommand;
-import com.github.fracpete.wekavirtualenv.action.OutputListener;
+import com.github.fracpete.wekavirtualenv.command.AbstractLaunchCommand;
+import com.github.fracpete.wekavirtualenv.command.OutputListener;
 import com.github.fracpete.wekavirtualenv.gui.core.IconHelper;
 import com.github.fracpete.wekavirtualenv.gui.env.EnvironmentAction;
 import nz.ac.waikato.cms.locator.ClassLocator;
@@ -149,6 +149,11 @@ public abstract class AbstractAction
 
     return result;
   }
+
+  /**
+   * Destroys the process if possible.
+   */
+  public abstract void destroy();
 
   /**
    * Uses the name for comparison.

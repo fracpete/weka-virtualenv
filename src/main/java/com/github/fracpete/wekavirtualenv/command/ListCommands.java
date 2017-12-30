@@ -14,25 +14,20 @@
  */
 
 /*
- * Reset.java
+ * ListCommands.java
  * Copyright (C) 2017 University of Waikato, Hamilton, NZ
  */
 
-package com.github.fracpete.wekavirtualenv.action;
+package com.github.fracpete.wekavirtualenv.command;
 
-import com.github.fracpete.wekavirtualenv.core.FileUtils;
-import com.github.fracpete.wekavirtualenv.env.Environments;
-import com.github.fracpete.wekavirtualenv.parser.ArgumentParser;
 import com.github.fracpete.wekavirtualenv.parser.Namespace;
 
-import java.io.File;
-
 /**
- * Resets an existing environment, i.e., deletes the "wekafiles" sub-directory.
+ * Lists all the commands.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
-public class Reset
+public class ListCommands
   extends AbstractCommand {
 
   /**
@@ -42,7 +37,7 @@ public class Reset
    */
   @Override
   public String getName() {
-    return "reset";
+    return "list_cmds";
   }
 
   /**
@@ -51,25 +46,7 @@ public class Reset
    * @return		the help string
    */
   public String getHelp() {
-    return "Deletes an existing environment, i.e., deletes the \"wekafiles\" sub-directory.";
-  }
-
-  /**
-   * Returns the parser to use for the arguments.
-   *
-   * @return		always null
-   */
-  @Override
-  protected ArgumentParser getParser() {
-    ArgumentParser 	result;
-
-    result = new ArgumentParser(getName());
-    result.addOption("--name")
-      .name("name")
-      .help("the name of the environment to reset")
-      .required(true);
-
-    return result;
+    return "Lists all available commands.";
   }
 
   /**
@@ -81,14 +58,21 @@ public class Reset
    */
   @Override
   protected boolean doExecute(Namespace ns, String[] options) {
-    boolean 	result;
+    System.out.println("Available commands:\n");
+    for (AbstractCommand cmd: AbstractCommand.getCommands()) {
+      System.out.println(cmd.getName() + (cmd.requiresEnvironment() ? " <env>" : "") + (cmd.getParser() != null ? " <options>" : ""));
+      for (String line: cmd.getHelp().split("\n"))
+	System.out.println("\t" + line);
+      System.out.println();
+    }
+    System.out.println();
+    System.out.println("Notes:");
+    System.out.println("<env>");
+    System.out.println("\tthe name of the environment to use for the command.");
+    System.out.println("<options>");
+    System.out.println("\tthe command supports additional options,");
+    System.out.println("\tyou can use --help as argument to see further details.");
 
-    result = FileUtils.delete(new File(Environments.getWekaFilesDir(ns.getString("name"))));
-    if (!result)
-      System.err.println("Failed to reset environment '" + ns.getString("name") + "':\n" + result);
-    else
-      System.out.println("Environment successfully reset: " + ns.getString("name"));
-
-    return result;
+    return true;
   }
 }

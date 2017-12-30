@@ -14,12 +14,13 @@
  */
 
 /*
- * Update.java
+ * Clone.java
  * Copyright (C) 2017 University of Waikato, Hamilton, NZ
  */
 
-package com.github.fracpete.wekavirtualenv.action;
+package com.github.fracpete.wekavirtualenv.command;
 
+import com.github.fracpete.wekavirtualenv.core.FileUtils;
 import com.github.fracpete.wekavirtualenv.env.Environment;
 import com.github.fracpete.wekavirtualenv.env.Environments;
 import com.github.fracpete.wekavirtualenv.parser.ArgumentParser;
@@ -28,11 +29,12 @@ import com.github.fracpete.wekavirtualenv.parser.Namespace;
 import java.io.File;
 
 /**
- * Allows adjusting of parameters of an existing environment.
+ * Clones a existing environment.
+ * Allows adjusting of environment parameters
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
-public class Update
+public class Clone
   extends AbstractCommand {
 
   /**
@@ -42,7 +44,7 @@ public class Update
    */
   @Override
   public String getName() {
-    return "update";
+    return "clone";
   }
 
   /**
@@ -51,17 +53,9 @@ public class Update
    * @return		the help string
    */
   public String getHelp() {
-    return "Allows adjusting of parameters of an existing environment.";
-  }
-
-  /**
-   * Returns whether it requires an environment.
-   *
-   * @return		true if required
-   */
-  @Override
-  public boolean requiresEnvironment() {
-    return true;
+    return
+      "Clones an existing environment.\n"
+      + "Allows adjusting of environment parameters.";
   }
 
   /**
@@ -74,20 +68,32 @@ public class Update
     ArgumentParser 	result;
 
     result = new ArgumentParser(getName());
+    result.addOption("--old")
+      .name("old")
+      .help("the name of the environment to clone")
+      .required(true);
+    result.addOption("--new")
+      .name("new")
+      .help("the name of the new environment")
+      .required(true);
     result.addOption("--java")
       .name("java")
       .help("the full path of the java binary to use for launching Weka\n"
-        + "Use " + Environment.DEFAULT + " to reset to default")
+	+ "Use " + Environment.DEFAULT + " to reset to default")
       .setDefault("");
     result.addOption("--memory")
       .name("memory")
       .help("the heap size to use for launching Weka (eg '1024m' or '2g')\n"
-        + "Use " + Environment.DEFAULT + " to reset to default")
+	+ "Use " + Environment.DEFAULT + " to reset to default")
       .setDefault("");
     result.addOption("--weka")
       .name("weka")
       .help("the full path to the weka.jar to use")
       .setDefault("");
+    result.addOption("--setup-only")
+      .name("setuponly")
+      .help("if set, does not copy the 'wekafiles' directory of the environment")
+      .argument(false);
 
     return result;
   }
@@ -101,12 +107,23 @@ public class Update
    */
   @Override
   protected boolean doExecute(Namespace ns, String[] options) {
+    Environment 	oldEnv;
     Environment 	newEnv;
     String		msg;
+    File		from;
+    File		to;
     File		file;
 
-    msg    = null;
-    newEnv = m_Env.clone();
+    msg = null;
+
+    oldEnv = Environments.readEnv(ns.getString("old"));
+    if (oldEnv == null) {
+      System.err.println("Failed to load old environment: " + ns.getString("old"));
+      return false;
+    }
+
+    newEnv = oldEnv.clone();
+    newEnv.name = ns.getString("new");
 
     // overrides?
     if (!ns.getString("java").isEmpty()) {
@@ -129,14 +146,38 @@ public class Update
 	newEnv.weka = ns.getString("weka");
     }
 
-    // save setup
+    // create empty environment
     if (msg == null)
-      msg = Environments.update(newEnv);
+      msg = Environments.create(newEnv);
+
+    // copy "wekafiles" across
+    if (!ns.getBoolean("setuponly")) {
+      if (msg == null) {
+        from = new File(Environments.getWekaFilesDir(oldEnv.name));
+        to = new File(Environments.getWekaFilesDir(newEnv.name));
+        if (from.exists() && from.isDirectory()) {
+          try {
+            if (!FileUtils.copyOrMove(from, to, false, false)) {
+              msg = "Failed to copy 'wekafiles' from old to new environment:\n"
+                + "- old: " + Environments.getWekaFilesDir(oldEnv.name) + "\n"
+                + "- new: " + Environments.getWekaFilesDir(newEnv.name);
+            }
+          }
+          catch (Exception e) {
+            msg = "Failed to copy 'wekafiles' from old to new environment:\n"
+              + "- old: " + Environments.getWekaFilesDir(oldEnv.name) + "\n"
+              + "- new: " + Environments.getWekaFilesDir(newEnv.name) + "\n"
+              + "- exception:\n"
+              + e;
+          }
+        }
+      }
+    }
 
     if (msg != null)
-      System.err.println(msg);
+      System.err.println("Failed to create environment:\n" + msg);
     else
-      System.out.println("Updated environment:\n" + newEnv);
+      System.out.println("Created environment:\n\n" + newEnv);
 
     return (msg == null);
   }

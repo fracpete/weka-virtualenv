@@ -14,21 +14,26 @@
  */
 
 /*
- * GUIChooser.java
+ * Reset.java
  * Copyright (C) 2017 University of Waikato, Hamilton, NZ
  */
 
-package com.github.fracpete.wekavirtualenv.action;
+package com.github.fracpete.wekavirtualenv.command;
 
+import com.github.fracpete.wekavirtualenv.core.FileUtils;
+import com.github.fracpete.wekavirtualenv.env.Environments;
+import com.github.fracpete.wekavirtualenv.parser.ArgumentParser;
 import com.github.fracpete.wekavirtualenv.parser.Namespace;
 
+import java.io.File;
+
 /**
- * Launches the Weka GUIChooser.
+ * Resets an existing environment, i.e., deletes the "wekafiles" sub-directory.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
-public class GUIChooser
-  extends AbstractLaunchCommand {
+public class Reset
+  extends AbstractCommand {
 
   /**
    * The name of the command (used on the commandline).
@@ -37,7 +42,7 @@ public class GUIChooser
    */
   @Override
   public String getName() {
-    return "guichooser";
+    return "reset";
   }
 
   /**
@@ -46,7 +51,25 @@ public class GUIChooser
    * @return		the help string
    */
   public String getHelp() {
-    return "Launches the Weka GUIChooser.";
+    return "Deletes an existing environment, i.e., deletes the \"wekafiles\" sub-directory.";
+  }
+
+  /**
+   * Returns the parser to use for the arguments.
+   *
+   * @return		always null
+   */
+  @Override
+  protected ArgumentParser getParser() {
+    ArgumentParser 	result;
+
+    result = new ArgumentParser(getName());
+    result.addOption("--name")
+      .name("name")
+      .help("the name of the environment to reset")
+      .required(true);
+
+    return result;
   }
 
   /**
@@ -56,7 +79,16 @@ public class GUIChooser
    * @param options	additional command-line options
    * @return		true if successful
    */
+  @Override
   protected boolean doExecute(Namespace ns, String[] options) {
-    return launch(build("weka.gui.GUIChooser", options));
+    boolean 	result;
+
+    result = FileUtils.delete(new File(Environments.getWekaFilesDir(ns.getString("name"))));
+    if (!result)
+      System.err.println("Failed to reset environment '" + ns.getString("name") + "':\n" + result);
+    else
+      System.out.println("Environment successfully reset: " + ns.getString("name"));
+
+    return result;
   }
 }

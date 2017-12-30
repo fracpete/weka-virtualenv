@@ -20,8 +20,8 @@
 
 package com.github.fracpete.wekavirtualenv;
 
-import com.github.fracpete.wekavirtualenv.action.AbstractCommand;
-import com.github.fracpete.wekavirtualenv.action.Help;
+import com.github.fracpete.wekavirtualenv.command.AbstractCommand;
+import com.github.fracpete.wekavirtualenv.command.Help;
 
 /**
  * Main class for launching commands and managing environments.

@@ -28,6 +28,9 @@ package com.github.fracpete.wekavirtualenv.gui.action;
 public class GUIChooser
   extends AbstractEnvironmentAction {
 
+  /** the command. */
+  protected com.github.fracpete.wekavirtualenv.command.GUIChooser m_Command;
+
   /**
    * Returns the name of the action (displayed in GUI).
    *
@@ -64,14 +67,23 @@ public class GUIChooser
    */
   @Override
   protected String doExecute() {
-    com.github.fracpete.wekavirtualenv.action.GUIChooser guichooser;
+    String	result;
 
-    guichooser = new com.github.fracpete.wekavirtualenv.action.GUIChooser();
-    guichooser.setEnv(m_Environment);
-    transferOutputListeners(guichooser);
-    if (!guichooser.execute(new String[0]))
-      return "Failed to launch GUIChooser!";
-    else
-      return null;
+    result    = null;
+    m_Command = new com.github.fracpete.wekavirtualenv.command.GUIChooser();
+    m_Command.setEnv(m_Environment);
+    transferOutputListeners(m_Command);
+    if (!m_Command.execute(new String[0]))
+      result = "Failed to launch GUIChooser!";
+    m_Command = null;
+    return result;
+  }
+
+  /**
+   * Destroys the process if possible.
+   */
+  public void destroy() {
+    if (m_Command != null)
+      m_Command.destroy();
   }
 }

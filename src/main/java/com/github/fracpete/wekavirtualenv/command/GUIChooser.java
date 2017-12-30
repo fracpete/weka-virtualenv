@@ -14,21 +14,21 @@
  */
 
 /*
- * Status.java
+ * GUIChooser.java
  * Copyright (C) 2017 University of Waikato, Hamilton, NZ
  */
 
-package com.github.fracpete.wekavirtualenv.action;
+package com.github.fracpete.wekavirtualenv.command;
 
 import com.github.fracpete.wekavirtualenv.parser.Namespace;
 
 /**
- * Outputs some status information.
+ * Launches the Weka GUIChooser.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
-public class Help
-  extends AbstractCommand {
+public class GUIChooser
+  extends AbstractLaunchCommand {
 
   /**
    * The name of the command (used on the commandline).
@@ -37,7 +37,7 @@ public class Help
    */
   @Override
   public String getName() {
-    return "help";
+    return "guichooser";
   }
 
   /**
@@ -46,7 +46,7 @@ public class Help
    * @return		the help string
    */
   public String getHelp() {
-    return "Outputs help information.";
+    return "Launches the Weka GUIChooser.";
   }
 
   /**
@@ -56,12 +56,7 @@ public class Help
    * @param options	additional command-line options
    * @return		true if successful
    */
-  @Override
   protected boolean doExecute(Namespace ns, String[] options) {
-    new ListCommands().execute(new String[0]);
-    System.out.println();
-    new ListEnvs().execute(new String[0]);
-    System.out.println();
-    return true;
+    return launch(build("weka.gui.GUIChooser", options));
   }
 }
