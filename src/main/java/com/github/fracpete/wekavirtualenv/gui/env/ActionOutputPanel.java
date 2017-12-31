@@ -20,6 +20,7 @@
 
 package com.github.fracpete.wekavirtualenv.gui.env;
 
+import com.github.fracpete.jclipboardhelper.ClipboardHelper;
 import com.github.fracpete.wekavirtualenv.command.OutputListener;
 import com.github.fracpete.wekavirtualenv.core.FileUtils;
 import com.github.fracpete.wekavirtualenv.gui.core.FileChooser;
@@ -33,6 +34,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -65,6 +68,9 @@ public class ActionOutputPanel
   /** the button for clearing the output. */
   protected JButton m_ButtonClear;
 
+  /** the button for copying the output. */
+  protected JButton m_ButtonCopy;
+
   /** the button for saving the output. */
   protected JButton m_ButtonSave;
 
@@ -89,6 +95,20 @@ public class ActionOutputPanel
     setLayout(new BorderLayout());
     m_TextArea = new JTextArea();
     m_TextArea.setFont(new Font("monospaced", Font.PLAIN, 12));
+    m_TextArea.getDocument().addDocumentListener(new DocumentListener() {
+      @Override
+      public void insertUpdate(DocumentEvent e) {
+	updateButtons();
+      }
+      @Override
+      public void removeUpdate(DocumentEvent e) {
+	updateButtons();
+      }
+      @Override
+      public void changedUpdate(DocumentEvent e) {
+	updateButtons();
+      }
+    });
     add(new ScrollPane(m_TextArea));
 
     // buttons
@@ -99,21 +119,39 @@ public class ActionOutputPanel
     m_PanelButtonsRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
     panel.add(m_PanelButtonsRight, BorderLayout.EAST);
 
-    m_ButtonClear = new JButton("Clear", IconHelper.getIcon("Clear"));
+    m_ButtonClear = new JButton(IconHelper.getIcon("Clear"));
+    m_ButtonClear.setToolTipText("Clears the output");
     m_ButtonClear.addActionListener((ActionEvent e) -> clear());
     m_PanelButtonsLeft.add(m_ButtonClear);
 
-    m_ButtonSave = new JButton("Save", IconHelper.getIcon("Save"));
+    m_ButtonCopy = new JButton(IconHelper.getIcon("Copy"));
+    m_ButtonCopy.setToolTipText("Copies the output to the clipboard");
+    m_ButtonCopy.addActionListener((ActionEvent e) -> copy());
+    m_PanelButtonsLeft.add(m_ButtonCopy);
+
+    m_ButtonSave = new JButton(IconHelper.getIcon("Save"));
+    m_ButtonSave.setToolTipText("Saves the output to a file");
     m_ButtonSave.addActionListener((ActionEvent e) -> save());
     m_PanelButtonsLeft.add(m_ButtonSave);
 
-    m_ButtonStop = new JButton("Stop", IconHelper.getIcon("Stop"));
+    m_ButtonStop = new JButton(IconHelper.getIcon("Stop"));
+    m_ButtonStop.setToolTipText("Stops the process");
     m_ButtonStop.addActionListener((ActionEvent e) -> stop());
     m_PanelButtonsRight.add(m_ButtonStop);
 
-    m_ButtonClose = new JButton("Close", IconHelper.getIcon("Close"));
+    m_ButtonClose = new JButton(IconHelper.getIcon("Close"));
+    m_ButtonClose.setToolTipText("Stops the process (if still running) and closes the tab");
     m_ButtonClose.addActionListener((ActionEvent e) -> close());
     m_PanelButtonsRight.add(m_ButtonClose);
+  }
+
+  /**
+   * Finishes the initialization.
+   */
+  @Override
+  protected void finishInit() {
+    super.finishInit();
+    updateButtons();
   }
 
   /**
@@ -165,6 +203,7 @@ public class ActionOutputPanel
     m_TextArea.append((stdout ? "[OUT] " : "[ERR] ") + line + "\n");
     if (atEnd)
       m_TextArea.setCaretPosition(m_TextArea.getText().length());
+    updateButtons();
   }
 
   /**
@@ -172,6 +211,17 @@ public class ActionOutputPanel
    */
   public void clear() {
     m_TextArea.setText("");
+    updateButtons();
+  }
+
+  /**
+   * Copies the output to the clipboard.
+   */
+  public void copy() {
+    if (m_TextArea.getSelectedText() == null)
+      ClipboardHelper.copyToClipboard(m_TextArea.getText());
+    else
+      ClipboardHelper.copyToClipboard(m_TextArea.getSelectedText());
   }
 
   /**
@@ -209,5 +259,17 @@ public class ActionOutputPanel
   public void close() {
     stop();
     m_TabbedPane.remove(this);
+  }
+
+  /**
+   * Updates the enabled state of the buttons.
+   */
+  protected void updateButtons() {
+    boolean	hasText;
+
+    hasText = (m_TextArea.getText().length() > 0);
+    m_ButtonClear.setEnabled(hasText);
+    m_ButtonCopy.setEnabled(hasText);
+    m_ButtonSave.setEnabled(hasText);
   }
 }
