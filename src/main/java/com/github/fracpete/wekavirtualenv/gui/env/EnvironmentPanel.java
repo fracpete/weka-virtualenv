@@ -22,6 +22,8 @@ package com.github.fracpete.wekavirtualenv.gui.env;
 
 import com.github.fracpete.wekavirtualenv.env.Environment;
 import com.github.fracpete.wekavirtualenv.gui.action.AbstractAction;
+import com.github.fracpete.wekavirtualenv.gui.action.GUIChooser;
+import com.github.fracpete.wekavirtualenv.gui.core.IconHelper;
 import nz.ac.waikato.cms.gui.core.BasePanel;
 
 import javax.swing.BorderFactory;
@@ -71,6 +73,9 @@ public class EnvironmentPanel
   /** the button for the actions. */
   protected JButton m_ButtonActions;
 
+  /** the button for the guichooser. */
+  protected JButton m_ButtonGUIChooser;
+
   /** the action menu. */
   protected JPopupMenu m_ActionMenu;
 
@@ -93,12 +98,11 @@ public class EnvironmentPanel
     m_Actions = new ArrayList<>();
     group         = "";
     for (AbstractAction action: AbstractAction.getActions()) {
-      if (group.isEmpty())
-        group = action.getGroup();
       if (!group.equals(action.getGroup()))
         m_Actions.add(null);
       envaction = action.getAction();
       m_Actions.add(envaction);
+      group = action.getGroup();
     }
 
     m_Prefixes = new ArrayList<>();
@@ -137,12 +141,17 @@ public class EnvironmentPanel
     m_LabelWeka = new JLabel();
     panel.add(createEntry("Weka", m_LabelWeka));
 
-    // actions
+    // buttons
     panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
     add(panel, BorderLayout.SOUTH);
+
     m_ButtonActions = new JButton("...");
     m_ButtonActions.addActionListener((ActionEvent ae) -> showActions());
     panel.add(m_ButtonActions);
+
+    m_ButtonGUIChooser = new JButton(IconHelper.getIcon("GUIChooser"));
+    m_ButtonGUIChooser.addActionListener((ActionEvent ae) -> startGuichooser());
+    panel.add(m_ButtonGUIChooser);
   }
 
   /**
@@ -265,5 +274,21 @@ public class EnvironmentPanel
       }
     }
     menu.show(this, 0, this.getHeight());
+  }
+
+  /**
+   * Starts the GUIChooser.
+   */
+  protected void startGuichooser() {
+    EnvironmentAction	envaction;
+    GUIChooser		action;
+
+    action    = new GUIChooser();
+    action.setEnvironment(getEnvironment());
+    envaction = new EnvironmentAction();
+    envaction.setTabbedPane(getOwner().getTabbedPane());
+    envaction.setEnvironment(getEnvironment());
+    envaction.setOwner(action);
+    envaction.actionPerformed(null);
   }
 }
