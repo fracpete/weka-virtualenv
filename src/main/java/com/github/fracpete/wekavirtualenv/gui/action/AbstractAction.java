@@ -15,7 +15,7 @@
 
 /*
  * AbstractAction.java
- * Copyright (C) 2017 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2018 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.gui.action;
@@ -193,7 +193,7 @@ public abstract class AbstractAction
   public static List<AbstractAction> getActions() {
     List<AbstractAction>	result;
     List<Class>			classes;
-    AbstractAction		cmd;
+    AbstractAction 		action;
 
     result = new ArrayList<>();
     classes = ClassLocator.getSingleton().findClasses(
@@ -202,8 +202,8 @@ public abstract class AbstractAction
 
     for (Class cls: classes) {
       try {
-        cmd = (AbstractAction) cls.newInstance();
-        result.add(cmd);
+        action = (AbstractAction) cls.newInstance();
+        result.add(action);
       }
       catch (Exception e) {
         // ignored
