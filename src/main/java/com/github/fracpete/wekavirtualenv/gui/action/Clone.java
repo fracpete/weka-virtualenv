@@ -142,8 +142,12 @@ public class Clone
       "--weka", props.getProperty("weka"),
     };
     m_Command = new com.github.fracpete.wekavirtualenv.command.Clone();
-    if (!m_Command.execute(options))
-      result = "Failed to clone environment!";
+    if (!m_Command.execute(options)) {
+      if (m_Command.hasErrors())
+        result = m_Command.getErrors();
+      else
+	result = "Failed to clone environment!";
+    }
     m_Command = null;
     return result;
   }

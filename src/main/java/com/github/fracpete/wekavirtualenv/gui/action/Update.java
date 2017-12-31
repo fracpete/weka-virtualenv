@@ -135,8 +135,12 @@ public class Update
     };
     m_Command = new com.github.fracpete.wekavirtualenv.command.Update();
     m_Command.setEnv(getEnvironment());
-    if (!m_Command.execute(options))
-      result = "Failed to update environment!";
+    if (!m_Command.execute(options)) {
+      if (m_Command.hasErrors())
+        result = m_Command.getErrors();
+      else
+        result = "Failed to update environment!";
+    }
     m_Command = null;
     return result;
   }

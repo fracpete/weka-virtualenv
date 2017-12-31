@@ -82,8 +82,12 @@ public class Delete
 
     result    = null;
     m_Command = new com.github.fracpete.wekavirtualenv.command.Delete();
-    if (!m_Command.execute(new String[]{"--name", getEnvironment().name}))
-      result = "Failed to delete environment!";
+    if (!m_Command.execute(new String[]{"--name", getEnvironment().name})) {
+      if (m_Command.hasErrors())
+        result = m_Command.getErrors();
+      else
+	result = "Failed to delete environment!";
+    }
     m_Command = null;
     return result;
   }

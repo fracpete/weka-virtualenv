@@ -179,7 +179,7 @@ public abstract class AbstractLaunchCommand
       return true;
     }
     catch (Exception e) {
-      System.err.println("Failed to launch command:\n" + builder.command());
+      addError("Failed to launch command:\n" + builder.command());
       return false;
     }
   }

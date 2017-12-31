@@ -136,7 +136,7 @@ public class Update
       msg = Environments.update(newEnv);
 
     if (msg != null)
-      System.err.println(msg);
+      addError(msg);
     else
       System.out.println("Updated environment:\n" + newEnv);
 

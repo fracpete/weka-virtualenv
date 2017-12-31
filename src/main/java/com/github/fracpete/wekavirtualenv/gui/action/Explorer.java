@@ -73,8 +73,12 @@ public class Explorer
     m_Command = new com.github.fracpete.wekavirtualenv.command.Explorer();
     m_Command.setEnv(m_Environment);
     transferOutputListeners(m_Command);
-    if (!m_Command.execute(new String[0]))
-      result = "Failed to launch Explorer!";
+    if (!m_Command.execute(new String[0])) {
+      if (m_Command.hasErrors())
+        result = m_Command.getErrors();
+      else
+        result = "Failed to launch Explorer!";
+    }
     m_Command = null;
     return result;
   }

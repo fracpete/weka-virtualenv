@@ -118,7 +118,7 @@ public class Clone
 
     oldEnv = Environments.readEnv(ns.getString("old"));
     if (oldEnv == null) {
-      System.err.println("Failed to load old environment: " + ns.getString("old"));
+      addError("Failed to load old environment: " + ns.getString("old"));
       return false;
     }
 
@@ -175,7 +175,7 @@ public class Clone
     }
 
     if (msg != null)
-      System.err.println("Failed to create environment:\n" + msg);
+      addError("Failed to create environment:\n" + msg);
     else
       System.out.println("Created environment:\n\n" + newEnv);
 

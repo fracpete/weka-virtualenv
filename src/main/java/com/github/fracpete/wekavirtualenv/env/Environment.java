@@ -37,7 +37,7 @@ import java.util.jar.JarFile;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public class Environment
-  implements Cloneable {
+  implements Cloneable, Comparable<Environment> {
 
   /** the name of the environment. */
   public final static String KEY_NAME = "name";
@@ -80,6 +80,28 @@ public class Environment
     result.weka   = weka;
 
     return result;
+  }
+
+  /**
+   * Comparison based on name alone.
+   *
+   * @param o		the other environment
+   * @return		the result of the string comparison of the names
+   */
+  @Override
+  public int compareTo(Environment o) {
+    return name.compareTo(o.name);
+  }
+
+  /**
+   * Checks whether the object is an environment with the same name.
+   *
+   * @param obj		the other object
+   * @return		true if other object an environment with same name
+   */
+  @Override
+  public boolean equals(Object obj) {
+    return (obj instanceof Environment) && (compareTo((Environment) obj) == 0);
   }
 
   /**

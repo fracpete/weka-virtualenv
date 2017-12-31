@@ -43,6 +43,17 @@ public abstract class AbstractCommand
   /** the environment to use. */
   protected Environment m_Env;
 
+  /** for storing any errors. */
+  protected StringBuilder m_Errors;
+
+  /**
+   * Initializes the command.
+   */
+  public AbstractCommand() {
+    super();
+    m_Errors = null;
+  }
+
   /**
    * The name of the command (used on the commandline).
    *
@@ -64,6 +75,40 @@ public abstract class AbstractCommand
    */
   public boolean requiresEnvironment() {
     return false;
+  }
+
+  /**
+   * Stores and outputs the error message.
+   *
+   * @param msg		the message
+   */
+  protected void addError(String msg) {
+    if (m_Errors == null)
+      m_Errors = new StringBuilder();
+    else
+      m_Errors.append("\n");
+    m_Errors.append(msg);
+  }
+
+  /**
+   * Returns whether any errors were recorded.
+   *
+   * @return		true if errors present
+   */
+  public boolean hasErrors() {
+    return (m_Errors != null);
+  }
+
+  /**
+   * Returns the errors.
+   *
+   * @return		the errors, null if none present
+   */
+  public String getErrors() {
+    if (m_Errors == null)
+      return null;
+    else
+      return m_Errors.toString();
   }
 
   /**

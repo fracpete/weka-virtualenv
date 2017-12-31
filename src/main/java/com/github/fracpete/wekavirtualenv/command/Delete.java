@@ -82,7 +82,7 @@ public class Delete
 
     msg = Environments.delete(ns.getString("name"));
     if (msg != null)
-      System.err.println("Failed to delete environment '" + ns.getString("name") + "':\n" + msg);
+      addError("Failed to delete environment '" + ns.getString("name") + "':\n" + msg);
     else
       System.out.println("Environment successfully deleted: " + ns.getString("name"));
 

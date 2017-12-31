@@ -146,7 +146,7 @@ public class Create
     }
 
     if (msg != null)
-      System.err.println("Failed to create environment:\n" + msg);
+      addError("Failed to create environment:\n" + msg);
     else
       System.out.println("Created environment:\n\n" + env);
 

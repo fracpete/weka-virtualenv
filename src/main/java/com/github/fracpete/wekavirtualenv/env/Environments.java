@@ -25,6 +25,7 @@ import nz.ac.waikato.cms.core.FileUtils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -172,6 +173,8 @@ public class Environments {
 	  result.add(env);
       }
     }
+
+    Collections.sort(result);
 
     return result;
   }
