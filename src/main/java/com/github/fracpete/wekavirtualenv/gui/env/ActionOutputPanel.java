@@ -25,8 +25,8 @@ import com.github.fracpete.wekavirtualenv.command.OutputListener;
 import com.github.fracpete.wekavirtualenv.core.FileUtils;
 import com.github.fracpete.wekavirtualenv.gui.core.FileChooser;
 import com.github.fracpete.wekavirtualenv.gui.core.IconHelper;
-import com.github.fracpete.wekavirtualenv.gui.core.ScrollPane;
 import nz.ac.waikato.cms.gui.core.BasePanel;
+import nz.ac.waikato.cms.gui.core.BaseScrollPane;
 import nz.ac.waikato.cms.gui.core.ExtensionFileFilter;
 import nz.ac.waikato.cms.gui.core.GUIHelper;
 
@@ -109,7 +109,7 @@ public class ActionOutputPanel
 	updateButtons();
       }
     });
-    add(new ScrollPane(m_TextArea));
+    add(new BaseScrollPane(m_TextArea));
 
     // buttons
     panel = new JPanel(new BorderLayout());
