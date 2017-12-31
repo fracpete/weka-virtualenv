@@ -15,16 +15,16 @@
 
 /*
  * ActionOutputPanel.java
- * Copyright (C) 2017 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2018 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.gui.env;
 
 import com.github.fracpete.jclipboardhelper.ClipboardHelper;
 import com.github.fracpete.wekavirtualenv.command.OutputListener;
-import com.github.fracpete.wekavirtualenv.core.FileUtils;
 import com.github.fracpete.wekavirtualenv.gui.core.FileChooser;
 import com.github.fracpete.wekavirtualenv.gui.core.IconHelper;
+import nz.ac.waikato.cms.core.FileUtils;
 import nz.ac.waikato.cms.gui.core.BasePanel;
 import nz.ac.waikato.cms.gui.core.BaseScrollPane;
 import nz.ac.waikato.cms.gui.core.ExtensionFileFilter;

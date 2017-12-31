@@ -15,16 +15,16 @@
 
 /*
  * Clone.java
- * Copyright (C) 2017 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2018 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.command;
 
-import com.github.fracpete.wekavirtualenv.core.FileUtils;
-import com.github.fracpete.wekavirtualenv.env.Environment;
-import com.github.fracpete.wekavirtualenv.env.Environments;
 import com.github.fracpete.simpleargparse4j.ArgumentParser;
 import com.github.fracpete.simpleargparse4j.Namespace;
+import com.github.fracpete.wekavirtualenv.env.Environment;
+import com.github.fracpete.wekavirtualenv.env.Environments;
+import nz.ac.waikato.cms.core.FileUtils;
 
 import java.io.File;
 

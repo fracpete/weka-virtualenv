@@ -15,12 +15,12 @@
 
 /*
  * Environment.java
- * Copyright (C) 2017 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2018 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.env;
 
-import com.github.fracpete.wekavirtualenv.core.FileUtils;
+import nz.ac.waikato.cms.core.FileUtils;
 
 import java.io.BufferedWriter;
 import java.io.File;
