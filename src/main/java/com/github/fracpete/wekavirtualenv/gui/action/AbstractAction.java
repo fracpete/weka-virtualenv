@@ -152,8 +152,11 @@ public abstract class AbstractAction
 
   /**
    * Destroys the process if possible.
+   * <br>
+   * Default implementation does nothing.
    */
-  public abstract void destroy();
+  public void destroy() {
+  }
 
   /**
    * Uses the name for comparison.
