@@ -22,10 +22,6 @@ package com.github.fracpete.wekavirtualenv.core;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Reader;
-import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -40,71 +36,8 @@ import java.util.List;
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
-public class FileUtils {
-
-  /**
-   * Closes the reader.
-   *
-   * @param reader	the reader to close
-   */
-  public static void closeQuietly(Reader reader) {
-    try {
-      if (reader != null)
-	reader.close();
-    }
-    catch (IOException e) {
-      // ignore
-    }
-  }
-
-  /**
-   * Closes the writer.
-   *
-   * @param writer	the writer to close
-   */
-  public static void closeQuietly(Writer writer) {
-    try {
-      if (writer != null) {
-        writer.flush();
-	writer.close();
-      }
-    }
-    catch (IOException e) {
-      // ignore
-    }
-  }
-
-  /**
-   * Closes the input stream.
-   *
-   * @param istream	the stream to close
-   */
-  public static void closeQuietly(InputStream istream) {
-    try {
-      if (istream != null)
-	istream.close();
-    }
-    catch (IOException e) {
-      // ignore
-    }
-  }
-
-  /**
-   * Closes the output stream.
-   *
-   * @param ostream	the stream to close
-   */
-  public static void closeQuietly(OutputStream ostream) {
-    try {
-      if (ostream != null) {
-        ostream.flush();
-	ostream.close();
-      }
-    }
-    catch (IOException e) {
-      // ignore
-    }
-  }
+public class FileUtils
+  extends nz.ac.waikato.cms.core.FileUtils {
 
   /**
    * Deletes the specified file. If the file represents a directory, then this
