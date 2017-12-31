@@ -22,8 +22,8 @@ package com.github.fracpete.wekavirtualenv.command;
 
 import com.github.fracpete.wekavirtualenv.core.FileUtils;
 import com.github.fracpete.wekavirtualenv.env.Environments;
-import com.github.fracpete.wekavirtualenv.parser.ArgumentParser;
-import com.github.fracpete.wekavirtualenv.parser.Namespace;
+import com.github.fracpete.simpleargparse4j.ArgumentParser;
+import com.github.fracpete.simpleargparse4j.Namespace;
 
 import java.io.File;
 

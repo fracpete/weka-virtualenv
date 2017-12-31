@@ -20,7 +20,7 @@
 
 package com.github.fracpete.wekavirtualenv.command;
 
-import com.github.fracpete.wekavirtualenv.parser.Namespace;
+import com.github.fracpete.simpleargparse4j.Namespace;
 
 /**
  * Lists all the commands.

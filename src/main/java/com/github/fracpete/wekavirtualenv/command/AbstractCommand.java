@@ -22,10 +22,10 @@ package com.github.fracpete.wekavirtualenv.command;
 
 import com.github.fracpete.wekavirtualenv.env.Environment;
 import com.github.fracpete.wekavirtualenv.env.Environments;
-import com.github.fracpete.wekavirtualenv.parser.ArgumentParser;
-import com.github.fracpete.wekavirtualenv.parser.ArgumentParserException;
-import com.github.fracpete.wekavirtualenv.parser.InvalidEnvironmentException;
-import com.github.fracpete.wekavirtualenv.parser.Namespace;
+import com.github.fracpete.simpleargparse4j.ArgumentParser;
+import com.github.fracpete.simpleargparse4j.ArgumentParserException;
+import com.github.fracpete.simpleargparse4j.InvalidEnvironmentException;
+import com.github.fracpete.simpleargparse4j.Namespace;
 import nz.ac.waikato.cms.locator.ClassLocator;
 
 import java.util.ArrayList;
