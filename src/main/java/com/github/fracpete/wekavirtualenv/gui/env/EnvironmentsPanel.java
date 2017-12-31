@@ -22,8 +22,10 @@ package com.github.fracpete.wekavirtualenv.gui.env;
 
 import com.github.fracpete.wekavirtualenv.env.Environment;
 import com.github.fracpete.wekavirtualenv.env.Environments;
+import com.github.fracpete.wekavirtualenv.gui.action.Create;
 import com.github.fracpete.wekavirtualenv.gui.core.IconHelper;
 import nz.ac.waikato.cms.gui.core.BasePanel;
+import nz.ac.waikato.cms.gui.core.GUIHelper;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -139,7 +141,14 @@ public class EnvironmentsPanel
    * Creates an environment.
    */
   public void create() {
-    // TODO
+    Create	create;
+    String	msg;
+
+    create = new Create();
+    msg    = create.execute();
+    reload();
+    if (msg != null)
+      GUIHelper.showErrorMessage(getParent(), msg);
   }
 
   /**
