@@ -48,15 +48,19 @@ public class EnvironmentAction
   /** the tabbed pane for output. */
   protected JTabbedPane m_TabbedPane;
 
+  /** the environments panel. */
+  protected EnvironmentsPanel m_EnvironmentsPanel;
+
   /** the launch counter. */
   protected Map<String,Integer> m_Counter;
 
   public EnvironmentAction() {
     super();
-    m_Owner       = null;
-    m_TabbedPane  = null;
-    m_Counter     = new HashMap<>();
-    m_Environment = null;
+    m_Owner             = null;
+    m_TabbedPane        = null;
+    m_EnvironmentsPanel = null;
+    m_Counter           = new HashMap<>();
+    m_Environment       = null;
   }
 
   /**
@@ -93,6 +97,24 @@ public class EnvironmentAction
    */
   public JTabbedPane getTabbedPane() {
     return m_TabbedPane;
+  }
+
+  /**
+   * Sets the environments panel.
+   *
+   * @param value	the panel
+   */
+  public void setEnvironmentsPanel(EnvironmentsPanel value) {
+    m_EnvironmentsPanel = value;
+  }
+
+  /**
+   * Returns the environments panel.
+   *
+   * @return		the panel
+   */
+  public EnvironmentsPanel getEnvironmentsPanel() {
+    return m_EnvironmentsPanel;
   }
 
   /**
@@ -165,6 +187,7 @@ public class EnvironmentAction
       @Override
       protected Object doInBackground() throws Exception {
 	String msg = m_Owner.execute();
+	m_EnvironmentsPanel.reload();
 	if (msg != null)
 	  GUIHelper.showErrorMessage(null, "Failed to execute " + m_Owner.getName() + ":\n" + msg);
 	return null;

@@ -268,6 +268,7 @@ public class EnvironmentPanel
 	}
         else {
           action.setEnvironment(getEnvironment());
+          action.setEnvironmentsPanel(getOwner());
 	  action.setTabbedPane(getOwner().getTabbedPane());
 	  menu.add(action);
 	}
@@ -286,6 +287,7 @@ public class EnvironmentPanel
     action    = new GUIChooser();
     action.setEnvironment(getEnvironment());
     envaction = new EnvironmentAction();
+    envaction.setEnvironmentsPanel(getOwner());
     envaction.setTabbedPane(getOwner().getTabbedPane());
     envaction.setEnvironment(getEnvironment());
     envaction.setOwner(action);
