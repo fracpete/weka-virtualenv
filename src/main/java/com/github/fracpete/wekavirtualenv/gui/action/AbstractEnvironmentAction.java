@@ -21,6 +21,11 @@
 package com.github.fracpete.wekavirtualenv.gui.action;
 
 import com.github.fracpete.wekavirtualenv.env.Environment;
+import nz.ac.waikato.cms.locator.ClassLocator;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Ancestor for actions that work on an environment.
@@ -66,6 +71,36 @@ public abstract class AbstractEnvironmentAction
       if (m_Environment == null)
         result = "No environment provided!";
     }
+
+    return result;
+  }
+
+  /**
+   * Lists all available environment actions.
+   *
+   * @return		the actions
+   */
+  public static List<AbstractEnvironmentAction> getAbstractEnvironmentActions() {
+    List<AbstractEnvironmentAction>	result;
+    List<Class>				classes;
+    AbstractEnvironmentAction 		action;
+
+    result = new ArrayList<>();
+    classes = ClassLocator.getSingleton().findClasses(
+      AbstractEnvironmentAction.class,
+      new String[]{AbstractEnvironmentAction.class.getPackage().getName()});
+
+    for (Class cls: classes) {
+      try {
+        action = (AbstractEnvironmentAction) cls.newInstance();
+        result.add(action);
+      }
+      catch (Exception e) {
+        // ignored
+      }
+    }
+
+    Collections.sort(result);
 
     return result;
   }

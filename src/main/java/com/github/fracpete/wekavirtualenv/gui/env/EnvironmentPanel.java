@@ -21,7 +21,7 @@
 package com.github.fracpete.wekavirtualenv.gui.env;
 
 import com.github.fracpete.wekavirtualenv.env.Environment;
-import com.github.fracpete.wekavirtualenv.gui.action.AbstractAction;
+import com.github.fracpete.wekavirtualenv.gui.action.AbstractEnvironmentAction;
 import com.github.fracpete.wekavirtualenv.gui.action.GUIChooser;
 import com.github.fracpete.wekavirtualenv.gui.core.IconHelper;
 import nz.ac.waikato.cms.gui.core.BasePanel;
@@ -97,7 +97,7 @@ public class EnvironmentPanel
     m_Environment = null;
     m_Actions = new ArrayList<>();
     group         = "";
-    for (AbstractAction action: AbstractAction.getActions()) {
+    for (AbstractEnvironmentAction action: AbstractEnvironmentAction.getAbstractEnvironmentActions()) {
       if (!group.equals(action.getGroup()))
         m_Actions.add(null);
       envaction = action.getAction();
