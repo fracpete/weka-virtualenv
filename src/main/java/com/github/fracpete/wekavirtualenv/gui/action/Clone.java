@@ -27,6 +27,7 @@ import nz.ac.waikato.cms.gui.core.PropertiesParameterPanel.PropertyType;
 
 import java.awt.BorderLayout;
 import java.awt.Dialog.ModalityType;
+import java.io.File;
 import java.util.Properties;
 
 /**
@@ -81,6 +82,7 @@ public class Clone
     Properties			props;
     ApprovalDialog		dialog;
     String[]			options;
+    File			file;
 
     panel = new PropertiesParameterPanel();
 
@@ -128,6 +130,10 @@ public class Clone
 
     result    = null;
     props     = panel.getProperties();
+    file      = new File(props.getProperty("java"));
+    if (file.isDirectory())
+      props.setProperty("java", "");
+
     options   = new String[]{
       "--old", getEnvironment().name,
       "--new", props.getProperty("newname"),
