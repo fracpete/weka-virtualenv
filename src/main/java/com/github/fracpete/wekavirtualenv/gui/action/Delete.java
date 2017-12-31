@@ -20,6 +20,10 @@
 
 package com.github.fracpete.wekavirtualenv.gui.action;
 
+import nz.ac.waikato.cms.gui.core.GUIHelper;
+
+import javax.swing.JOptionPane;
+
 /**
  * Deletes the environment.
  *
@@ -68,6 +72,13 @@ public class Delete
   @Override
   protected String doExecute() {
     String	result;
+    int		retVal;
+
+    retVal = JOptionPane.showConfirmDialog(
+      GUIHelper.getParentComponent(getAction().getEnvironmentsPanel()),
+      "Delete environment '" + getEnvironment().name + "'?");
+    if (retVal != JOptionPane.OK_OPTION)
+      return null;
 
     result    = null;
     m_Command = new com.github.fracpete.wekavirtualenv.command.Delete();
