@@ -110,7 +110,7 @@ public class Clone
     });
 
     props = new Properties();
-    props.setProperty("newname", "");
+    props.setProperty("newname", getEnvironment().name + ".clone");
     props.setProperty("java", getEnvironment().java);
     props.setProperty("memory", getEnvironment().memory);
     props.setProperty("weka", getEnvironment().weka);
