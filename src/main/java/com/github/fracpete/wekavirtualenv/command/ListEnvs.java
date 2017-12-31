@@ -65,7 +65,7 @@ public class ListEnvs
 
     result = new ArgumentParser(getName());
     result.addOption("--verbose")
-      .name("verbose")
+      .dest("verbose")
       .help("outputs more information if enabled")
       .argument(false);
 

@@ -118,7 +118,7 @@ public class ArgumentParser
     mapped   = new HashMap<>();
     required = new HashSet<>();
     for (Option opt: m_Options) {
-      result.setDefault(opt.getName(), opt.getDefault());
+      result.setDefault(opt.getDest(), opt.getDefault());
       mapped.put(opt.getFlag(), opt);
       if (opt.isRequired())
         required.add(opt);
@@ -136,7 +136,7 @@ public class ArgumentParser
         if (option.hasArgument()) {
 	  if (i == args.length - 1)
 	    throw new MissingArgumentException("No argument supplied: " + option.getFlag());
-	  result.setValue(option.getName(), args[i+1]);
+	  result.setValue(option.getDest(), args[i+1]);
           if (remove) {
 	    args[i]   = "";
 	    args[i+1] = "";
@@ -144,7 +144,7 @@ public class ArgumentParser
 	  }
 	}
 	else {
-          result.flipValue(option.getName());
+          result.flipValue(option.getDest());
           if (remove)
             args[i] = "";
 	}
@@ -185,7 +185,7 @@ public class ArgumentParser
       if (!opt.isRequired())
         optwidth += 2;  // surrounding brackets
       if (opt.hasArgument())
-        optwidth += 1 + opt.getName().length();
+        optwidth += 1 + opt.getDest().length();
       if (width + optwidth + 1 > SCREEN_WIDTH)
         result.append("\n").append("      ");
       result.append(" ");
@@ -193,7 +193,7 @@ public class ArgumentParser
         result.append("[");
       result.append(opt.getFlag());
       if (opt.hasArgument())
-        result.append(" ").append(opt.getName().toUpperCase());
+        result.append(" ").append(opt.getDest().toUpperCase());
       if (!opt.isRequired())
         result.append("]");
     }
@@ -205,7 +205,7 @@ public class ArgumentParser
     for (Option opt: m_Options) {
       result.append(opt.getFlag());
       if (!opt.hasArgument())
-        result.append(" ").append(opt.getName().toUpperCase());
+        result.append(" ").append(opt.getDest().toUpperCase());
       result.append("\n");
       result.append("\t").append(opt.getHelp());
       result.append("\n");

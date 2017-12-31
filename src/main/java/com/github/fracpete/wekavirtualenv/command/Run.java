@@ -61,7 +61,7 @@ public class Run
 
     result = new ArgumentParser(getName());
     result.addOption("--class")
-      .name("class")
+      .dest("class")
       .help("the class to execute")
       .required(true);
 

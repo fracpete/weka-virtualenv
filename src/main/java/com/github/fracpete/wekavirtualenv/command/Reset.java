@@ -65,7 +65,7 @@ public class Reset
 
     result = new ArgumentParser(getName());
     result.addOption("--name")
-      .name("name")
+      .dest("name")
       .help("the name of the environment to reset")
       .required(true);
 

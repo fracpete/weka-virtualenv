@@ -30,8 +30,8 @@ import java.io.Serializable;
 public class Option
   implements Serializable, Comparable<Option> {
 
-  /** the name. */
-  protected String m_Name;
+  /** the destination (key in namespace). */
+  protected String m_Dest;
 
   /** the commandline flag. */
   protected String m_Flag;
@@ -60,15 +60,15 @@ public class Option
   /**
    * Initializes the option.
    *
-   * @param name	the name
+   * @param dest	the destination (ie key in namespace)
    * @param flag	the flag (eg "--blah")
    * @param hasArg	true if the option has an argument
    * @param defValue	the default value
    * @param help	short help string
    * @param required	true if required, otherwise optional
    */
-  public Option(String name, String flag, boolean hasArg, String defValue, String help, boolean required) {
-    m_Name         = name;
+  public Option(String dest, String flag, boolean hasArg, String defValue, String help, boolean required) {
+    m_Dest         = dest;
     m_Flag         = flag;
     m_HasArgument  = hasArg;
     m_DefaultValue = defValue;
@@ -77,13 +77,13 @@ public class Option
   }
 
   /**
-   * Sets the name (used in the namespace).
+   * Sets the destination key (used in the namespace).
    *
-   * @param value	the name
+   * @param value	the name of the key
    * @return		the option
    */
-  public Option name(String value) {
-    m_Name = value;
+  public Option dest(String value) {
+    m_Dest = value;
     return this;
   }
 
@@ -132,12 +132,12 @@ public class Option
   }
 
   /**
-   * Returns the name.
+   * Returns the destination key name.
    *
-   * @return		the name
+   * @return		the key
    */
-  public String getName() {
-    return m_Name;
+  public String getDest() {
+    return m_Dest;
   }
 
   /**
@@ -193,7 +193,7 @@ public class Option
    */
   @Override
   public int compareTo(Option o) {
-    return m_Name.compareTo(o.getName());
+    return m_Dest.compareTo(o.getDest());
   }
 
   /**
@@ -214,7 +214,7 @@ public class Option
    */
   @Override
   public int hashCode() {
-    return m_Name.hashCode();
+    return m_Dest.hashCode();
   }
 
   /**
@@ -223,7 +223,7 @@ public class Option
    * @return		the description
    */
   public String toString() {
-    return "name=" + m_Name + ", "
+    return "name=" + m_Dest + ", "
       + "flag=" + m_Flag + ", "
       + "hasArg=" + m_HasArgument + ", "
       + "defValue=" + m_DefaultValue + ", "

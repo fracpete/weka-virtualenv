@@ -75,17 +75,17 @@ public class Update
 
     result = new ArgumentParser(getName());
     result.addOption("--java")
-      .name("java")
+      .dest("java")
       .help("the full path of the java binary to use for launching Weka\n"
         + "Use " + Environment.DEFAULT + " to reset to default")
       .setDefault("");
     result.addOption("--memory")
-      .name("memory")
+      .dest("memory")
       .help("the heap size to use for launching Weka (eg '1024m' or '2g')\n"
         + "Use " + Environment.DEFAULT + " to reset to default")
       .setDefault("");
     result.addOption("--weka")
-      .name("weka")
+      .dest("weka")
       .help("the full path to the weka.jar to use")
       .setDefault("");
 

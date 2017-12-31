@@ -69,23 +69,23 @@ public class Create
 
     result = new ArgumentParser(getName());
     result.addOption("--name")
-      .name("name")
+      .dest("name")
       .help("the name of the environment")
       .required(true);
     result.addOption("--java")
-      .name("java")
+      .dest("java")
       .help("the full path of the java binary to use for launching Weka")
       .setDefault("");
     result.addOption("--memory")
-      .name("memory")
+      .dest("memory")
       .help("the heap size to use for launching Weka (eg '1024m' or '2g')")
       .setDefault("");
     result.addOption("--weka")
-      .name("weka")
+      .dest("weka")
       .help("the full path to the weka.jar to use")
       .required(true);
     result.addOption("--wekafiles")
-      .name("wekafiles")
+      .dest("wekafiles")
       .help("the full path to the 'wekafiles' directory to initialize the environment with")
       .setDefault("");
 

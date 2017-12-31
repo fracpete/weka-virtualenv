@@ -62,7 +62,7 @@ public class Delete
 
     result = new ArgumentParser(getName());
     result.addOption("--name")
-      .name("name")
+      .dest("name")
       .help("the name of the environment to delete")
       .required(true);
 
