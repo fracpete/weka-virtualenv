@@ -159,7 +159,12 @@ public class ActionOutputPanel
    * @param stdout	whether stdout or stderr
    */
   public void outputOccurred(String line, boolean stdout) {
+    boolean 	atEnd;
+
+    atEnd = (m_TextArea.getCaretPosition() == m_TextArea.getText().length());
     m_TextArea.append((stdout ? "[OUT] " : "[ERR] ") + line + "\n");
+    if (atEnd)
+      m_TextArea.setCaretPosition(m_TextArea.getText().length());
   }
 
   /**
