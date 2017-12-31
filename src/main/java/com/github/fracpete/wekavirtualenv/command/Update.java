@@ -110,17 +110,19 @@ public class Update
 
     // overrides?
     if (!ns.getString("java").isEmpty()) {
-      if (ns.getString("java").equals(Environment.DEFAULT))
+      file = new File(ns.getString("java"));
+      if (ns.getString("java").equals(Environment.DEFAULT) || file.isDirectory())
         newEnv.java = "";
       else
         newEnv.java = ns.getString("java");
     }
-    if (!ns.getString("memory").isEmpty()) {
-      if (ns.getString("memory").equals(Environment.DEFAULT))
-        newEnv.memory = "";
-      else
-        newEnv.memory = ns.getString("memory");
+    else {
+      newEnv.java = "";
     }
+    if (ns.getString("memory").isEmpty() || ns.getString("memory").equals(Environment.DEFAULT))
+      newEnv.memory = "";
+    else
+      newEnv.memory = ns.getString("memory");
     if (!ns.getString("weka").isEmpty()) {
       file = new File(ns.getString("weka"));
       if (!file.exists())
