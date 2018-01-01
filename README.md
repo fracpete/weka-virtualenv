@@ -12,8 +12,9 @@ using the `explorer` command, a dataset can be supplied to load immediately,
 or, when executing a classifier using the `run` command, any additional option 
 will get passed to the Weka class.
 
-At this stage, no graphical user interface available for managing or launching 
-environments.
+You can use the tool either through the command-line or through a user 
+interface.
+
 
 **Note**
 You still need to install Weka yourself, *weka-virtualenv* only helps you
@@ -30,6 +31,14 @@ When launching a class or GUI tool, it launches a new Java process with the
 
 If an environment has no Java or heap size configure (`<default>`), then it 
 just uses the system's default settings for launching the new process.
+
+
+## User interface
+
+You can start the GUI with the following script from the `bin` directory:
+
+* Linux/Mac: `wenvg.sh`
+* Windows: `wenvg.bat`
 
 
 ## Commands
@@ -142,6 +151,7 @@ The environments get created in the following directory:
 
 The following releases are available:
 
+* [0.0.5](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.5/weka-virtualenv-0.0.5-bin.zip)
 * [0.0.4](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.4/weka-virtualenv-0.0.4-bin.zip)
 * [0.0.3](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.3/weka-virtualenv-0.0.3-bin.zip)
 * [0.0.2](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.2/weka-virtualenv-0.0.2-bin.zip)
