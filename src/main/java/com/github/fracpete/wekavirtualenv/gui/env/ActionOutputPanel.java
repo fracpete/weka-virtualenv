@@ -34,8 +34,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -95,20 +93,6 @@ public class ActionOutputPanel
     setLayout(new BorderLayout());
     m_TextArea = new JTextArea();
     m_TextArea.setFont(new Font("monospaced", Font.PLAIN, 12));
-    m_TextArea.getDocument().addDocumentListener(new DocumentListener() {
-      @Override
-      public void insertUpdate(DocumentEvent e) {
-	updateButtons();
-      }
-      @Override
-      public void removeUpdate(DocumentEvent e) {
-	updateButtons();
-      }
-      @Override
-      public void changedUpdate(DocumentEvent e) {
-	updateButtons();
-      }
-    });
     add(new BaseScrollPane(m_TextArea));
 
     // buttons
@@ -203,6 +187,7 @@ public class ActionOutputPanel
     m_TextArea.append((stdout ? "[OUT] " : "[ERR] ") + line + "\n");
     if (atEnd)
       m_TextArea.setCaretPosition(m_TextArea.getText().length());
+
     updateButtons();
   }
 

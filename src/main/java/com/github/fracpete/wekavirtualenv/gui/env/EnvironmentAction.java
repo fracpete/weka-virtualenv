@@ -26,6 +26,7 @@ import com.github.fracpete.wekavirtualenv.gui.action.AbstractEnvironmentAction;
 import nz.ac.waikato.cms.gui.core.GUIHelper;
 
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
@@ -187,7 +188,7 @@ public class EnvironmentAction
       @Override
       protected Object doInBackground() throws Exception {
 	String msg = m_Owner.execute();
-	m_EnvironmentsPanel.reload();
+	SwingUtilities.invokeLater(() -> m_EnvironmentsPanel.reload());
 	if (msg != null)
 	  GUIHelper.showErrorMessage(null, "Failed to execute " + m_Owner.getName() + ":\n" + msg);
 	return null;
