@@ -15,7 +15,7 @@
 
 /*
  * EnvironmentsPanel.java
- * Copyright (C) 2017 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2018 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.gui.env;
@@ -25,11 +25,11 @@ import com.github.fracpete.wekavirtualenv.env.Environments;
 import com.github.fracpete.wekavirtualenv.gui.action.Create;
 import com.github.fracpete.wekavirtualenv.gui.core.IconHelper;
 import nz.ac.waikato.cms.gui.core.BasePanel;
+import nz.ac.waikato.cms.gui.core.BaseScrollPane;
 import nz.ac.waikato.cms.gui.core.GUIHelper;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -60,7 +60,7 @@ public class EnvironmentsPanel
   protected JPanel m_PanelEnvs;
 
   /** the scroll pane. */
-  protected JScrollPane m_ScrollPaneEnvs;
+  protected BaseScrollPane m_ScrollPaneEnvs;
 
   /** the panel for the buttons. */
   protected JPanel m_PanelButtons;
@@ -77,7 +77,7 @@ public class EnvironmentsPanel
     m_PanelAll = new JPanel(new BorderLayout());
     m_PanelEnvs = new JPanel(new GridLayout(0, 1, 5, 5));
     m_PanelAll.add(m_PanelEnvs, BorderLayout.NORTH);
-    m_ScrollPaneEnvs = new JScrollPane(m_PanelAll);
+    m_ScrollPaneEnvs = new BaseScrollPane(m_PanelAll);
     add(m_ScrollPaneEnvs, BorderLayout.CENTER);
 
     // buttons
