@@ -270,6 +270,7 @@ public class EnvironmentPanel
           action.setEnvironment(getEnvironment());
           action.setEnvironmentsPanel(getOwner());
 	  action.setTabbedPane(getOwner().getTabbedPane());
+	  action.setEnabled(action.getOwner().isAvailable());
 	  menu.add(action);
 	}
       }
