@@ -85,6 +85,15 @@ public class Environment
   }
 
   /**
+   * Returns the Weka version of the jar, if possible.
+   *
+   * @return		the version
+   */
+  public String version() {
+    return getVersion(weka);
+  }
+
+  /**
    * Comparison based on name alone.
    *
    * @param o		the other environment
@@ -131,7 +140,7 @@ public class Environment
     result.append(prefix).append("Memory: ").append(memory.isEmpty() ? DEFAULT : memory).append("\n");
     result.append(prefix).append("Weka: ").append(weka).append("\n");
     if (verbose) {
-      version = getVersion(weka);
+      version = version();
       if (version == null)
         version = "?.?.?";
       result.append(prefix).append("Version: ").append(version).append("\n");
