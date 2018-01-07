@@ -15,7 +15,7 @@
 
 /*
  * Explorer.java
- * Copyright (C) 2017 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2018 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.command;
@@ -46,7 +46,8 @@ public class Explorer
    * @return		the help string
    */
   public String getHelp() {
-    return "Launches the Weka Explorer.";
+    return "Launches the Weka Explorer.\n"
+      + "You can supply a dataset filename to load immediately in the Explorer.";
   }
 
   /**
