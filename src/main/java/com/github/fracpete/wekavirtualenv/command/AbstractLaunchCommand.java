@@ -84,6 +84,15 @@ public abstract class AbstractLaunchCommand
   }
 
   /**
+   * Returns whether the action is available.
+   *
+   * @return		true if available
+   */
+  public boolean isAvailable() {
+    return true;
+  }
+
+  /**
    * Returns the java command to use.
    *
    * @return		the java command

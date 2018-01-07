@@ -84,12 +84,21 @@ public abstract class AbstractAction
   public abstract String getGroup();
 
   /**
+   * Returns whether the action is available.
+   *
+   * @return		true if available
+   */
+  public boolean isAvailable() {
+    return true;
+  }
+
+  /**
    * Returns the swing action for the menu.
    *
    * @return		the action
    */
   public EnvironmentAction getAction() {
-    EnvironmentAction  result;
+    EnvironmentAction	result;
     ImageIcon		icon;
 
     result = new EnvironmentAction();
