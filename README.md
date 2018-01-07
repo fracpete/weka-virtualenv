@@ -12,7 +12,7 @@ using the `explorer` command, a dataset can be supplied to load immediately,
 or, when executing a classifier using the `run` command, any additional option 
 will get passed to the Weka class.
 
-You can use the tool either through the command-line or through a user 
+You can use the tool either through the command-line or through its user 
 interface.
 
 
@@ -46,6 +46,10 @@ You can start the GUI with the following script from the `bin` directory:
 ```
 Available commands:
 
+arffviewer <env>
+	Launches the Weka Arff viewer.
+	You can supply dataset filenames to load immediately in the viewer.
+
 clone <options>
 	Clones an existing environment.
 	Allows adjusting of environment parameters.
@@ -62,12 +66,16 @@ experimenter <env>
 
 explorer <env>
 	Launches the Weka Explorer.
+	You can supply a dataset filename to load immediately in the Explorer.
 
 guichooser <env>
 	Launches the Weka GUIChooser.
 
 help
 	Outputs help information.
+
+knowledgeflow <env>
+	Launches the Weka KnowledgeFlow.
 
 list_cmds
 	Lists all available commands.
@@ -81,11 +89,17 @@ reset <options>
 run <env> <options>
 	Executes an arbitrary class with the left-over command-line options.
 
+sqlviewer <env>
+	Launches the Weka SQL Viewer.
+
 status
 	Outputs some status information.
 
 update <env> <options>
 	Allows adjusting of parameters of an existing environment.
+
+workbench <env>
+	Launches the Weka Workbench.
 
 
 Notes:
@@ -151,6 +165,7 @@ The environments get created in the following directory:
 
 The following releases are available:
 
+* [0.0.8](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.8/weka-virtualenv-0.0.8-bin.zip)
 * [0.0.7](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.7/weka-virtualenv-0.0.7-bin.zip)
 * [0.0.4](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.4/weka-virtualenv-0.0.4-bin.zip)
 * [0.0.3](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.3/weka-virtualenv-0.0.3-bin.zip)
