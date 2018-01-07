@@ -20,6 +20,8 @@
 
 package com.github.fracpete.wekavirtualenv.env;
 
+import gnu.trove.list.TByteList;
+import gnu.trove.list.array.TByteArrayList;
 import nz.ac.waikato.cms.core.FileUtils;
 
 import java.io.BufferedWriter;
@@ -236,21 +238,40 @@ public class Environment
    */
   public static String getVersion(String jar, boolean verbose) {
     String		result;
+    byte[]		bytes;
+
+    bytes = readResource(jar, "weka/core/version.txt", verbose);
+    if (bytes == null)
+      result = null;
+    else
+      result = new String(bytes);
+
+    return result;
+  }
+
+  /**
+   * Reads the binary content of the resource from the jar file.
+   *
+   * @param jar		the jar to use
+   * @param resource 	the resource to load
+   * @return		the content, null if failed to load
+   */
+  public static byte[] readResource(String jar, String resource, boolean verbose) {
+    TByteList 		result;
     JarFile		jfile;
     JarEntry 		entry;
     InputStream		in;
-    StringBuilder	content;
-    int 		c;
+    int 		b;
 
-    in = null;
+    result = new TByteArrayList();
+    in     = null;
+    jfile  = null;
     try {
       jfile   = new JarFile(jar);
-      entry   = jfile.getJarEntry("weka/core/version.txt");
+      entry   = jfile.getJarEntry(resource);
       in      = jfile.getInputStream(entry);
-      content = new StringBuilder();
-      while ((c = in.read()) != -1)
-	content.append((char) c);
-      result = content.toString().trim();
+      while ((b = in.read()) != -1)
+	result.add((byte) b);
     }
     catch (Exception e) {
       if (verbose) {
@@ -261,6 +282,64 @@ public class Environment
     }
     finally {
       FileUtils.closeQuietly(in);
+      if (jfile != null) {
+        try {
+	  jfile.close();
+	}
+	catch (Exception e) {
+          // ignored
+	}
+      }
+    }
+
+    return result.toArray();
+  }
+
+  /**
+   * Checks whether the given class is available.
+   *
+   * @param jar		the jar to analyze
+   * @param classname	the class to look for
+   * @return		true if present
+   */
+  public static boolean hasClass(String jar, String classname, boolean verbose) {
+    return hasResource(jar, classname.replace(".", "/") + ".class", verbose);
+  }
+
+  /**
+   * Checks whether the given resource is available.
+   *
+   * @param jar		the jar to analyze
+   * @param resource	the resource to look for
+   * @return		true if present
+   */
+  public static boolean hasResource(String jar, String resource, boolean verbose) {
+    boolean		result;
+    JarFile		jfile;
+    JarEntry 		entry;
+
+    jfile = null;
+    try {
+      jfile  = new JarFile(jar);
+      entry  = jfile.getJarEntry(resource);
+      result = (entry != null);
+    }
+    catch (Exception e) {
+      if (verbose) {
+        System.err.println("Failed to read: " + jar);
+        e.printStackTrace();
+      }
+      result = false;
+    }
+    finally {
+      if (jfile != null) {
+        try {
+	  jfile.close();
+	}
+	catch (Exception e) {
+          // ignored
+	}
+      }
     }
 
     return result;
