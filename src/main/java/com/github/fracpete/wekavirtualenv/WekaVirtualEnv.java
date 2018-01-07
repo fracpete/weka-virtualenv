@@ -40,6 +40,7 @@ public class WekaVirtualEnv {
   public static void main(String[] args) throws Exception {
     AbstractCommand 	cmd;
     String[]		options;
+    boolean 		success;
 
     // output help if no options supplied
     if (args.length == 0) {
@@ -72,6 +73,12 @@ public class WekaVirtualEnv {
     }
 
     // execute
-    cmd.execute(options);
+    success = cmd.execute(options);
+    if (!success) {
+      if (cmd.hasErrors())
+        System.err.println(cmd.getErrors());
+      else
+        System.err.println("Failed to execute command!");
+    }
   }
 }
