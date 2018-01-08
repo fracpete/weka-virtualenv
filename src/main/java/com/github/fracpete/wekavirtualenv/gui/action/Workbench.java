@@ -91,7 +91,7 @@ public class Workbench
       if (m_Command.hasErrors())
         result = m_Command.getErrors();
       else
-        result = "Failed to launch SQL Viewer!";
+        result = "Failed to launch Workbench!";
     }
     m_Command = null;
     return result;
