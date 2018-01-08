@@ -83,6 +83,13 @@ list_cmds
 list_envs <options>
 	Lists all available environments.
 
+pkgmgr <env>
+	Executes the commandline package manager.
+	You can supply additional options to the package manager, like '-list-packages'.
+
+pkgmgr-gui <env>
+	Launches the package manager user interface.
+
 reset <options>
 	Deletes an existing environment, i.e., deletes the "wekafiles" sub-directory.
 
@@ -165,6 +172,7 @@ The environments get created in the following directory:
 
 The following releases are available:
 
+* [0.0.9](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.9/weka-virtualenv-0.0.9-bin.zip)
 * [0.0.8](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.8/weka-virtualenv-0.0.8-bin.zip)
 * [0.0.7](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.7/weka-virtualenv-0.0.7-bin.zip)
 * [0.0.4](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.4/weka-virtualenv-0.0.4-bin.zip)
