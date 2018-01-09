@@ -15,7 +15,7 @@
 
 /*
  * AbstractCommand.java
- * Copyright (C) 2017 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2018 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.command;
@@ -271,5 +271,66 @@ public abstract class AbstractCommand
     }
 
     return result.toArray(new String[result.size()]);
+  }
+
+  /**
+   * Parses the command-line options and executes the command if possible.
+   *
+   * @param args	the options to use
+   * @param exit	if system exits are allowed
+   * @return		true if successful
+   */
+  public static boolean parse(String[] args, boolean exit) {
+    AbstractCommand 	cmd;
+    String[]		options;
+    boolean 		success;
+
+    // output help if no options supplied
+    if (args.length == 0) {
+      new Help().execute(new String[0]);
+      if (exit)
+	System.exit(0);
+      else
+        return true;
+    }
+
+    // locate command
+    cmd = null;
+    for (AbstractCommand c: AbstractCommand.getCommands()) {
+      if (c.getName().equals(args[0])) {
+        cmd = c;
+        break;
+      }
+    }
+    if (cmd == null) {
+      System.err.println("Unknown command: " + args[0]);
+      new Help().execute(new String[0]);
+      if (exit)
+	System.exit(1);
+      else
+        return false;
+    }
+
+    // remove command from array
+    args[0] = "";
+    options = AbstractCommand.compress(args);
+
+    // environment name?
+    if (cmd.requiresEnvironment()) {
+      cmd.loadEnv(options);
+      options = AbstractCommand.compress(options);
+    }
+
+    // execute
+    success = cmd.execute(options);
+    if (!success) {
+      if (cmd.hasErrors())
+        System.err.println(cmd.getErrors());
+      else
+        System.err.println("Failed to execute command!");
+      return false;
+    }
+
+    return true;
   }
 }

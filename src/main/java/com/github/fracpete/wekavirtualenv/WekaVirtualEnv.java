@@ -15,13 +15,12 @@
 
 /*
  * WekaVirtualEnv.java
- * Copyright (C) 2017 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2018 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv;
 
 import com.github.fracpete.wekavirtualenv.command.AbstractCommand;
-import com.github.fracpete.wekavirtualenv.command.Help;
 
 /**
  * Main class for launching commands and managing environments.
@@ -38,47 +37,6 @@ public class WekaVirtualEnv {
    * @throws Exception	if failed to parse or execute
    */
   public static void main(String[] args) throws Exception {
-    AbstractCommand 	cmd;
-    String[]		options;
-    boolean 		success;
-
-    // output help if no options supplied
-    if (args.length == 0) {
-      new Help().execute(new String[0]);
-      System.exit(0);
-    }
-
-    // locate command
-    cmd = null;
-    for (AbstractCommand c: AbstractCommand.getCommands()) {
-      if (c.getName().equals(args[0])) {
-        cmd = c;
-        break;
-      }
-    }
-    if (cmd == null) {
-      System.err.println("Unknown command: " + args[0]);
-      new Help().execute(new String[0]);
-      System.exit(1);
-    }
-
-    // remove command from array
-    args[0] = "";
-    options = AbstractCommand.compress(args);
-
-    // environment name?
-    if (cmd.requiresEnvironment()) {
-      cmd.loadEnv(options);
-      options = AbstractCommand.compress(options);
-    }
-
-    // execute
-    success = cmd.execute(options);
-    if (!success) {
-      if (cmd.hasErrors())
-        System.err.println(cmd.getErrors());
-      else
-        System.err.println("Failed to execute command!");
-    }
+    AbstractCommand.parse(args, true);
   }
 }
