@@ -47,7 +47,18 @@ public class KnowledgeFlow
    * @return		the help string
    */
   public String getHelp() {
-    return "Launches the Weka KnowledgeFlow.";
+    return "Launches the Weka KnowledgeFlow.\n"
+      + "You can supply a flow file to load immediately.";
+  }
+
+  /**
+   * Returns whether the command utilizes additional arguments that get passed on.
+   *
+   * @return		true if additional options
+   */
+  @Override
+  public boolean supportsAdditionalArguments() {
+    return true;
   }
 
   /**

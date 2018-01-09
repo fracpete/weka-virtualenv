@@ -15,7 +15,7 @@
 
 /*
  * ListCommands.java
- * Copyright (C) 2017 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2018 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.command;
@@ -60,7 +60,9 @@ public class ListCommands
   protected boolean doExecute(Namespace ns, String[] options) {
     System.out.println("Available commands:\n");
     for (AbstractCommand cmd: AbstractCommand.getCommands()) {
-      System.out.println(cmd.getName() + (cmd.requiresEnvironment() ? " <env>" : "") + (cmd.getParser() != null ? " <options>" : ""));
+      System.out.println(cmd.getName() + (cmd.requiresEnvironment() ? " <env>" : "")
+        + (cmd.getParser() != null ? " <options>" : "")
+        + (cmd.supportsAdditionalArguments() ? " <args>" : ""));
       for (String line: cmd.getHelp().split("\n"))
 	System.out.println("\t" + line);
       System.out.println();
@@ -72,6 +74,9 @@ public class ListCommands
     System.out.println("<options>");
     System.out.println("\tthe command supports additional options,");
     System.out.println("\tyou can use --help as argument to see further details.");
+    System.out.println("<args>");
+    System.out.println("\tthe command passes on all unconsumed options to the ");
+    System.out.println("\tunderlying process");
 
     return true;
   }

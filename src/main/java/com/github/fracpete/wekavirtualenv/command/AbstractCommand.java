@@ -154,8 +154,17 @@ public abstract class AbstractCommand
    *
    * @return		the parser, null if no arguments to parse
    */
-  protected ArgumentParser getParser() {
+  public ArgumentParser getParser() {
     return null;
+  }
+
+  /**
+   * Returns whether the command utilizes additional arguments that get passed on.
+   *
+   * @return		true if additional options
+   */
+  public boolean supportsAdditionalArguments() {
+    return false;
   }
 
   /**
@@ -189,7 +198,7 @@ public abstract class AbstractCommand
       }
     }
 
-    return doExecute(ns, options);
+    return doExecute(ns, supportsAdditionalArguments() ? options : new String[0]);
   }
 
   /**

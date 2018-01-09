@@ -54,6 +54,16 @@ public class PackageManager
   }
 
   /**
+   * Returns whether the command utilizes additional arguments that get passed on.
+   *
+   * @return		true if additional options
+   */
+  @Override
+  public boolean supportsAdditionalArguments() {
+    return true;
+  }
+
+  /**
    * Returns whether the action is available.
    *
    * @return		true if available

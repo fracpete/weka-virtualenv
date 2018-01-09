@@ -70,7 +70,7 @@ public class Update
    * @return		always null
    */
   @Override
-  protected ArgumentParser getParser() {
+  public ArgumentParser getParser() {
     ArgumentParser 	result;
 
     result = new ArgumentParser(getName());

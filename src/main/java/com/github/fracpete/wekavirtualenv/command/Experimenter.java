@@ -50,6 +50,16 @@ public class Experimenter
   }
 
   /**
+   * Returns whether the command utilizes additional arguments that get passed on.
+   *
+   * @return		true if additional options
+   */
+  @Override
+  public boolean supportsAdditionalArguments() {
+    return true;
+  }
+
+  /**
    * Executes the command.
    *
    * @param ns		the namespace of the parsed options, null if no options to parse

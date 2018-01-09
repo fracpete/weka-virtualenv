@@ -47,7 +47,17 @@ public class Run
    * @return		the help string
    */
   public String getHelp() {
-    return "Executes an arbitrary class with the left-over command-line options.";
+    return "Executes an arbitrary class with the unconsumed command-line options.";
+  }
+
+  /**
+   * Returns whether the command utilizes additional arguments that get passed on.
+   *
+   * @return		true if additional options
+   */
+  @Override
+  public boolean supportsAdditionalArguments() {
+    return true;
   }
 
   /**
@@ -56,7 +66,7 @@ public class Run
    * @return		always null
    */
   @Override
-  protected ArgumentParser getParser() {
+  public ArgumentParser getParser() {
     ArgumentParser 	result;
 
     result = new ArgumentParser(getName());
