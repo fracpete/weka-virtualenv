@@ -140,8 +140,9 @@ Notes:
 
 ## Examples
 
-**Note for Windows users:** use `wenv.bat` instead of `wenv.sh` from the `bin` 
-directory for the following examples.
+**Note for Windows users:** Use `wenv.bat` instead of `wenv.sh` from the `bin` 
+directory for the following examples. Also, remove the trailing backslashes
+in the commands and place the whole command on a single line.
 
 
 ### Environments
