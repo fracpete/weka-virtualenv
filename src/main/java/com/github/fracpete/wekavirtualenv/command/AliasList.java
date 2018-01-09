@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Lists alias definitions, i.e., shortcuts for commands and their options.
+ * Lists alias definitions (names and associated options).
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */

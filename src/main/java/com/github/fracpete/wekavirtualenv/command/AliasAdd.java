@@ -50,8 +50,9 @@ public class AliasAdd
   public String getHelp() {
     return
       "Adds an alias definition, i.e., shortcut for command and options.\n"
-      + "All options not consumed by this command will get used as options "
-      + "for the alias. No checks are being performed on the correctness.";
+	+ "All options not consumed by this command will get used as options "
+	+ "for the alias.\n"
+	+ "No checks are being performed on the correctness.";
   }
 
   /**

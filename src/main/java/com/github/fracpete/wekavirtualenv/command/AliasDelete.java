@@ -48,8 +48,7 @@ public class AliasDelete
    * @return		the help string
    */
   public String getHelp() {
-    return
-      "Removes an alias definition, i.e., shortcut for command and options.";
+    return "Removes an alias definition.";
   }
 
   /**

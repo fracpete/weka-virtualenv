@@ -46,7 +46,24 @@ You can start the GUI with the following script from the `bin` directory:
 ```
 Available commands:
 
-arffviewer <env>
+alias-add <options> <args>
+	Adds an alias definition, i.e., shortcut for command and options.
+	All options not consumed by this command will get used as options for the alias.
+	No checks are being performed on the correctness.
+
+alias-del <options>
+	Removes an alias definition.
+
+alias-exec <options> <args>
+	Executes an alias definition, i.e., shortcut for command and options.
+	All options not consumed by this command will get used as additional options for the alias.
+	No checks are being performed on the correctness.
+
+alias-list <options>
+	Lists aliases and their associated options.
+	Listing can be for global aliases, per environment, or for all.
+
+arffviewer <env> <args>
 	Launches the Weka Arff viewer.
 	You can supply dataset filenames to load immediately in the viewer.
 
@@ -61,10 +78,10 @@ create <options>
 delete <options>
 	Deletes an existing environment.
 
-experimenter <env>
+experimenter <env> <args>
 	Launches the Weka Experimenter.
 
-explorer <env>
+explorer <env> <args>
 	Launches the Weka Explorer.
 	You can supply a dataset filename to load immediately in the Explorer.
 
@@ -74,8 +91,9 @@ guichooser <env>
 help
 	Outputs help information.
 
-knowledgeflow <env>
+knowledgeflow <env> <args>
 	Launches the Weka KnowledgeFlow.
+	You can supply a flow file to load immediately.
 
 list_cmds
 	Lists all available commands.
@@ -83,7 +101,7 @@ list_cmds
 list_envs <options>
 	Lists all available environments.
 
-pkgmgr <env>
+pkgmgr <env> <args>
 	Executes the commandline package manager.
 	You can supply additional options to the package manager, like '-list-packages'.
 
@@ -93,8 +111,8 @@ pkgmgr-gui <env>
 reset <options>
 	Deletes an existing environment, i.e., deletes the "wekafiles" sub-directory.
 
-run <env> <options>
-	Executes an arbitrary class with the left-over command-line options.
+run <env> <options> <args>
+	Executes an arbitrary class with the unconsumed command-line options.
 
 sqlviewer <env>
 	Launches the Weka SQL Viewer.
@@ -115,9 +133,18 @@ Notes:
 <options>
 	the command supports additional options,
 	you can use --help as argument to see further details.
+<args>
+	the command passes on all unconsumed options to the 
+	underlying process
 ```
 
 ## Examples
+
+**Note for Windows users:** use `wenv.bat` instead of `wenv.sh` from the `bin` 
+directory for the following examples.
+
+
+### Environments
 
 Create an environment for Weka 3.8.1:
 ```bash
@@ -136,6 +163,8 @@ wenv.sh create \
   --memory 4g
 ```
 
+### Launching user interfaces
+
 Launch the GUIChooser from the `weka381` environment:
 ```bash
 wenv.sh guichooser weka381
@@ -146,13 +175,66 @@ Launch the Explorer from the `weka391` environment:
 wenv.sh explorer weka391
 ```
 
+### Executing classes
+
 Cross-validate J48 from the `weka381` environment on the *iris* dataset:
 ```bash
 wenv.sh run weka381 --class weka.classifiers.trees.J48 \
   -t /home/fracpete/development/datasets/uci/nominal/iris.arff
 ```
 
-For Windows users, use `wenv.bat` instead of `wenv.sh` from the `bin` directory.
+### Aliases (global)
+
+Create a global alias called `j48`:
+```bash
+wenv.sh alias-add --name j48 run --class weka.classifiers.trees.J48 -C 0.3
+``` 
+
+If the command of a global alias requires an environment for executing, then
+the environment needs to get injected via the `--inject-env` option. 
+The following command executes the global alias `j48`, cross-validating the 
+`J48` classifier on the UCI dataset *iris*:
+```bash
+wenv.sh alias-exec --inject-env weka381 --name j48 -t iris.arff
+```
+
+### Aliases (environment-specific)
+
+Create an alias called `j48` in the `weka381` environment:
+```bash
+wenv.sh alias-add --env weka381 --name j48 run --class weka.classifiers.trees.J48 -C 0.3
+``` 
+ 
+The following command executes the alias `j48` from the `weka381` environment, 
+cross-validating the `J48` classifier on the UCI dataset *iris*:
+```bash
+wenv.sh alias-exec --env weka381 --name j48 -t iris.arff
+```
+
+### Aliases (list)
+
+You can list all aliases, global and for all environments, as follows:
+```bash
+wenv.sh alias-list --all
+```
+
+Which will output something like this:
+```
+Environment | Name | Command                                      
+------------+------+----------------------------------------------
+<global>    | j48  | run --class weka.classifiers.trees.J48 -C 0.3
+weka381     | j48  | run -class weka.classifiers.trees.J48 -C 0.3 
+```
+
+You can list all global aliases as follows:
+```bash
+wenv.sh alias-list
+```
+
+You can list the aliases for environment `weka381` as follows:
+```bash
+wenv.sh alias-list --env weka381
+```
 
 
 ## Environment locations

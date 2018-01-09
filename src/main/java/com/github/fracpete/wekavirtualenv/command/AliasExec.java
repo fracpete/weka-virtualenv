@@ -29,7 +29,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Executes an alias definition, i.e., shortcut for command and options.
+ * Executes an alias definition.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
@@ -54,8 +54,9 @@ public class AliasExec
   public String getHelp() {
     return
       "Executes an alias definition, i.e., shortcut for command and options.\n"
-      + "All options not consumed by this command will get used as additional "
-      + "options for the alias. No checks are being performed on the correctness.";
+	+ "All options not consumed by this command will get used as additional "
+	+ "options for the alias.\n"
+	+ "No checks are being performed on the correctness.";
   }
 
   /**
@@ -116,25 +117,25 @@ public class AliasExec
     if (ns.getString("env").isEmpty()) {
       cmd = Aliases.get(null, ns.getString("name"), errors);
       if (!errors.isEmpty()) {
-        for (String error: errors)
+	for (String error: errors)
 	  addError(error);
 	return false;
       }
       if (cmd == null) {
-        addError("Failed to retrieve global alias: " + ns.getString("name"));
-        return false;
+	addError("Failed to retrieve global alias: " + ns.getString("name"));
+	return false;
       }
     }
     else {
       cmd = Aliases.get(ns.getString("env"), ns.getString("name"), errors);
       if (!errors.isEmpty()) {
-        for (String error: errors)
+	for (String error: errors)
 	  addError(error);
 	return false;
       }
       if (cmd == null) {
-        addError("Failed to retrieve alias (env=" + ns.getString("env") +"): " + ns.getString("name"));
-        return false;
+	addError("Failed to retrieve alias (env=" + ns.getString("env") +"): " + ns.getString("name"));
+	return false;
       }
     }
 
