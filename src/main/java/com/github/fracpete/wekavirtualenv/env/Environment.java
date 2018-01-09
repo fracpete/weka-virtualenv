@@ -180,7 +180,7 @@ public class Environment
       }
     }
     catch (Exception e) {
-      System.err.println("Failed to read: " + file);
+      System.err.println("Failed to read environment: " + file);
       e.printStackTrace();
     }
     finally {
@@ -284,7 +284,7 @@ public class Environment
     }
     catch (Exception e) {
       if (verbose) {
-        System.err.println("Failed to read: " + jar);
+        System.err.println("Failed to read jar: " + jar);
         e.printStackTrace();
       }
       result = null;
@@ -335,7 +335,7 @@ public class Environment
     }
     catch (Exception e) {
       if (verbose) {
-        System.err.println("Failed to read: " + jar);
+        System.err.println("Failed to read jar: " + jar);
         e.printStackTrace();
       }
       result = false;
