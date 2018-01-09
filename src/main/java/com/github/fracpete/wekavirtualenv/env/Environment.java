@@ -197,7 +197,7 @@ public class Environment
    * @param file	the file to save to
    * @return		null if successful, otherwise error message
    */
-  public static String save(Environment env, File file) {
+  public static String write(Environment env, File file) {
     String		result;
     Properties		props;
     FileWriter		fwriter;

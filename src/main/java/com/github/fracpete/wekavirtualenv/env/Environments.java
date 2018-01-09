@@ -116,7 +116,7 @@ public class Environments {
     if (!dir.mkdirs())
       return "Failed to set up environment dir: " + dir;
 
-    return Environment.save(env, new File(dir.getAbsolutePath() + File.separator + SETUP));
+    return Environment.write(env, new File(dir.getAbsolutePath() + File.separator + SETUP));
   }
 
   /**
@@ -132,7 +132,7 @@ public class Environments {
     if (!dir.exists())
       return "Environment does not exist!\n" + "environment dir: " + dir;
 
-    return Environment.save(env, new File(dir.getAbsolutePath() + File.separator + SETUP));
+    return Environment.write(env, new File(dir.getAbsolutePath() + File.separator + SETUP));
   }
 
   /**
