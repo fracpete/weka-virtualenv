@@ -28,6 +28,7 @@ import com.github.fracpete.simpleargparse4j.InvalidEnvironmentException;
 import com.github.fracpete.simpleargparse4j.Namespace;
 import nz.ac.waikato.cms.locator.ClassLocator;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,6 +40,19 @@ import java.util.List;
  */
 public abstract class AbstractCommand
   implements Comparable<AbstractCommand> {
+
+  /**
+   * Container object for the command setup.
+   */
+  public static class CommandSetup
+    implements Serializable {
+
+    /** the parsed command. */
+    public AbstractCommand command;
+
+    /** the current command-line options. */
+    public String[] options;
+  }
 
   /** the environment to use. */
   protected Environment m_Env;
@@ -123,7 +137,7 @@ public abstract class AbstractCommand
     if (options.length > 0) {
       m_Env = Environments.readEnv(options[0]);
       if (m_Env == null)
-        throw new InvalidEnvironmentException(options[0]);
+	throw new InvalidEnvironmentException(options[0]);
       options[0] = "";
     }
     else {
@@ -241,11 +255,11 @@ public abstract class AbstractCommand
 
     for (Class cls: classes) {
       try {
-        cmd = (AbstractCommand) cls.newInstance();
-        result.add(cmd);
+	cmd = (AbstractCommand) cls.newInstance();
+	result.add(cmd);
       }
       catch (Exception e) {
-        // ignored
+	// ignored
       }
     }
 
@@ -274,16 +288,71 @@ public abstract class AbstractCommand
   }
 
   /**
+   * Configures the command setup.
+   *
+   * @param setup	the setup to update
+   * @param exit	whether System.exit is allowed
+   * @return		the command, null if failed to configure
+   */
+  public static boolean configureSetup(CommandSetup setup, boolean exit) {
+    for (AbstractCommand c: AbstractCommand.getCommands()) {
+      if (c.getName().equals(setup.options[0])) {
+	setup.command = c;
+	break;
+      }
+    }
+    if (setup.command == null) {
+      System.err.println("Unknown command: " + setup.options[0]);
+      new Help().execute(new String[0]);
+      if (exit)
+	System.exit(1);
+      else
+	return false;
+    }
+
+    // remove command from array
+    setup.options[0] = "";
+    setup.options = AbstractCommand.compress(setup.options);
+
+    // environment name?
+    if (setup.command.requiresEnvironment()) {
+      setup.command.loadEnv(setup.options);
+      setup.options = AbstractCommand.compress(setup.options);
+    }
+
+    return true;
+  }
+
+  /**
+   * Executes the command setup.
+   *
+   * @param setup	the setup
+   * @return		true if successfully executed
+   */
+  public static boolean executeSetup(CommandSetup setup) {
+    boolean	success;
+
+    success = setup.command.execute(setup.options);
+    if (!success) {
+      if (setup.command.hasErrors())
+	System.err.println(setup.command.getErrors());
+      else
+	System.err.println("Failed to execute command!");
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
    * Parses the command-line options and executes the command if possible.
    *
    * @param args	the options to use
    * @param exit	if system exits are allowed
    * @return		true if successful
    */
-  public static boolean parse(String[] args, boolean exit) {
-    AbstractCommand 	cmd;
-    String[]		options;
-    boolean 		success;
+  public static boolean parseArgs(String[] args, boolean exit) {
+    CommandSetup 	setup;
 
     // output help if no options supplied
     if (args.length == 0) {
@@ -291,46 +360,16 @@ public abstract class AbstractCommand
       if (exit)
 	System.exit(0);
       else
-        return true;
+	return true;
     }
 
     // locate command
-    cmd = null;
-    for (AbstractCommand c: AbstractCommand.getCommands()) {
-      if (c.getName().equals(args[0])) {
-        cmd = c;
-        break;
-      }
-    }
-    if (cmd == null) {
-      System.err.println("Unknown command: " + args[0]);
-      new Help().execute(new String[0]);
-      if (exit)
-	System.exit(1);
-      else
-        return false;
-    }
-
-    // remove command from array
-    args[0] = "";
-    options = AbstractCommand.compress(args);
-
-    // environment name?
-    if (cmd.requiresEnvironment()) {
-      cmd.loadEnv(options);
-      options = AbstractCommand.compress(options);
-    }
+    setup = new CommandSetup();
+    setup.options = args.clone();
+    if (!configureSetup(setup, exit) || (setup.command == null))
+      return false;
 
     // execute
-    success = cmd.execute(options);
-    if (!success) {
-      if (cmd.hasErrors())
-        System.err.println(cmd.getErrors());
-      else
-        System.err.println("Failed to execute command!");
-      return false;
-    }
-
-    return true;
+    return executeSetup(setup);
   }
 }

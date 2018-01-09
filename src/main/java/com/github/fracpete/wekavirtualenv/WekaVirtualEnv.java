@@ -37,6 +37,6 @@ public class WekaVirtualEnv {
    * @throws Exception	if failed to parse or execute
    */
   public static void main(String[] args) throws Exception {
-    AbstractCommand.parse(args, true);
+    AbstractCommand.parseArgs(args, true);
   }
 }
