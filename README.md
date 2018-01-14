@@ -41,6 +41,16 @@ You can start the GUI with the following script from the `bin` directory:
 * Windows: `wenvg.bat`
 
 
+## Arff Command Selector
+
+This little tool lets you choose environment and application (Explorer or Arff 
+Viewer) to launch, using the provided dataset filenames (e.g., *Open with* from 
+the right-click mouse context menu):
+
+* Linux/Mac: `wenvarff.sh`
+* Windows: `wenvarff.bat`
+
+
 ## Video
 
 The following video gives you a quick run through of some of the functionality
@@ -268,6 +278,7 @@ The environments get created in the following directory:
 
 The following releases are available:
 
+* [0.0.11](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.11/weka-virtualenv-0.0.11-bin.zip)
 * [0.0.10](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.10/weka-virtualenv-0.0.10-bin.zip)
 * [0.0.9](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.9/weka-virtualenv-0.0.9-bin.zip)
 * [0.0.8](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.8/weka-virtualenv-0.0.8-bin.zip)
@@ -284,7 +295,7 @@ Add the following dependency to you `pom.xml`:
   <dependency>
     <groupId>com.github.fracpete</groupId>
     <artifactId>weka-virtualenv</artifactId>
-    <version>0.0.10</version>
+    <version>0.0.11</version>
   </dependency>
 ```
 
