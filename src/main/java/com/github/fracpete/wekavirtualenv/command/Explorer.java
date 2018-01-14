@@ -28,7 +28,8 @@ import com.github.fracpete.simpleargparse4j.Namespace;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public class Explorer
-  extends AbstractLaunchCommand {
+  extends AbstractLaunchCommand
+  implements DatasetHandler {
 
   /**
    * The name of the command (used on the commandline).

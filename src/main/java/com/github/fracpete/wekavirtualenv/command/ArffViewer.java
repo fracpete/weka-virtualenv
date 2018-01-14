@@ -15,7 +15,7 @@
 
 /*
  * ArffViewer.java
- * Copyright (C) 201 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2018 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.command;
@@ -28,7 +28,8 @@ import com.github.fracpete.simpleargparse4j.Namespace;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public class ArffViewer
-  extends AbstractLaunchCommand {
+  extends AbstractLaunchCommand
+  implements DatasetHandler {
 
   /**
    * The name of the command (used on the commandline).
