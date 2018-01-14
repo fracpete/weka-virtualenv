@@ -269,6 +269,26 @@ public abstract class AbstractCommand
   }
 
   /**
+   * Returns the command associated with the command name.
+   *
+   * @param name	the name of the command
+   * @return		the command, null if not available
+   */
+  public static AbstractCommand getCommand(String name) {
+    AbstractCommand		result;
+
+    result = null;
+    for (AbstractCommand cmd: getCommands()) {
+      if (cmd.getName().equals(name)) {
+        result = cmd;
+        break;
+      }
+    }
+
+    return result;
+  }
+
+  /**
    * Removes any empty strings from the array.
    *
    * @param options 	the options to compress
