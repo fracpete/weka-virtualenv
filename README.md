@@ -41,6 +41,19 @@ You can start the GUI with the following script from the `bin` directory:
 * Windows: `wenvg.bat`
 
 
+## Video
+
+The following video gives you a quick run through of some of the functionality
+of the tool (no audio, so watch closely!):
+
+[youtu.be/bFCS7mcCpHM](https://youtu.be/bFCS7mcCpHM)
+
+**Windows users** just have to substitute the `wenv.sh` and `wenvg.sh` scripts
+with `wenv.bat` and `wenvg.bat`. For adding the tool's `bin` directory to
+your `PATH` environment variable (to make it available from the command prompt),
+follow [these instructions](https://www.computerhope.com/issues/ch000549.htm).
+
+
 ## Commands
 
 ```
