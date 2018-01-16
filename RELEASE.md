@@ -8,3 +8,16 @@ How to make a release
   ```
 
 * Push all changes
+* Update documentation - if necessary
+
+  * test 
+    
+    ```
+    mkdocs build --clean && mkdocs serve
+    ```
+    
+  * deploy
+
+    ```
+    mkdocs gh-deploy
+    ```
