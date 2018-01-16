@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>weka-virtualenv</title>
+  
+
+  <link rel="shortcut icon" href="./img/favicon.ico">
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="./css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="./css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="./css/highlight.css">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "None";
+  </script>
+  
+  <script src="./js/jquery-2.1.1.min.js"></script>
+  <script src="./js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="./js/highlight.pack.js"></script>
+  <script src="./js/theme.js"></script> 
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="." class="icon icon-home"> weka-virtualenv</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <li class="toctree-l1 current">
+        <a class="current" href=".">Home</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#how-it-works">How it works</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#user-interface">User interface</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#arff-command-selector">Arff Command Selector</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#video">Video</a></li>
+                
+            
+            </ul>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="commands/">Commands</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="examples/">Examples</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="maven/">Maven</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="releases/">Releases</a>
+        
+    </li>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href=".">weka-virtualenv</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Home</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        
+          <a href="https://github.com/fracpete/weka-virtualenv" class="icon icon-github"> Edit on GitHub</a>
+        
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p>Virtual environment manager for Weka, inspired by the extremely useful virtual 
+environments that Python supports.</p>
+<p><em>weka-virtualenv</em> can be used for launching the GUI or arbitrary Weka classes.</p>
+<p>Since <em>weka-virtualenv</em> uses options starting with double-dashes (<code>--</code>), clashes with 
+Weka options are avoided. Any option that wasn't consumed by <em>weka-virtualenv</em> 
+will get further processed by the command. E.g., when launching the Explorer
+using the <code>explorer</code> command, a dataset can be supplied to load immediately, 
+or, when executing a classifier using the <code>run</code> command, any additional option 
+will get passed to the Weka class.</p>
+<p>You can use the tool either through the command-line or through its user 
+interface.</p>
+<p><strong>Note</strong>
+You still need to install Weka yourself, <em>weka-virtualenv</em> only helps you
+separating your various Weka installations. It is mainly aimed at separating
+packages.</p>
+<h2 id="how-it-works">How it works</h2>
+<p>The tool simply uses existing Weka functionality, namely the <code>WEKA_HOME</code>
+environment variable, for separating the various environments. 
+When launching a class or GUI tool, it launches a new Java process with the
+<code>WEKA_HOME</code> environment variable pointing to the current environment's
+<code>wekafiles</code> directory. </p>
+<p>If an environment has no Java or heap size configure (<code>&lt;default&gt;</code>), then it 
+just uses the system's default settings for launching the new process.</p>
+<h2 id="user-interface">User interface</h2>
+<p>You can start the GUI with the following script from the <code>bin</code> directory:</p>
+<ul>
+<li>Linux/Mac: <code>wenvg.sh</code></li>
+<li>Windows: <code>wenvg.bat</code></li>
+</ul>
+<p><img alt="Screenshot" src="./img/weka-virtualenv-gui.png" /></p>
+<h2 id="arff-command-selector">Arff Command Selector</h2>
+<p>This little tool lets you choose environment and application (Explorer or Arff 
+Viewer) to launch, using the provided dataset filenames (e.g., <em>Open with</em> from 
+the right-click mouse context menu):</p>
+<ul>
+<li>Linux/Mac: <code>wenvarff.sh</code></li>
+<li>Windows: <code>wenvarff.bat</code></li>
+</ul>
+<p><img alt="Screenshot" src="./img/arffcommandselector.png" /></p>
+<h2 id="video">Video</h2>
+<p>The following video gives you a quick run through of some of the functionality
+of the tool (no audio, so watch closely!):</p>
+<p><a href="https://youtu.be/bFCS7mcCpHM">youtu.be/bFCS7mcCpHM</a></p>
+<p><strong>Windows users</strong> just have to substitute the <code>wenv.sh</code> and <code>wenvg.sh</code> scripts
+with <code>wenv.bat</code> and <code>wenvg.bat</code>. For adding the tool's <code>bin</code> directory to
+your <code>PATH</code> environment variable (to make it available from the command prompt),
+follow <a href="https://www.computerhope.com/issues/ch000549.htm">these instructions</a>.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="commands/" class="btn btn-neutral float-right" title="Commands"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+      
+        <span style="margin-left: 15px"><a href="commands/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 0.14.0
+Build Date UTC : 2018-01-16 02:25:16.053698
+-->

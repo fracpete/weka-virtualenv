@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Examples - weka-virtualenv</title>
+  
+
+  <link rel="shortcut icon" href="../img/favicon.ico">
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Examples";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script>
+  <script src="../js/theme.js"></script> 
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> weka-virtualenv</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="..">Home</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../commands/">Commands</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Examples</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#environments">Environments</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#launching-user-interfaces">Launching user interfaces</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#executing-classes">Executing classes</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#aliases-global">Aliases (global)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#aliases-environment-specific">Aliases (environment-specific)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#aliases-list">Aliases (list)</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#environment-locations">Environment locations</a></li>
+                
+            
+            </ul>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../maven/">Maven</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../releases/">Releases</a>
+        
+    </li>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">weka-virtualenv</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Examples</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        
+          <a href="https://github.com/fracpete/weka-virtualenv" class="icon icon-github"> Edit on GitHub</a>
+        
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p><strong>Note for Windows users:</strong> Use <code>wenv.bat</code> instead of <code>wenv.sh</code> from the <code>bin</code> 
+directory for the following examples. Also, remove the trailing backslashes
+in the commands and place the whole command on a single line.</p>
+<h2 id="environments">Environments</h2>
+<p>Create an environment for Weka 3.8.1:</p>
+<pre><code class="bash">wenv.sh create \
+  --name weka381 \
+  --weka /home/fracpete/programs/weka/weka-3-8-1/weka.jar
+</code></pre>
+
+<p>Create an environment for Weka 3.9.1 with a custom java binary to use
+and 4GB of heap size:</p>
+<pre><code class="bash">wenv.sh create \
+  --name weka391 \
+  --weka /home/fracpete/programs/weka/weka-3-9-1/weka.jar \
+  --java /home/fracpete/programs/jdk/jdk1.8.0_144-64bit/bin/java \
+  --memory 4g
+</code></pre>
+
+<h2 id="launching-user-interfaces">Launching user interfaces</h2>
+<p>Launch the GUIChooser from the <code>weka381</code> environment:</p>
+<pre><code class="bash">wenv.sh guichooser weka381
+</code></pre>
+
+<p>Launch the Explorer from the <code>weka391</code> environment:</p>
+<pre><code class="bash">wenv.sh explorer weka391
+</code></pre>
+
+<h2 id="executing-classes">Executing classes</h2>
+<p>Cross-validate J48 from the <code>weka381</code> environment on the <em>iris</em> dataset:</p>
+<pre><code class="bash">wenv.sh run weka381 --class weka.classifiers.trees.J48 \
+  -t /home/fracpete/development/datasets/uci/nominal/iris.arff
+</code></pre>
+
+<h2 id="aliases-global">Aliases (global)</h2>
+<p>Create a global alias called <code>j48</code>:</p>
+<pre><code class="bash">wenv.sh alias-add --name j48 run --class weka.classifiers.trees.J48 -C 0.3
+</code></pre>
+
+<p>If the command of a global alias requires an environment for executing, then
+the environment needs to get injected via the <code>--inject-env</code> option. 
+The following command executes the global alias <code>j48</code>, cross-validating the 
+<code>J48</code> classifier on the UCI dataset <em>iris</em>:</p>
+<pre><code class="bash">wenv.sh alias-exec --inject-env weka381 --name j48 -t iris.arff
+</code></pre>
+
+<h2 id="aliases-environment-specific">Aliases (environment-specific)</h2>
+<p>Create an alias called <code>j48</code> in the <code>weka381</code> environment:</p>
+<pre><code class="bash">wenv.sh alias-add --env weka381 --name j48 run --class weka.classifiers.trees.J48 -C 0.3
+</code></pre>
+
+<p>The following command executes the alias <code>j48</code> from the <code>weka381</code> environment, 
+cross-validating the <code>J48</code> classifier on the UCI dataset <em>iris</em>:</p>
+<pre><code class="bash">wenv.sh alias-exec --env weka381 --name j48 -t iris.arff
+</code></pre>
+
+<h2 id="aliases-list">Aliases (list)</h2>
+<p>You can list all aliases, global and for all environments, as follows:</p>
+<pre><code class="bash">wenv.sh alias-list --all
+</code></pre>
+
+<p>Which will output something like this:</p>
+<pre><code>Environment | Name | Command                                      
+------------+------+----------------------------------------------
+&lt;global&gt;    | j48  | run --class weka.classifiers.trees.J48 -C 0.3
+weka381     | j48  | run -class weka.classifiers.trees.J48 -C 0.3 
+</code></pre>
+
+<p>You can list all global aliases as follows:</p>
+<pre><code class="bash">wenv.sh alias-list
+</code></pre>
+
+<p>You can list the aliases for environment <code>weka381</code> as follows:</p>
+<pre><code class="bash">wenv.sh alias-list --env weka381
+</code></pre>
+
+<h1 id="environment-locations">Environment locations</h1>
+<p>The environments get created in the following directory:</p>
+<ul>
+<li>
+<p>Unix (Linux, Mac)</p>
+<p><code>$HOME/.local/share/wekavirtualenv</code></p>
+</li>
+<li>
+<p>Windows</p>
+<p><code>%USERPROFILE%\wekavirtualenv</code></p>
+</li>
+</ul>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../maven/" class="btn btn-neutral float-right" title="Maven"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../commands/" class="btn btn-neutral" title="Commands"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../commands/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../maven/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+
+</body>
+</html>
