@@ -72,7 +72,7 @@
         },
         {
             "location": "/maven/",
-            "text": "Add the following dependency to you \npom.xml\n:\n\n\n  <dependency>\n    <groupId>com.github.fracpete</groupId>\n    <artifactId>weka-virtualenv</artifactId>\n    <version>0.0.12</version>\n  </dependency>",
+            "text": "Add the following dependency to you \npom.xml\n:\n\n\n  <dependency>\n    <groupId>com.github.fracpete</groupId>\n    <artifactId>weka-virtualenv</artifactId>\n    <version>0.0.13</version>\n  </dependency>",
             "title": "Maven"
         },
         {
