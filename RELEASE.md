@@ -19,5 +19,5 @@ How to make a release
   * deploy
 
     ```
-    mkdocs gh-deploy
+    mkdocs gh-deploy --clean
     ```
