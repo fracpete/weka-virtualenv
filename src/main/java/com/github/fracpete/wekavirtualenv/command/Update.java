@@ -20,10 +20,11 @@
 
 package com.github.fracpete.wekavirtualenv.command;
 
-import com.github.fracpete.wekavirtualenv.env.Environment;
-import com.github.fracpete.wekavirtualenv.env.Environments;
 import com.github.fracpete.simpleargparse4j.ArgumentParser;
 import com.github.fracpete.simpleargparse4j.Namespace;
+import com.github.fracpete.wekavirtualenv.env.Environment;
+import com.github.fracpete.wekavirtualenv.env.Environments;
+import nz.ac.waikato.cms.jenericcmdline.core.OptionUtils;
 
 import java.io.File;
 
@@ -88,6 +89,14 @@ public class Update
       .dest("weka")
       .help("the full path to the weka.jar to use")
       .setDefault("");
+    result.addOption("--envvar")
+      .dest("envvar")
+      .help("optional environment variables to set (key=value); override existing vars")
+      .multiple(true);
+    result.addOption("--no-envvars")
+      .dest("noenvvars")
+      .help("if set, removes any existing environment variables")
+      .argument(false);
 
     return result;
   }
@@ -130,6 +139,10 @@ public class Update
       else
 	newEnv.weka = ns.getString("weka");
     }
+    if (ns.getList("envvar").size() > 0)
+      newEnv.envvars = OptionUtils.joinOptions(ns.getList("envvar").toArray(new String[0]));
+    if (ns.getBoolean("noenvvars"))
+      newEnv.envvars = null;
 
     // save setup
     if (msg == null)

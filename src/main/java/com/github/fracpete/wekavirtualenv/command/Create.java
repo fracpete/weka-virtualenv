@@ -25,6 +25,7 @@ import com.github.fracpete.simpleargparse4j.Namespace;
 import com.github.fracpete.wekavirtualenv.env.Environment;
 import com.github.fracpete.wekavirtualenv.env.Environments;
 import nz.ac.waikato.cms.core.FileUtils;
+import nz.ac.waikato.cms.jenericcmdline.core.OptionUtils;
 
 import java.io.File;
 
@@ -88,6 +89,10 @@ public class Create
       .dest("wekafiles")
       .help("the full path to the 'wekafiles' directory to initialize the environment with")
       .setDefault("");
+    result.addOption("--envvar")
+      .dest("envvar")
+      .help("optional environment variables to set (key=value)")
+      .multiple(true);
 
     return result;
   }
@@ -114,6 +119,8 @@ public class Create
     env.java   = ns.getString("java");
     env.memory = ns.getString("memory");
     env.weka   = ns.getString("weka");
+    if (ns.getList("envvar").size() > 0)
+      env.envvars = OptionUtils.joinOptions(ns.getList("envvar").toArray(new String[0]));
 
     // check weka.jar
     file = new File(env.weka);

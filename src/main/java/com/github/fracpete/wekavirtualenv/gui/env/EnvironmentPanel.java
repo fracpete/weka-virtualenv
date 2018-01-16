@@ -15,7 +15,7 @@
 
 /*
  * EnvironmentPanel.java
- * Copyright (C) 2017 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2018 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.gui.env;
@@ -66,6 +66,9 @@ public class EnvironmentPanel
 
   /** the weka jar. */
   protected JLabel m_LabelWeka;
+
+  /** the Environmenr vars. */
+  protected JLabel m_LabelEnvVars;
 
   /** the prefix labels .*/
   protected List<JLabel> m_Prefixes;
@@ -121,7 +124,7 @@ public class EnvironmentPanel
     setLayout(new BorderLayout());
 
     // labels
-    panel = new JPanel(new GridLayout(4, 1));
+    panel = new JPanel(new GridLayout(0, 1));
     add(panel, BorderLayout.CENTER);
 
     m_LabelName = new JLabel();
@@ -140,6 +143,9 @@ public class EnvironmentPanel
 
     m_LabelWeka = new JLabel();
     panel.add(createEntry("Weka", m_LabelWeka));
+
+    m_LabelEnvVars = new JLabel();
+    panel.add(createEntry("Env. vars", m_LabelEnvVars));
 
     // buttons
     panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -242,12 +248,14 @@ public class EnvironmentPanel
       m_LabelJava.setText(Environment.DEFAULT);
       m_LabelMemory.setText(Environment.DEFAULT);
       m_LabelWeka.setText("");
+      m_LabelEnvVars.setText("");
     }
     else {
       m_LabelName.setText(m_Environment.name);
       m_LabelJava.setText(m_Environment.java.isEmpty() ? Environment.DEFAULT : m_Environment.java);
       m_LabelMemory.setText(m_Environment.memory.isEmpty() ? Environment.DEFAULT : m_Environment.memory);
       m_LabelWeka.setText(m_Environment.weka);
+      m_LabelEnvVars.setText(m_Environment.envvars.isEmpty() ? Environment.NONE : m_Environment.envvars);
     }
   }
 

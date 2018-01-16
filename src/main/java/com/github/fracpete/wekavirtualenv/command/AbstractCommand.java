@@ -20,12 +20,13 @@
 
 package com.github.fracpete.wekavirtualenv.command;
 
-import com.github.fracpete.wekavirtualenv.env.Environment;
-import com.github.fracpete.wekavirtualenv.env.Environments;
 import com.github.fracpete.simpleargparse4j.ArgumentParser;
 import com.github.fracpete.simpleargparse4j.ArgumentParserException;
-import com.github.fracpete.simpleargparse4j.InvalidEnvironmentException;
 import com.github.fracpete.simpleargparse4j.Namespace;
+import com.github.fracpete.wekavirtualenv.core.InvalidEnvironmentException;
+import com.github.fracpete.wekavirtualenv.env.Environment;
+import com.github.fracpete.wekavirtualenv.env.Environments;
+import nz.ac.waikato.cms.jenericcmdline.core.OptionUtils;
 import nz.ac.waikato.cms.locator.ClassLocator;
 
 import java.io.Serializable;
@@ -212,7 +213,14 @@ public abstract class AbstractCommand
       }
     }
 
-    return doExecute(ns, supportsAdditionalArguments() ? options : new String[0]);
+    if (!supportsAdditionalArguments()) {
+      options = compress(options);
+      if (OptionUtils.joinOptions(options).trim().length() > 0)
+        System.err.println("Unparsed options ('" + getName() + "' does pass on any options): " + OptionUtils.joinOptions(options));
+      options = new String[0];
+    }
+
+    return doExecute(ns, options);
   }
 
   /**

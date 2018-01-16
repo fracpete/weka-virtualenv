@@ -15,7 +15,7 @@
 
 /*
  * Create.java
- * Copyright (C) 2017 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2018 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.gui.action;
@@ -24,10 +24,13 @@ import nz.ac.waikato.cms.gui.core.ApprovalDialog;
 import nz.ac.waikato.cms.gui.core.GUIHelper;
 import nz.ac.waikato.cms.gui.core.PropertiesParameterPanel;
 import nz.ac.waikato.cms.gui.core.PropertiesParameterPanel.PropertyType;
+import nz.ac.waikato.cms.jenericcmdline.core.OptionUtils;
 
 import java.awt.BorderLayout;
 import java.awt.Dialog.ModalityType;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -81,8 +84,9 @@ public class Create
     PropertiesParameterPanel  	panel;
     Properties			props;
     ApprovalDialog		dialog;
-    String[]			options;
+    List<String> 		options;
     File			file;
+    String[]			envvars;
 
     panel = new PropertiesParameterPanel();
 
@@ -102,11 +106,16 @@ public class Create
     panel.setLabel("weka", "Weka jar");
     panel.setHelp("weka", "The weka jar to use for the environment, cannot be empty");
 
+    panel.addPropertyType("envvars", PropertyType.STRING);
+    panel.setLabel("envvars", "Environment variables");
+    panel.setHelp("envvars", "Additional environment variables, blank-separated list of key=value pairs");
+
     panel.setPropertyOrder(new String[]{
       "name",
       "java",
       "memory",
       "weka",
+      "envvars",
     });
 
     props = new Properties();
@@ -114,6 +123,7 @@ public class Create
     props.setProperty("java", "");
     props.setProperty("memory", "");
     props.setProperty("weka", "");
+    props.setProperty("envvars", "");
     panel.setProperties(props);
     if (GUIHelper.getParentDialog(getAction().getTabbedPane()) != null)
       dialog = new ApprovalDialog(GUIHelper.getParentDialog(getAction().getTabbedPane()), ModalityType.DOCUMENT_MODAL);
@@ -133,14 +143,25 @@ public class Create
     file      = new File(props.getProperty("java"));
     if (file.isDirectory())
       props.setProperty("java", "");
-    options   = new String[]{
-      "--name", props.getProperty("name"),
-      "--java", props.getProperty("java"),
-      "--memory", props.getProperty("memory"),
-      "--weka", props.getProperty("weka"),
-    };
+    options = new ArrayList<>();
+    options.add("--name"); options.add(props.getProperty("name"));
+    options.add("--java"); options.add(props.getProperty("java"));
+    options.add("--memory"); options.add(props.getProperty("memory"));
+    options.add("--weka"); options.add(props.getProperty("weka"));
+    if (!props.getProperty("envvars", "").trim().isEmpty()) {
+      try {
+        envvars = OptionUtils.splitOptions(props.getProperty("envvars"));
+        for (String envvar: envvars) {
+	  options.add("--envvar");
+	  options.add(envvar);
+	}
+      }
+      catch (Exception e) {
+        return "Failed to split blank-separated list of environment variables (key=value) pairs: " + e;
+      }
+    }
     m_Command = new com.github.fracpete.wekavirtualenv.command.Create();
-    if (!m_Command.execute(options)) {
+    if (!m_Command.execute(options.toArray(new String[options.size()]))) {
       if (m_Command.hasErrors())
         result = m_Command.getErrors();
       else

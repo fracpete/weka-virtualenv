@@ -24,6 +24,7 @@ import com.github.fracpete.processoutput4j.core.StreamingProcessOutputType;
 import com.github.fracpete.processoutput4j.core.StreamingProcessOwner;
 import com.github.fracpete.processoutput4j.output.StreamingProcessOutput;
 import com.github.fracpete.wekavirtualenv.env.Environments;
+import nz.ac.waikato.cms.jenericcmdline.core.OptionUtils;
 import org.apache.commons.lang3.SystemUtils;
 
 import java.io.File;
@@ -131,6 +132,8 @@ public abstract class AbstractLaunchCommand
     ProcessBuilder	result;
     List<String>	cmd;
     Map<String, String> vars;
+    String[]		envvars;
+    String[]		parts;
 
     cmd = new ArrayList<>();
     cmd.add(getJava());
@@ -146,6 +149,23 @@ public abstract class AbstractLaunchCommand
     result.command(cmd);
     vars = result.environment();
     vars.put("WEKA_HOME", Environments.getWekaFilesDir(m_Env.name));
+    if ((m_Env.envvars != null) && !m_Env.envvars.isEmpty()) {
+      System.out.println("Using environment variables: " + m_Env.envvars);
+      try {
+	envvars = OptionUtils.splitOptions(m_Env.envvars);
+	for (String envvar: envvars) {
+	  parts = envvar.split("=");
+	  if (parts.length == 2)
+	    vars.put(parts[0], parts[1]);
+	  else
+	    System.err.println("Wrong format for environment variable (key=value)? " + envvar);
+	}
+      }
+      catch (Exception e) {
+        System.err.println("Failed to parse environment variables (blank separated list, key=value pairs): " + m_Env.envvars);
+        e.printStackTrace();
+      }
+    }
 
     return result;
   }

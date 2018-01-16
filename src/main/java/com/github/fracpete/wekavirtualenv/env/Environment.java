@@ -53,7 +53,12 @@ public class Environment
   /** the weka jar to use. */
   public final static String KEY_WEKA = "weka";
 
+  /** the environment variables to set. */
+  public final static String KEY_ENVVARS = "envvars";
+
   public static final String DEFAULT = "<default>";
+
+  public static final String NONE = "<none>";
 
   /** the name of the environment. */
   public String name;
@@ -67,6 +72,9 @@ public class Environment
   /** the weka jar (full path). */
   public String weka;
 
+  /** the additional environment variables (blank-separated key=value pairs). */
+  public String envvars;
+
   /**
    * Returns a clone.
    *
@@ -75,11 +83,12 @@ public class Environment
   public Environment clone() {
     Environment	result;
 
-    result        = new Environment();
-    result.name   = name;
-    result.java   = java;
-    result.memory = memory;
-    result.weka   = weka;
+    result         = new Environment();
+    result.name    = name;
+    result.java    = java;
+    result.memory  = memory;
+    result.weka    = weka;
+    result.envvars = envvars;
 
     return result;
   }
@@ -139,6 +148,7 @@ public class Environment
     result.append(prefix).append("Java: ").append(java.isEmpty() ? DEFAULT : java).append("\n");
     result.append(prefix).append("Memory: ").append(memory.isEmpty() ? DEFAULT : memory).append("\n");
     result.append(prefix).append("Weka: ").append(weka).append("\n");
+    result.append(prefix).append("Env. vars: ").append(envvars == null ? NONE : envvars).append("\n");
     if (verbose) {
       version = version();
       if (version == null)
@@ -172,11 +182,12 @@ public class Environment
       props   = new Properties();
       props.load(freader);
       if ((props.getProperty(KEY_NAME) != null) && (props.getProperty(KEY_WEKA) != null)) {
-        result = new Environment();
-        result.name = props.getProperty(KEY_NAME);
-        result.java = props.getProperty(KEY_JAVA);
-        result.memory = props.getProperty(KEY_MEMORY);
-        result.weka = props.getProperty(KEY_WEKA);
+        result         = new Environment();
+        result.name    = props.getProperty(KEY_NAME);
+        result.java    = props.getProperty(KEY_JAVA, "");
+        result.memory  = props.getProperty(KEY_MEMORY, "");
+        result.weka    = props.getProperty(KEY_WEKA);
+        result.envvars = props.getProperty(KEY_ENVVARS, "");
       }
     }
     catch (Exception e) {
@@ -210,6 +221,7 @@ public class Environment
     props.setProperty(KEY_JAVA, (env.java == null ? "" : env.java));
     props.setProperty(KEY_MEMORY, (env.memory == null ? "" : env.memory));
     props.setProperty(KEY_WEKA, env.weka);
+    props.setProperty(KEY_ENVVARS, (env.envvars == null ? "" : env.envvars));
 
     fwriter = null;
     bwriter = null;
