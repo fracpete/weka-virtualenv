@@ -8,8 +8,10 @@ How to make a release
   ```
 
 * Push all changes
-* Update documentation - if necessary
+* Update documentation
 
+  * add new release link (`releases.md`)
+  * update artifact version (`maven.md`)
   * test 
     
     ```
