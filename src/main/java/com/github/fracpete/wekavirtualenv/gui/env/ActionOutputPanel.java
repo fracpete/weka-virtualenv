@@ -27,14 +27,18 @@ import com.github.fracpete.wekavirtualenv.gui.core.IconHelper;
 import nz.ac.waikato.cms.core.FileUtils;
 import nz.ac.waikato.cms.gui.core.BasePanel;
 import nz.ac.waikato.cms.gui.core.BaseScrollPane;
+import nz.ac.waikato.cms.gui.core.BaseTextPaneWithWordWrap;
 import nz.ac.waikato.cms.gui.core.ExtensionFileFilter;
 import nz.ac.waikato.cms.gui.core.GUIHelper;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -55,7 +59,7 @@ public class ActionOutputPanel
   protected EnvironmentAction m_Action;
 
   /** the text area. */
-  protected JTextArea m_TextArea;
+  protected BaseTextPaneWithWordWrap m_TextArea;
 
   /** the buttons on the left. */
   protected JPanel m_PanelButtonsLeft;
@@ -78,8 +82,33 @@ public class ActionOutputPanel
   /** the button for closing the output. */
   protected JButton m_ButtonClose;
 
+  /** whether to enable word wrap. */
+  protected JCheckBox m_CheckBoxLineWrap;
+
   /** the file chooser. */
   protected FileChooser m_FileChooser;
+
+  /** the attribute set for stdout. */
+  protected SimpleAttributeSet m_StdOutAttributeSet;
+
+  /** the attribute set for stderr. */
+  protected SimpleAttributeSet m_StdErrAttributeSet;
+
+  /**
+   * Initializes the members.
+   */
+  @Override
+  protected void initialize() {
+    super.initialize();
+
+    m_StdOutAttributeSet = new SimpleAttributeSet();
+    StyleConstants.setForeground(m_StdOutAttributeSet, Color.BLACK);
+    StyleConstants.setFontFamily(m_StdOutAttributeSet, "monospaced");
+
+    m_StdErrAttributeSet = new SimpleAttributeSet();
+    StyleConstants.setForeground(m_StdErrAttributeSet, Color.RED.darker());
+    StyleConstants.setFontFamily(m_StdErrAttributeSet, "monospaced");
+  }
 
   /**
    * Initializes the widgets;
@@ -91,8 +120,8 @@ public class ActionOutputPanel
     super.initGUI();
 
     setLayout(new BorderLayout());
-    m_TextArea = new JTextArea();
-    m_TextArea.setFont(new Font("monospaced", Font.PLAIN, 12));
+    m_TextArea = new BaseTextPaneWithWordWrap();
+    m_TextArea.setFont(Font.decode("monospaced"));
     add(new BaseScrollPane(m_TextArea));
 
     // buttons
@@ -117,6 +146,13 @@ public class ActionOutputPanel
     m_ButtonSave.setToolTipText("Saves the output to a file");
     m_ButtonSave.addActionListener((ActionEvent e) -> save());
     m_PanelButtonsLeft.add(m_ButtonSave);
+
+    m_CheckBoxLineWrap = new JCheckBox("Line wrap");
+    m_CheckBoxLineWrap.setSelected(m_TextArea.getWordWrap());
+    m_CheckBoxLineWrap.addActionListener((ActionEvent e) -> {
+      m_TextArea.setWordWrap(!m_TextArea.getWordWrap());
+    });
+    m_PanelButtonsLeft.add(m_CheckBoxLineWrap);
 
     m_ButtonStop = new JButton(IconHelper.getIcon("Stop"));
     m_ButtonStop.setToolTipText("Stops the process");
@@ -184,7 +220,7 @@ public class ActionOutputPanel
     boolean 	atEnd;
 
     atEnd = (m_TextArea.getCaretPosition() == m_TextArea.getText().length());
-    m_TextArea.append((stdout ? "[OUT] " : "[ERR] ") + line + "\n");
+    m_TextArea.append(line + "\n", stdout ? m_StdOutAttributeSet : m_StdErrAttributeSet);
     if (atEnd)
       m_TextArea.setCaretPosition(m_TextArea.getText().length());
 
