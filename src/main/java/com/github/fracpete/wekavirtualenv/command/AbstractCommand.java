@@ -208,7 +208,7 @@ public abstract class AbstractCommand
       }
       catch (ArgumentParserException e) {
 	parser.handleError(e);
-	return false;
+	return !parser.getHelpRequested();
       }
     }
 
