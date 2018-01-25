@@ -59,14 +59,8 @@ public class ListCommands
   @Override
   protected boolean doExecute(Namespace ns, String[] options) {
     System.out.println("Available commands:\n");
-    for (AbstractCommand cmd: AbstractCommand.getCommands()) {
-      System.out.println(cmd.getName() + (cmd.requiresEnvironment() ? " <env>" : "")
-        + (cmd.getParser() != null ? " <options>" : "")
-        + (cmd.supportsAdditionalArguments() ? " <args>" : ""));
-      for (String line: cmd.getHelp().split("\n"))
-	System.out.println("\t" + line);
-      System.out.println();
-    }
+    for (AbstractCommand cmd: AbstractCommand.getCommands())
+      System.out.println(cmd.generateHelpScreen(false, false));
     System.out.println();
     System.out.println("Notes:");
     System.out.println("<env>");

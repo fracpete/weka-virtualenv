@@ -24,6 +24,7 @@ import com.github.fracpete.simpleargparse4j.ArgumentParser;
 import com.github.fracpete.simpleargparse4j.ArgumentParserException;
 import com.github.fracpete.simpleargparse4j.Namespace;
 import com.github.fracpete.wekavirtualenv.core.InvalidEnvironmentException;
+import com.github.fracpete.wekavirtualenv.core.MissingEnvironmentException;
 import com.github.fracpete.wekavirtualenv.env.Environment;
 import com.github.fracpete.wekavirtualenv.env.Environments;
 import nz.ac.waikato.cms.jenericcmdline.core.OptionUtils;
@@ -84,6 +85,37 @@ public abstract class AbstractCommand
   public abstract String getHelp();
 
   /**
+   * Generates a help screen.
+   *
+   * @param outputParser 	whether to output the help from the parser as well
+   */
+  public String generateHelpScreen(boolean requested, boolean outputParser) {
+    StringBuilder	result;
+    ArgumentParser	parser;
+
+    result = new StringBuilder();
+    if (requested) {
+      result.append("Help requested");
+      result.append("\n\n");
+    }
+
+    result.append(getName() + (requiresEnvironment() ? " <env>" : "")
+      + (getParser() != null ? " <options>" : "")
+      + (supportsAdditionalArguments() ? " <args>" : "") + "\n");
+
+    for (String line: getHelp().split("\n"))
+      result.append("\t").append(line).append("\n");
+
+    parser = getParser();
+    if (outputParser && (parser != null)) {
+      result.append("\n");
+      result.append(parser.generateHelpScreen(false, false, false, true));
+    }
+
+    return result.toString();
+  }
+
+  /**
    * Returns whether it requires an environment.
    *
    * @return		true if required
@@ -142,7 +174,7 @@ public abstract class AbstractCommand
       options[0] = "";
     }
     else {
-      throw new InvalidEnvironmentException();
+      throw new MissingEnvironmentException();
     }
   }
 
@@ -342,10 +374,39 @@ public abstract class AbstractCommand
     setup.options[0] = "";
     setup.options = AbstractCommand.compress(setup.options);
 
+    // check for help
+    for (String option: setup.options) {
+      if (option.equals("--help")) {
+        System.out.println(setup.command.generateHelpScreen(true, true));
+        if (exit)
+          System.exit(0);
+        else
+          return true;
+      }
+    }
+
     // environment name?
     if (setup.command.requiresEnvironment()) {
-      setup.command.loadEnv(setup.options);
-      setup.options = AbstractCommand.compress(setup.options);
+      try {
+	setup.command.loadEnv(setup.options);
+	setup.options = AbstractCommand.compress(setup.options);
+      }
+      catch (MissingEnvironmentException e) {
+        System.err.println("No environment supplied!");
+        System.out.println(setup.command.generateHelpScreen(false, true));
+        if (exit)
+          System.exit(1);
+        else
+          return false;
+      }
+      catch (InvalidEnvironmentException ie) {
+        System.err.println("Invalid environment supplied: " + (setup.options[0]));
+        new ListEnvs().execute(new String[0]);
+        if (exit)
+          System.exit(1);
+        else
+          return false;
+      }
     }
 
     return true;
