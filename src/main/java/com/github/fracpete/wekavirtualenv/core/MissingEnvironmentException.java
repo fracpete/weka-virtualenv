@@ -14,26 +14,24 @@
  */
 
 /*
- * InvalidEnvironmentException.java
- * Copyright (C) 2017-2018 University of Waikato, Hamilton, NZ
+ * MissingEnvironmentException.java
+ * Copyright (C) 2018 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.core;
 
 /**
- * Gets thrown if invalid environment specified.
+ * Gets thrown if no environment specified.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
-public class InvalidEnvironmentException
+public class MissingEnvironmentException
   extends RuntimeException {
 
   /**
-   * Initializes the exception.
-   *
-   * @param env 	the invalid environment
+   * Initializes the exception with 'missing env'.
    */
-  public InvalidEnvironmentException(String env) {
-    super("Invalid environment: " + env);
+  public MissingEnvironmentException() {
+    super("Missing environment!");
   }
 }
