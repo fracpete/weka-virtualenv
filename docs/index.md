@@ -35,8 +35,8 @@ just uses the system's default settings for launching the new process.
 
 You can start the GUI with the following script from the `bin` directory:
 
-* Linux/Mac: `wenvg.sh`
-* Windows: `wenvg.bat`
+* Linux/Mac: `wenvgui.sh`
+* Windows: `wenvgui.bat`
 
 ![Screenshot](img/weka-virtualenv-gui.png)
 
@@ -59,7 +59,7 @@ of the tool (no audio, so watch closely!):
 
 [youtu.be/bFCS7mcCpHM](https://youtu.be/bFCS7mcCpHM)
 
-**Windows users** just have to substitute the `wenv.sh` and `wenvg.sh` scripts
-with `wenv.bat` and `wenvg.bat`. For adding the tool's `bin` directory to
+**Windows users** just have to substitute the `wenv.sh` and `wenvgui.sh` scripts
+with `wenv.bat` and `wenvgui.bat`. For adding the tool's `bin` directory to
 your `PATH` environment variable (to make it available from the command prompt),
 follow [these instructions](https://www.computerhope.com/issues/ch000549.htm).
