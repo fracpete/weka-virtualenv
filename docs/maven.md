@@ -3,6 +3,6 @@ Add the following dependency to you `pom.xml`:
   <dependency>
     <groupId>com.github.fracpete</groupId>
     <artifactId>weka-virtualenv</artifactId>
-    <version>0.0.13</version>
+    <version>0.0.14</version>
   </dependency>
 ```
