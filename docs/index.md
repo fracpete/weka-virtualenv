@@ -54,10 +54,9 @@ the right-click mouse context menu):
 
 ## Video
 
-The following video gives you a quick run through of some of the functionality
-of the tool (no audio, so watch closely!):
+You can find videos for the tool in the following YouTube playlist:
 
-[youtu.be/bFCS7mcCpHM](https://youtu.be/bFCS7mcCpHM)
+[weka-virtualenv playlist](https://www.youtube.com/playlist?list=PLMeTbrv9G0apt1ii_kyU5rtJEu58WrGwB)
 
 **Windows users** just have to substitute the `wenv.sh` and `wenvgui.sh` scripts
 with `wenv.bat` and `wenvgui.bat`. For adding the tool's `bin` directory to
