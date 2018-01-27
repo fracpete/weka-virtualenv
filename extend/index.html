@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Extend - weka-virtualenv</title>
+  
+
+  <link rel="shortcut icon" href="../img/favicon.ico">
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Extend";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script>
+  <script src="../js/theme.js"></script> 
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> weka-virtualenv</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="..">Home</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../commands/">Commands</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Extend</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#dataset-filenames">Dataset filenames</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#handling-arguments">Handling arguments</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#executing-class-with-main-method">Executing class with main method</a></li>
+                
+            
+            </ul>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../examples/">Examples</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../maven/">Maven</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../releases/">Releases</a>
+        
+    </li>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">weka-virtualenv</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Extend</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        
+          <a href="https://github.com/fracpete/weka-virtualenv" class="icon icon-github"> Edit on GitHub</a>
+        
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p>It is quite easy to add new commands to the tool:</p>
+<ul>
+<li>create a class derived from <code>com.github.fracpete.wekavirtualenv.command.AbstractCommand</code></li>
+<li>place the class in package <code>com.github.fracpete.wekavirtualenv.command</code></li>
+</ul>
+<h1 id="dataset-filenames">Dataset filenames</h1>
+<p>If your command should handle additional arguments as dataset filenames, then
+implement the indicator interface <code>com.github.fracpete.wekavirtualenv.command.DatasetHandler</code>.</p>
+<p>This interface is used by the <code>com.github.fracpete.wekavirtualenv.gui.ArffCommandSelector</code>
+tool, listing all the tools in the dropdown box that implement this interface.
+By default, these are by default only the <em>Explorer</em> and <em>ArffViewer</em>.  </p>
+<h1 id="handling-arguments">Handling arguments</h1>
+<p>The <code>Delete</code> command just takes a single option, which is the name of the
+environment to delete. In order for the parsing to work, you have to define
+a <code>ArgumentParser</code> object in the <code>getParser</code> method and then access the
+parsed options in the <code>doExecute</code> method, using the <code>Namespace</code> object.</p>
+<p>Here is the <code>Delete</code> command's code:</p>
+<pre><code class="java">public class Delete extends AbstractCommand {
+
+  public String getName() {
+    return &quot;delete&quot;;
+  }
+
+  public String getHelp() {
+    return &quot;Deletes an existing environment.&quot;;
+  }
+
+  public ArgumentParser getParser() {
+    ArgumentParser result = new ArgumentParser(getName());
+    result.addOption(&quot;--name&quot;)
+      .dest(&quot;name&quot;)
+      .help(&quot;the name of the environment to delete&quot;)
+      .required(true);
+    return result;
+  }
+
+  protected boolean doExecute(Namespace ns, String[] options) {
+    String msg = Environments.delete(ns.getString(&quot;name&quot;));
+    if (msg != null)
+      addError(&quot;Failed to delete environment '&quot; + ns.getString(&quot;name&quot;) + &quot;':\n&quot; + msg);
+    else
+      System.out.println(&quot;Environment successfully deleted: &quot; + ns.getString(&quot;name&quot;));
+    return (msg == null);
+  }
+}
+</code></pre>
+
+<p>For more information on the parsing, check out the 
+<a href="https://github.com/fracpete/simple-argparse4j">simple-argparse4j</a>
+project page.</p>
+<h1 id="executing-class-with-main-method">Executing class with main method</h1>
+<p>The <code>AbstractLaunchCommand</code> class makes it easier to execute a class that
+has a <code>main</code> method.</p>
+<p>The class for launching the Weka Explorer is quite simple:</p>
+<pre><code class="java">public class Explorer extends AbstractLaunchCommand implements DatasetHandler {
+
+  public String getName() {
+    return &quot;explorer&quot;;
+  }
+
+  public String getHelp() {
+    return &quot;Launches the Weka Explorer.\n&quot;
+      + &quot;You can supply a dataset filename to load immediately in the Explorer.&quot;;
+  }
+
+  public boolean supportsAdditionalArguments() {
+    return true;
+  }
+
+  protected boolean doExecute(Namespace ns, String[] options) {
+    return launch(build(&quot;weka.gui.explorer.Explorer&quot;, options));
+  }
+}
+
+</code></pre>
+
+<p>In the <code>doExecute</code> method, the <code>build</code> method takes the class name and any
+options that the class should process. In the Explorer's case an optional 
+dataset to load.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../examples/" class="btn btn-neutral float-right" title="Examples"/>Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../commands/" class="btn btn-neutral" title="Commands"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../commands/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../examples/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+
+</body>
+</html>
