@@ -3,6 +3,11 @@ It is quite easy to add new commands to the tool:
 * create a class derived from `com.github.fracpete.wekavirtualenv.command.AbstractCommand`
 * place the class in package `com.github.fracpete.wekavirtualenv.command`
 
+Thanks to the automatic class discovery (provided by 
+[jclasslocator](https://github.com/Waikato/jclasslocator)), you don't have
+to register anything, you only have to place the command in that particular 
+package.
+
 
 # Dataset filenames
 If your command should handle additional arguments as dataset filenames, then
