@@ -145,6 +145,10 @@
 <li>create a class derived from <code>com.github.fracpete.wekavirtualenv.command.AbstractCommand</code></li>
 <li>place the class in package <code>com.github.fracpete.wekavirtualenv.command</code></li>
 </ul>
+<p>Thanks to the automatic class discovery (provided by 
+<a href="https://github.com/Waikato/jclasslocator">jclasslocator</a>), you don't have
+to register anything, you only have to place the command in that particular 
+package.</p>
 <h1 id="dataset-filenames">Dataset filenames</h1>
 <p>If your command should handle additional arguments as dataset filenames, then
 implement the indicator interface <code>com.github.fracpete.wekavirtualenv.command.DatasetHandler</code>.</p>
