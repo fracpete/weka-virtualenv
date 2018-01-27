@@ -5,6 +5,7 @@ site_description: weka-virtualenv Documentation
 pages:
     - Home: index.md
     - Commands: commands.md
+    - Extend: extend.md
     - Examples: examples.md
     - Maven: maven.md
     - Releases: releases.md
