@@ -22,11 +22,11 @@ separating your various Weka installations. It is mainly aimed at separating
 packages.
 
 
-## Documentation
+## Links
 
-You can find general documentation and examples here:
-
-[fracpete.github.io/weka-virtualenv](https://fracpete.github.io/weka-virtualenv/)
+* [Releases](https://fracpete.github.io/weka-virtualenv/releases/)
+* [Documentation](https://fracpete.github.io/weka-virtualenv/)
+* [Videos](https://www.youtube.com/playlist?list=PLMeTbrv9G0apt1ii_kyU5rtJEu58WrGwB)
 
 
 ## Licenses
