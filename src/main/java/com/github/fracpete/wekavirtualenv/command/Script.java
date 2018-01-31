@@ -124,31 +124,32 @@ public class Script
   }
 
   /**
-   * Sets the variable and its value. If the value is null, the variable
-   * gets removed
+   * Sets the variable and its value.
    *
    * @param name	the name of the variable
-   * @param value	the value (string or string array), null to remove variable
+   * @param value	the value
    */
   public void setVariable(String name, String value) {
-    if (value == null)
-      m_Variables.remove(name);
-    else
-      m_Variables.put(name, value);
+    m_Variables.put(name, value);
   }
 
   /**
-   * Sets the variable and its value. If the value is null, the variable
-   * gets removed
+   * Sets the variable and its value.
    *
    * @param name	the name of the variable
-   * @param value	the value (string or string array), null to remove variable
+   * @param value	the value
    */
   public void setVariable(String name, String[] value) {
-    if (value == null)
-      m_Variables.remove(name);
-    else
-      m_Variables.put(name, value);
+    m_Variables.put(name, value);
+  }
+
+  /**
+   * Removes the specified variable.
+   *
+   * @param name	the name of the variable
+   */
+  public void removeVariable(String name) {
+    m_Variables.remove(name);
   }
 
   /**

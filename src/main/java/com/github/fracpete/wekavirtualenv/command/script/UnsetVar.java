@@ -74,7 +74,7 @@ public class UnsetVar
     result = true;
 
     if (options.length == 1) {
-      getContext().setVariable(options[0], null);
+      getContext().removeVariable(options[0]);
     }
     else {
       addError("Missing name of variable to remove!");
