@@ -179,14 +179,17 @@ public class Script
    */
   public String expandVariables(String cmd) {
     String	result;
+    String	orig;
 
     result = cmd;
+    orig   = cmd;
 
     for (String name: m_Variables.keySet())
       result = result.replace(VAR_START + name + VAR_END, m_Variables.get(name));
 
-    if (m_Verbose)
-      System.err.println("");
+    // recursive expansion?
+    if (result.contains(VAR_START) && !result.equals(orig))
+      result = expandVariables(result);
 
     return result;
   }

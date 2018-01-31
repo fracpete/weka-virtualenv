@@ -48,7 +48,8 @@ public class SetVar
    */
   @Override
   public String getHelp() {
-    return "Sets a variable in the form of 'name=value'.";
+    return "Sets a variable in the form of 'name=value'.\n"
+      + "The value can contain other variables, which will get evaluated in a lazy fashion.";
   }
 
   /**
