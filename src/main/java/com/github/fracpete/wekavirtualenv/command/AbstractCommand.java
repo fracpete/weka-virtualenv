@@ -30,7 +30,6 @@ import com.github.fracpete.wekavirtualenv.env.Environments;
 import nz.ac.waikato.cms.jenericcmdline.core.OptionUtils;
 import nz.ac.waikato.cms.locator.ClassLocator;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -41,20 +40,7 @@ import java.util.List;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public abstract class AbstractCommand
-  implements Comparable<AbstractCommand> {
-
-  /**
-   * Container object for the command setup.
-   */
-  public static class CommandSetup
-    implements Serializable {
-
-    /** the parsed command. */
-    public AbstractCommand command;
-
-    /** the current command-line options. */
-    public String[] options;
-  }
+  implements Command {
 
   /** the environment to use. */
   protected Environment m_Env;
@@ -263,7 +249,7 @@ public abstract class AbstractCommand
    * 			if the name is less than, equal to or greater
    */
   @Override
-  public int compareTo(AbstractCommand o) {
+  public int compareTo(Command o) {
     return getName().compareTo(o.getName());
   }
 
@@ -275,7 +261,7 @@ public abstract class AbstractCommand
    */
   @Override
   public boolean equals(Object obj) {
-    return (obj instanceof AbstractCommand) && (compareTo((AbstractCommand) obj) == 0);
+    return (obj instanceof Command) && (compareTo((Command) obj) == 0);
   }
 
   /**
@@ -283,19 +269,19 @@ public abstract class AbstractCommand
    *
    * @return		the commands
    */
-  public static List<AbstractCommand> getCommands() {
-    List<AbstractCommand>	result;
-    List<Class>			classes;
-    AbstractCommand		cmd;
+  public static List<Command> getCommands() {
+    List<Command>	result;
+    List<Class>		classes;
+    Command		cmd;
 
     result = new ArrayList<>();
     classes = ClassLocator.getSingleton().findClasses(
-      AbstractCommand.class,
-      new String[]{AbstractCommand.class.getPackage().getName()});
+      Command.class,
+      new String[]{Command.class.getPackage().getName()});
 
     for (Class cls: classes) {
       try {
-	cmd = (AbstractCommand) cls.newInstance();
+	cmd = (Command) cls.newInstance();
 	result.add(cmd);
       }
       catch (Exception e) {
@@ -314,11 +300,11 @@ public abstract class AbstractCommand
    * @param name	the name of the command
    * @return		the command, null if not available
    */
-  public static AbstractCommand getCommand(String name) {
-    AbstractCommand		result;
+  public static Command getCommand(String name) {
+    Command		result;
 
     result = null;
-    for (AbstractCommand cmd: getCommands()) {
+    for (Command cmd: getCommands()) {
       if (cmd.getName().equals(name)) {
         result = cmd;
         break;
@@ -355,7 +341,7 @@ public abstract class AbstractCommand
    * @return		the command, null if failed to configure
    */
   public static boolean configureSetup(CommandSetup setup, boolean exit) {
-    for (AbstractCommand c: AbstractCommand.getCommands()) {
+    for (Command c: AbstractCommand.getCommands()) {
       if (c.getName().equals(setup.options[0])) {
 	setup.command = c;
 	break;
@@ -372,7 +358,7 @@ public abstract class AbstractCommand
 
     // remove command from array
     setup.options[0] = "";
-    setup.options = AbstractCommand.compress(setup.options);
+    setup.options = compress(setup.options);
 
     // check for help
     for (String option: setup.options) {
@@ -389,7 +375,7 @@ public abstract class AbstractCommand
     if (setup.command.requiresEnvironment()) {
       try {
 	setup.command.loadEnv(setup.options);
-	setup.options = AbstractCommand.compress(setup.options);
+	setup.options = compress(setup.options);
       }
       catch (MissingEnvironmentException e) {
         System.err.println("No environment supplied!");

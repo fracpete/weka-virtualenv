@@ -23,6 +23,7 @@ package com.github.fracpete.wekavirtualenv.command;
 import com.github.fracpete.simpleargparse4j.ArgumentParser;
 import com.github.fracpete.simpleargparse4j.Namespace;
 import com.github.fracpete.wekavirtualenv.command.script.AbstractScriptCommand;
+import com.github.fracpete.wekavirtualenv.command.script.ScriptCommand;
 import com.github.fracpete.wekavirtualenv.core.InvalidEnvironmentException;
 import com.github.fracpete.wekavirtualenv.core.MissingEnvironmentException;
 import nz.ac.waikato.cms.core.Utils;
@@ -220,7 +221,7 @@ public class Script
    * @return		the command, null if failed to configure
    */
   public boolean configureScriptSetup(CommandSetup setup) {
-    for (AbstractCommand c: AbstractCommand.getCommands()) {
+    for (Command c: AbstractCommand.getCommands()) {
       if (c.getName().equals(setup.options[0])) {
 	setup.command = c;
 	break;
@@ -228,7 +229,7 @@ public class Script
     }
     // check script commands
     if (setup.command == null) {
-      for (AbstractScriptCommand c: AbstractScriptCommand.getScriptCommands()) {
+      for (ScriptCommand c: AbstractScriptCommand.getScriptCommands()) {
 	if (c.getName().equals(setup.options[0])) {
 	  setup.command = c;
 	  break;

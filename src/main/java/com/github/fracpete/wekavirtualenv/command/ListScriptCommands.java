@@ -22,6 +22,7 @@ package com.github.fracpete.wekavirtualenv.command;
 
 import com.github.fracpete.simpleargparse4j.Namespace;
 import com.github.fracpete.wekavirtualenv.command.script.AbstractScriptCommand;
+import com.github.fracpete.wekavirtualenv.command.script.ScriptCommand;
 
 /**
  * Lists all the script commands.
@@ -61,7 +62,7 @@ public class ListScriptCommands
   @Override
   protected boolean doExecute(Namespace ns, String[] options) {
     System.out.println("Available script commands:\n");
-    for (AbstractScriptCommand cmd: AbstractScriptCommand.getScriptCommands())
+    for (ScriptCommand cmd: AbstractScriptCommand.getScriptCommands())
       System.out.println(cmd.generateHelpScreen(false, false));
     System.out.println();
     System.out.println("Notes:");

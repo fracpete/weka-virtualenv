@@ -21,6 +21,7 @@
 package com.github.fracpete.wekavirtualenv.gui;
 
 import com.github.fracpete.wekavirtualenv.command.AbstractCommand;
+import com.github.fracpete.wekavirtualenv.command.Command;
 import com.github.fracpete.wekavirtualenv.command.DatasetHandler;
 import com.github.fracpete.wekavirtualenv.env.Environment;
 import com.github.fracpete.wekavirtualenv.env.Environments;
@@ -177,9 +178,9 @@ public class ArffCommandSelector
    * Launches the selected
    */
   public void launch() {
-    final AbstractCommand	cmd;
-    Properties			props;
-    SwingWorker			worker;
+    final Command 	cmd;
+    Properties		props;
+    SwingWorker		worker;
 
     props = m_PanelParams.getProperties();
 

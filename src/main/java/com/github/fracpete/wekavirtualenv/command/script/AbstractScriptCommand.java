@@ -36,7 +36,8 @@ import java.util.List;
  * @see Script
  */
 public abstract class AbstractScriptCommand
-  extends AbstractCommand {
+  extends AbstractCommand
+  implements ScriptCommand {
 
   /** the script this command belongs to. */
   protected Script m_Context;
@@ -89,19 +90,19 @@ public abstract class AbstractScriptCommand
    *
    * @return		the commands
    */
-  public static List<AbstractScriptCommand> getScriptCommands() {
-    List<AbstractScriptCommand>	result;
+  public static List<ScriptCommand> getScriptCommands() {
+    List<ScriptCommand>		result;
     List<Class>			classes;
-    AbstractScriptCommand		cmd;
+    ScriptCommand		cmd;
 
     result = new ArrayList<>();
     classes = ClassLocator.getSingleton().findClasses(
-      AbstractScriptCommand.class,
-      new String[]{AbstractScriptCommand.class.getPackage().getName()});
+      ScriptCommand.class,
+      new String[]{ScriptCommand.class.getPackage().getName()});
 
     for (Class cls: classes) {
       try {
-	cmd = (AbstractScriptCommand) cls.newInstance();
+	cmd = (ScriptCommand) cls.newInstance();
 	result.add(cmd);
       }
       catch (Exception e) {

@@ -59,7 +59,7 @@ public class ListCommands
   @Override
   protected boolean doExecute(Namespace ns, String[] options) {
     System.out.println("Available commands:\n");
-    for (AbstractCommand cmd: AbstractCommand.getCommands())
+    for (Command cmd: AbstractCommand.getCommands())
       System.out.println(cmd.generateHelpScreen(false, false));
     System.out.println();
     System.out.println("Notes:");
