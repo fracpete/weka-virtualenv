@@ -57,7 +57,7 @@ public class Script
   protected boolean m_Verbose;
 
   /** the variables. */
-  protected Map<String,String> m_Variables;
+  protected Map<String,Object> m_Variables;
 
   /**
    * The name of the command (used on the commandline).
@@ -128,9 +128,23 @@ public class Script
    * gets removed
    *
    * @param name	the name of the variable
-   * @param value	the value, null to remove variable
+   * @param value	the value (string or string array), null to remove variable
    */
   public void setVariable(String name, String value) {
+    if (value == null)
+      m_Variables.remove(name);
+    else
+      m_Variables.put(name, value);
+  }
+
+  /**
+   * Sets the variable and its value. If the value is null, the variable
+   * gets removed
+   *
+   * @param name	the name of the variable
+   * @param value	the value (string or string array), null to remove variable
+   */
+  public void setVariable(String name, String[] value) {
     if (value == null)
       m_Variables.remove(name);
     else
@@ -153,7 +167,7 @@ public class Script
    * @param name	the name of the variable to retrieve
    * @return		the value, null if variable doesn't exist
    */
-  public String getVariable(String name) {
+  public Object getVariable(String name) {
     return m_Variables.get(name);
   }
 
@@ -180,12 +194,16 @@ public class Script
   public String expandVariables(String cmd) {
     String	result;
     String	orig;
+    Object	val;
 
     result = cmd;
     orig   = cmd;
 
-    for (String name: m_Variables.keySet())
-      result = result.replace(VAR_START + name + VAR_END, m_Variables.get(name));
+    for (String name: m_Variables.keySet()) {
+      val = m_Variables.get(name);
+      if (val instanceof String)
+	result = result.replace(VAR_START + name + VAR_END, (String) val);
+    }
 
     // recursive expansion?
     if (result.contains(VAR_START) && !result.equals(orig))

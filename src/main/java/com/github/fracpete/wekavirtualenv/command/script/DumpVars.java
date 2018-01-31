@@ -21,6 +21,7 @@
 package com.github.fracpete.wekavirtualenv.command.script;
 
 import com.github.fracpete.simpleargparse4j.Namespace;
+import nz.ac.waikato.cms.core.Utils;
 
 /**
  * Just outputs all the currently set variables.
@@ -59,8 +60,15 @@ public class DumpVars
    */
   @Override
   protected boolean evalCommand(Namespace ns, String[] options) {
-    for (String name: getContext().variableNames())
-      System.out.println(name + "=" + getContext().getVariable(name));
+    Object	val;
+
+    for (String name: getContext().variableNames()) {
+      val = getContext().getVariable(name);
+      if (val instanceof String)
+	System.out.println(name + "=" + val);
+      else
+        System.out.println(name + "=" + Utils.flatten((String[]) val, ", "));
+    }
     return true;
   }
 }
