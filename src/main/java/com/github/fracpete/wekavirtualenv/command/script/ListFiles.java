@@ -54,7 +54,7 @@ public class ListFiles
   @Override
   public String getHelp() {
     return "Locates files in specified directory and stores them in a variable.\n"
-      + "Search can be recursive, file names can be matched again regular expression.";
+      + "Search can be recursive, file names (excl path) can be matched again regular expression.";
   }
 
   /**
