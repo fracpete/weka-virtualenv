@@ -22,6 +22,7 @@ package com.github.fracpete.wekavirtualenv.command;
 
 import com.github.fracpete.simpleargparse4j.ArgumentParser;
 import com.github.fracpete.simpleargparse4j.Namespace;
+import nz.ac.waikato.cms.jenericcmdline.core.OptionUtils;
 
 /**
  * Just outputs a message.
@@ -62,7 +63,7 @@ public class Echo
     result = new ArgumentParser(getName());
     result.addOption("--message")
       .dest("message")
-      .help("the message to output")
+      .help("the message to output. Use \\n and \\t for newline and tab.")
       .required(true);
     result.addOption("--stderr")
       .dest("stderr")
@@ -70,6 +71,16 @@ public class Echo
       .argument(false);
 
     return result;
+  }
+
+  /**
+   * Un-backquotes tab and newline.
+   *
+   * @param message	the message to process
+   * @return		the processed message
+   */
+  protected String unbackquote(String message) {
+    return OptionUtils.unbackQuoteChars(message, new String[]{"\\n" , "\\t"}, new char[]{'\n', '\t'});
   }
 
   /**
@@ -82,9 +93,9 @@ public class Echo
   @Override
   protected boolean doExecute(Namespace ns, String[] options) {
     if (ns.getBoolean("stderr"))
-      System.err.println(ns.getString("message"));
+      System.err.println(unbackquote(ns.getString("message")));
     else
-      System.out.println(ns.getString("message"));
+      System.out.println(unbackquote(ns.getString("message")));
     return true;
   }
 }
