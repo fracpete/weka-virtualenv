@@ -111,7 +111,7 @@ public class AliasExec
     List<String>	cmdList;
     CommandSetup results;
 
-    options = compress(options);
+    options = CommandUtils.compress(options);
 
     errors = new ArrayList<>();
     if (ns.getString("env").isEmpty()) {

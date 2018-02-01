@@ -232,7 +232,7 @@ public abstract class AbstractCommand
     }
 
     if (!supportsAdditionalArguments()) {
-      options = compress(options);
+      options = CommandUtils.compress(options);
       if (OptionUtils.joinOptions(options).trim().length() > 0)
         System.err.println("Unparsed options ('" + getName() + "' does pass on any options): " + OptionUtils.joinOptions(options));
       options = new String[0];
@@ -315,25 +315,6 @@ public abstract class AbstractCommand
   }
 
   /**
-   * Removes any empty strings from the array.
-   *
-   * @param options 	the options to compress
-   * @return		the compressed options
-   */
-  public static String[] compress(String[] options) {
-    List<String>	result;
-    int			i;
-
-    result = new ArrayList<>();
-    for (i = 0; i < options.length; i++) {
-      if (!options[i].isEmpty())
-	result.add(options[i]);
-    }
-
-    return result.toArray(new String[result.size()]);
-  }
-
-  /**
    * Configures the command setup.
    *
    * @param setup	the setup to update
@@ -358,7 +339,7 @@ public abstract class AbstractCommand
 
     // remove command from array
     setup.options[0] = "";
-    setup.options = compress(setup.options);
+    setup.options = CommandUtils.compress(setup.options);
 
     // check for help
     for (String option: setup.options) {
@@ -375,7 +356,7 @@ public abstract class AbstractCommand
     if (setup.command.requiresEnvironment()) {
       try {
 	setup.command.loadEnv(setup.options);
-	setup.options = compress(setup.options);
+	setup.options = CommandUtils.compress(setup.options);
       }
       catch (MissingEnvironmentException e) {
         System.err.println("No environment supplied!");

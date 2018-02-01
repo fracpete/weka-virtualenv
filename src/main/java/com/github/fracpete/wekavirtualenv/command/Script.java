@@ -244,7 +244,7 @@ public class Script
 
     // remove command from array
     setup.options[0] = "";
-    setup.options = AbstractCommand.compress(setup.options);
+    setup.options = CommandUtils.compress(setup.options);
 
     // check for help
     for (String option: setup.options) {
@@ -258,7 +258,7 @@ public class Script
     if (setup.command.requiresEnvironment()) {
       try {
 	setup.command.loadEnv(setup.options);
-	setup.options = AbstractCommand.compress(setup.options);
+	setup.options = CommandUtils.compress(setup.options);
       }
       catch (MissingEnvironmentException e) {
         System.err.println("No environment supplied!");

@@ -99,7 +99,7 @@ public class AliasAdd
   protected boolean doExecute(Namespace ns, String[] options) {
     String	msg;
 
-    options = compress(options);
+    options = CommandUtils.compress(options);
 
     // global?
     if (ns.getString("env").isEmpty()) {
