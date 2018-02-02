@@ -14,7 +14,7 @@
  */
 
 /*
- * ForLoop.java
+ * For.java
  * Copyright (C) 2018 University of Waikato, Hamilton, NZ
  */
 
@@ -173,10 +173,10 @@ public class For
   protected boolean evalCommand(Namespace ns, String[] options) {
     boolean	result;
 
-    m_Step = ns.getDouble("step");
-    m_Upper = ns.getDouble("to");
-    m_Current = ns.getDouble("from") - m_Step;
-    m_Verbose = ns.getBoolean("verbose");
+    m_Step     = ns.getDouble("step");
+    m_Upper    = ns.getDouble("to");
+    m_Current  = ns.getDouble("from") - m_Step;
+    m_Verbose  = ns.getBoolean("verbose");
     m_Variable = ns.getString("var");
 
     result = true;
