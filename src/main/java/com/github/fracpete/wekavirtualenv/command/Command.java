@@ -29,7 +29,7 @@ import com.github.fracpete.wekavirtualenv.env.Environment;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public interface Command
-  extends Comparable<Command> {
+  extends Comparable<Command>, ErrorHandler {
 
   /**
    * The name of the command (used on the commandline).
@@ -58,20 +58,6 @@ public interface Command
    * @return		true if required
    */
   public boolean requiresEnvironment();
-
-  /**
-   * Returns whether any errors were recorded.
-   *
-   * @return		true if errors present
-   */
-  public boolean hasErrors();
-
-  /**
-   * Returns the errors.
-   *
-   * @return		the errors, null if none present
-   */
-  public String getErrors();
 
   /**
    * Hook method for loading the environment.

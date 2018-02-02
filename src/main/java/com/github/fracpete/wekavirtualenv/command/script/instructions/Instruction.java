@@ -14,36 +14,27 @@
  */
 
 /*
- * ScriptCommand.java
+ * Instruction.java
  * Copyright (C) 2018 University of Waikato, Hamilton, NZ
  */
 
-package com.github.fracpete.wekavirtualenv.command.script;
-
-import com.github.fracpete.wekavirtualenv.command.Command;
-import com.github.fracpete.wekavirtualenv.command.Script;
-import com.github.fracpete.wekavirtualenv.command.script.instructions.EngineContext;
+package com.github.fracpete.wekavirtualenv.command.script.instructions;
 
 /**
- * Interface for a command that can only be run within a script.
+ * Generic interface for instructions.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
- * @see Script
  */
-public interface ScriptCommand
-  extends Command {
+public interface Instruction {
+
+  /** the line comment start. */
+  public final static String COMMENT = "#";
 
   /**
-   * Sets the script context.
+   * For converting the the instruction into a string.
    *
-   * @param value	the context
+   * @param indentation 	the number of indentation chars to use
+   * @return			the generated string
    */
-  public void setContext(EngineContext value);
-
-  /**
-   * Returns the script context.
-   *
-   * @return		the context, null if none set
-   */
-  public EngineContext getContext();
+  public String toString(int indentation);
 }

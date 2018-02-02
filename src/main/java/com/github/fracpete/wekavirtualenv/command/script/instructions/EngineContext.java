@@ -14,36 +14,21 @@
  */
 
 /*
- * ScriptCommand.java
+ * EngineContext.java
  * Copyright (C) 2018 University of Waikato, Hamilton, NZ
  */
 
-package com.github.fracpete.wekavirtualenv.command.script;
+package com.github.fracpete.wekavirtualenv.command.script.instructions;
 
-import com.github.fracpete.wekavirtualenv.command.Command;
-import com.github.fracpete.wekavirtualenv.command.Script;
-import com.github.fracpete.wekavirtualenv.command.script.instructions.EngineContext;
+import com.github.fracpete.wekavirtualenv.command.ErrorHandler;
+import com.github.fracpete.wekavirtualenv.command.script.VariablesHandler;
 
 /**
- * Interface for a command that can only be run within a script.
+ * The context for executing script commands.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
- * @see Script
  */
-public interface ScriptCommand
-  extends Command {
+public interface EngineContext
+  extends ErrorHandler, VariablesHandler {
 
-  /**
-   * Sets the script context.
-   *
-   * @param value	the context
-   */
-  public void setContext(EngineContext value);
-
-  /**
-   * Returns the script context.
-   *
-   * @return		the context, null if none set
-   */
-  public EngineContext getContext();
 }

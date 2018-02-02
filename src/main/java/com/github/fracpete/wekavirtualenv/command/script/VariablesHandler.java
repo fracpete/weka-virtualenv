@@ -14,36 +14,23 @@
  */
 
 /*
- * ScriptCommand.java
+ * VariablesHandler.java
  * Copyright (C) 2018 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.command.script;
 
-import com.github.fracpete.wekavirtualenv.command.Command;
-import com.github.fracpete.wekavirtualenv.command.Script;
-import com.github.fracpete.wekavirtualenv.command.script.instructions.EngineContext;
-
 /**
- * Interface for a command that can only be run within a script.
+ * Interface for classes that manage variables.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
- * @see Script
  */
-public interface ScriptCommand
-  extends Command {
+public interface VariablesHandler {
 
   /**
-   * Sets the script context.
+   * Returns the managed variables.
    *
-   * @param value	the context
+   * @return		the variables
    */
-  public void setContext(EngineContext value);
-
-  /**
-   * Returns the script context.
-   *
-   * @return		the context, null if none set
-   */
-  public EngineContext getContext();
+  public Variables getVariables();
 }

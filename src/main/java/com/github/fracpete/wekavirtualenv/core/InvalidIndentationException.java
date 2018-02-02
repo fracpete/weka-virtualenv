@@ -14,36 +14,27 @@
  */
 
 /*
- * ScriptCommand.java
+ * InvalidIndentationException.java
  * Copyright (C) 2018 University of Waikato, Hamilton, NZ
  */
 
-package com.github.fracpete.wekavirtualenv.command.script;
-
-import com.github.fracpete.wekavirtualenv.command.Command;
-import com.github.fracpete.wekavirtualenv.command.Script;
-import com.github.fracpete.wekavirtualenv.command.script.instructions.EngineContext;
+package com.github.fracpete.wekavirtualenv.core;
 
 /**
- * Interface for a command that can only be run within a script.
+ * Gets thrown if a mix of tabs and blanks is used.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
- * @see Script
  */
-public interface ScriptCommand
-  extends Command {
+public class InvalidIndentationException
+  extends Exception {
 
   /**
-   * Sets the script context.
+   * Initializes the exception.
    *
-   * @param value	the context
+   * @param lineNo	the line number (0-based)
+   * @param line	the line itself
    */
-  public void setContext(EngineContext value);
-
-  /**
-   * Returns the script context.
-   *
-   * @return		the context, null if none set
-   */
-  public EngineContext getContext();
+  public InvalidIndentationException(int lineNo, String line) {
+    super("Line " + (lineNo+1) + " mixes tabs and blanks for indentation: " + line);
+  }
 }

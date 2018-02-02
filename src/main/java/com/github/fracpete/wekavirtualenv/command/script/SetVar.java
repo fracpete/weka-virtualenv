@@ -82,7 +82,7 @@ public class SetVar
     if (pair.contains("=")) {
       name  = pair.substring(0, pair.indexOf("=")).trim();
       value = pair.substring(pair.indexOf("=") + 1).trim();
-      getContext().setVariable(name, value);
+      getContext().getVariables().set(name, value);
     }
     else {
       addError("Did not find expected 'name=value'!");

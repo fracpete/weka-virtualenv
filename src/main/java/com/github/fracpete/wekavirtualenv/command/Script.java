@@ -22,20 +22,16 @@ package com.github.fracpete.wekavirtualenv.command;
 
 import com.github.fracpete.simpleargparse4j.ArgumentParser;
 import com.github.fracpete.simpleargparse4j.Namespace;
-import com.github.fracpete.wekavirtualenv.command.script.AbstractScriptCommand;
-import com.github.fracpete.wekavirtualenv.command.script.ScriptCommand;
-import com.github.fracpete.wekavirtualenv.core.InvalidEnvironmentException;
-import com.github.fracpete.wekavirtualenv.core.MissingEnvironmentException;
-import nz.ac.waikato.cms.core.Utils;
-import nz.ac.waikato.cms.jenericcmdline.core.OptionUtils;
+import com.github.fracpete.wekavirtualenv.command.script.Variables;
+import com.github.fracpete.wekavirtualenv.command.script.VariablesHandler;
+import com.github.fracpete.wekavirtualenv.command.script.instructions.Block;
+import com.github.fracpete.wekavirtualenv.command.script.instructions.Engine;
+import com.github.fracpete.wekavirtualenv.command.script.instructions.EngineContext;
+import com.github.fracpete.wekavirtualenv.core.InvalidIndentationException;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Just outputs a message.
@@ -43,22 +39,14 @@ import java.util.Map;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public class Script
-  extends AbstractCommand {
-
-  /** the line comment start. */
-  public final static String COMMENT = "#";
-
-  /** the opening of a variable. */
-  public final static String VAR_START = "${";
-
-  /** the closing of a variable. */
-  public final static String VAR_END = "}";
+  extends AbstractCommand
+  implements VariablesHandler, EngineContext {
 
   /** whether we are in verbose mode. */
   protected boolean m_Verbose;
 
   /** the variables. */
-  protected Map<String,Object> m_Variables;
+  protected Variables m_Variables;
 
   /**
    * The name of the command (used on the commandline).
@@ -77,7 +65,7 @@ public class Script
    */
   public String getHelp() {
     return "Executes the commands in the specified script file.\n"
-      + "Empty lines and lines starting with " + COMMENT + " get skipped.";
+      + "Empty lines and lines starting with " + Block.COMMENT + " get skipped.";
   }
 
   /**
@@ -103,230 +91,12 @@ public class Script
   }
 
   /**
-   * Removes all empty and comment lines.
+   * Returns the variables.
    *
-   * @param cmds	the commands to clean in-place
+   * @return		the variables
    */
-  protected void cleanCommands(List<String> cmds) {
-    int		i;
-
-    i = 0;
-    while (i < cmds.size()) {
-      if (cmds.get(i).trim().isEmpty()) {
-        cmds.remove(i);
-        continue;
-      }
-      if (cmds.get(i).trim().startsWith(COMMENT)) {
-        cmds.remove(i);
-        continue;
-      }
-      i++;
-    }
-  }
-
-  /**
-   * Sets the variable and its value.
-   *
-   * @param name	the name of the variable
-   * @param value	the value
-   */
-  public void setVariable(String name, String value) {
-    m_Variables.put(name, value);
-  }
-
-  /**
-   * Sets the variable and its value.
-   *
-   * @param name	the name of the variable
-   * @param value	the value
-   */
-  public void setVariable(String name, String[] value) {
-    m_Variables.put(name, value);
-  }
-
-  /**
-   * Removes the specified variable.
-   *
-   * @param name	the name of the variable
-   */
-  public void removeVariable(String name) {
-    m_Variables.remove(name);
-  }
-
-  /**
-   * Checks whether the variable exists.
-   *
-   * @param name	the variable to check
-   * @return		true if present
-   */
-  public boolean hasVariable(String name) {
-    return m_Variables.containsKey(name);
-  }
-
-  /**
-   * Returns the value of the variable.
-   *
-   * @param name	the name of the variable to retrieve
-   * @return		the value, null if variable doesn't exist
-   */
-  public Object getVariable(String name) {
-    return m_Variables.get(name);
-  }
-
-  /**
-   * Returns the names of the currently stored variables.
-   *
-   * @return		the variable names
-   */
-  public List<String> variableNames() {
-    List<String>	result;
-
-    result = new ArrayList<>(m_Variables.keySet());
-    Collections.sort(result);
-
-    return result;
-  }
-
-  /**
-   * Expands all variables in the command.
-   *
-   * @param cmd		the command to process
-   * @return		the processed command
-   */
-  public String expandVariables(String cmd) {
-    String	result;
-    String	orig;
-    Object	val;
-
-    result = cmd;
-    orig   = cmd;
-
-    for (String name: m_Variables.keySet()) {
-      val = m_Variables.get(name);
-      if (val instanceof String)
-	result = result.replace(VAR_START + name + VAR_END, (String) val);
-    }
-
-    // recursive expansion?
-    if (result.contains(VAR_START) && !result.equals(orig))
-      result = expandVariables(result);
-
-    return result;
-  }
-
-  /**
-   * Configures the command setup for the script.
-   *
-   * @param setup	the setup to update
-   * @return		the command, null if failed to configure
-   */
-  public boolean configureScriptSetup(CommandSetup setup) {
-    for (Command c: AbstractCommand.getCommands()) {
-      if (c.getName().equals(setup.options[0])) {
-	setup.command = c;
-	break;
-      }
-    }
-    // check script commands
-    if (setup.command == null) {
-      for (ScriptCommand c: AbstractScriptCommand.getScriptCommands()) {
-	if (c.getName().equals(setup.options[0])) {
-	  setup.command = c;
-	  break;
-	}
-      }
-    }
-    if (setup.command == null) {
-      System.err.println("Unknown command: " + setup.options[0]);
-      new Help().execute(new String[0]);
-      return false;
-    }
-
-    // remove command from array
-    setup.options[0] = "";
-    setup.options = CommandUtils.compress(setup.options);
-
-    // check for help
-    for (String option: setup.options) {
-      if (option.equals("--help")) {
-        System.out.println(setup.command.generateHelpScreen(true, true));
-	return true;
-      }
-    }
-
-    // environment name?
-    if (setup.command.requiresEnvironment()) {
-      try {
-	setup.command.loadEnv(setup.options);
-	setup.options = CommandUtils.compress(setup.options);
-      }
-      catch (MissingEnvironmentException e) {
-        System.err.println("No environment supplied!");
-        System.out.println(setup.command.generateHelpScreen(false, true));
-	return false;
-      }
-      catch (InvalidEnvironmentException ie) {
-        System.err.println("Invalid environment supplied: " + (setup.options[0]));
-        new ListEnvs().execute(new String[0]);
-	return false;
-      }
-    }
-
-    if (setup.command instanceof AbstractScriptCommand)
-      ((AbstractScriptCommand) setup.command).setContext(this);
-
-    return true;
-  }
-
-  /**
-   * Processes the command.
-   *
-   * @param cmd		the command to execute
-   * @return		true if successfully executed
-   */
-  protected boolean processCommand(String cmd) {
-    CommandSetup	setup;
-
-    if (m_Verbose)
-      System.err.println("[RAW] " + cmd);
-    cmd = expandVariables(cmd);
-    if (m_Verbose)
-      System.err.println("[EXP] " + cmd);
-
-    try {
-      setup = new CommandSetup();
-      setup.options = OptionUtils.splitOptions(cmd);
-      if (!configureScriptSetup(setup) || (setup.command == null))
-	return false;
-
-      // execute
-      return executeSetup(setup);
-    }
-    catch (Exception e) {
-      addError("Failed to execute command: " + cmd + "\n" + Utils.throwableToString(e));
-      return false;
-    }
-  }
-
-  /**
-   * Processes the commands.
-   *
-   * @param cmds	the commands to execute
-   * @return		true if successfully executed
-   */
-  protected boolean processCommands(List<String> cmds) {
-    boolean	result;
-
-    m_Variables = new HashMap<>();
-
-    result = true;
-    for (String cmd: cmds) {
-      result = processCommand(cmd);
-      if (!result)
-        break;
-    }
-
-    return result;
+  public Variables getVariables() {
+    return m_Variables;
   }
 
   /**
@@ -340,6 +110,8 @@ public class Script
   protected boolean doExecute(Namespace ns, String[] options) {
     File 		scriptfile;
     List<String>	cmds;
+    Block		instructions;
+    Engine		engine;
 
     scriptfile = new File(ns.getString("file"));
     if (!scriptfile.exists()) {
@@ -355,13 +127,21 @@ public class Script
       cmds = Files.readAllLines(scriptfile.toPath());
     }
     catch (Exception e) {
-      addError("Failed to load commands from: " + scriptfile + "\n" + Utils.throwableToString(e));
+      addError("Failed to load commands from: " + scriptfile, e);
       return false;
     }
 
     m_Verbose = ns.getBoolean("verbose");
+    m_Variables = new Variables();
 
-    cleanCommands(cmds);
-    return processCommands(cmds);
+    try {
+      instructions = Block.parse(cmds);
+      engine       = new Engine(this, instructions, m_Verbose);
+      return engine.execute();
+    }
+    catch (InvalidIndentationException e) {
+      addError("Failed to parse instructions!", e);
+      return false;
+    }
   }
 }

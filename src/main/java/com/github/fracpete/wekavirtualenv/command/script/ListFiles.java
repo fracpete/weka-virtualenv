@@ -158,7 +158,7 @@ public class ListFiles
 
     search(dir, recursive, pattern, files);
 
-    getContext().setVariable(ns.getString("var"), files.toArray(new String[files.size()]));
+    getContext().getVariables().set(ns.getString("var"), files.toArray(new String[files.size()]));
 
     return true;
   }

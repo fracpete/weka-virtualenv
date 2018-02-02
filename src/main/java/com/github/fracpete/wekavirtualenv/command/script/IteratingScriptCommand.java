@@ -14,36 +14,31 @@
  */
 
 /*
- * ScriptCommand.java
+ * IteratingScriptCommand.java
  * Copyright (C) 2018 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.command.script;
 
-import com.github.fracpete.wekavirtualenv.command.Command;
-import com.github.fracpete.wekavirtualenv.command.Script;
-import com.github.fracpete.wekavirtualenv.command.script.instructions.EngineContext;
-
 /**
- * Interface for a command that can only be run within a script.
+ * Interface for script commands that iterate a block of instructions2.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
- * @see Script
  */
-public interface ScriptCommand
-  extends Command {
+public interface IteratingScriptCommand
+  extends ScriptCommand {
 
   /**
-   * Sets the script context.
+   * For querying whether the command can still iterate.
    *
-   * @param value	the context
+   * @return		true if to iterate, false if finished
    */
-  public void setContext(EngineContext value);
+  public boolean canIterate();
 
   /**
-   * Returns the script context.
+   * Performs the next iteration.
    *
-   * @return		the context, null if none set
+   * @return		true if successfully executed
    */
-  public EngineContext getContext();
+  public boolean iterate();
 }

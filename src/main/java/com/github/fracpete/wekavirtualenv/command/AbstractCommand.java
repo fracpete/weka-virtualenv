@@ -27,6 +27,7 @@ import com.github.fracpete.wekavirtualenv.core.InvalidEnvironmentException;
 import com.github.fracpete.wekavirtualenv.core.MissingEnvironmentException;
 import com.github.fracpete.wekavirtualenv.env.Environment;
 import com.github.fracpete.wekavirtualenv.env.Environments;
+import nz.ac.waikato.cms.core.Utils;
 import nz.ac.waikato.cms.jenericcmdline.core.OptionUtils;
 import nz.ac.waikato.cms.locator.ClassLocator;
 
@@ -114,8 +115,18 @@ public abstract class AbstractCommand
    * Stores and outputs the error message.
    *
    * @param msg		the message
+   * @param t 		the associated exception
    */
-  protected void addError(String msg) {
+  public void addError(String msg, Throwable t) {
+    addError(msg + "\n" + Utils.throwableToString(t));
+  }
+
+  /**
+   * Stores and outputs the error message.
+   *
+   * @param msg		the message
+   */
+  public void addError(String msg) {
     if (m_Errors == null)
       m_Errors = new StringBuilder();
     else

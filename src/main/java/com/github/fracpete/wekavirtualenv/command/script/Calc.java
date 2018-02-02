@@ -87,7 +87,7 @@ public class Calc
     Expression		expr;
 
     expr = new Expression(ns.getString("expr"));
-    getContext().setVariable(ns.getString("var"), "" + expr.calculate());
+    getContext().getVariables().set(ns.getString("var"), "" + expr.calculate());
 
     return true;
   }

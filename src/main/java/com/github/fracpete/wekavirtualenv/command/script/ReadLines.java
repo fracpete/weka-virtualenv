@@ -22,7 +22,6 @@ package com.github.fracpete.wekavirtualenv.command.script;
 
 import com.github.fracpete.simpleargparse4j.ArgumentParser;
 import com.github.fracpete.simpleargparse4j.Namespace;
-import nz.ac.waikato.cms.core.Utils;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -130,7 +129,7 @@ public class ReadLines
         pattern = Pattern.compile(regexp);
       }
       catch (Exception e) {
-        addError("Failed to parse regular expression: " + regexp);
+        addError("Failed to parse regular expression: " + regexp, e);
         return false;
       }
     }
@@ -140,7 +139,7 @@ public class ReadLines
       lines = Files.readAllLines(file.toPath());
     }
     catch (Exception e) {
-      addError("Failed to read: " + file + "\n" + Utils.throwableToString(e));
+      addError("Failed to read: " + file, e);
       return false;
     }
 
@@ -163,7 +162,7 @@ public class ReadLines
 	i++;
     }
 
-    getContext().setVariable(ns.getString("var"), lines.toArray(new String[lines.size()]));
+    getContext().getVariables().set(ns.getString("var"), lines.toArray(new String[lines.size()]));
 
     return true;
   }

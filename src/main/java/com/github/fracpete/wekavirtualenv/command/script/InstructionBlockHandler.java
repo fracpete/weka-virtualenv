@@ -14,36 +14,27 @@
  */
 
 /*
- * ScriptCommand.java
+ * InstructionBlockHandler.java
  * Copyright (C) 2018 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.command.script;
 
 import com.github.fracpete.wekavirtualenv.command.Command;
-import com.github.fracpete.wekavirtualenv.command.Script;
-import com.github.fracpete.wekavirtualenv.command.script.instructions.EngineContext;
+import com.github.fracpete.wekavirtualenv.command.script.instructions.Block;
 
 /**
- * Interface for a command that can only be run within a script.
+ * Interface for commands that handle a block of instructions.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
- * @see Script
  */
-public interface ScriptCommand
-  extends Command {
+public interface InstructionBlockHandler
+  extends Command, VariablesHandler {
 
   /**
-   * Sets the script context.
+   * Sets the instructions.
    *
-   * @param value	the context
+   * @param instructions	the commands to execute
    */
-  public void setContext(EngineContext value);
-
-  /**
-   * Returns the script context.
-   *
-   * @return		the context, null if none set
-   */
-  public EngineContext getContext();
+  public void setInstructions(Block instructions);
 }

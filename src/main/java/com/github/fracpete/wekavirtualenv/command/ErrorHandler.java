@@ -14,36 +14,45 @@
  */
 
 /*
- * ScriptCommand.java
+ * ErrorHandler.java
  * Copyright (C) 2018 University of Waikato, Hamilton, NZ
  */
 
-package com.github.fracpete.wekavirtualenv.command.script;
-
-import com.github.fracpete.wekavirtualenv.command.Command;
-import com.github.fracpete.wekavirtualenv.command.Script;
-import com.github.fracpete.wekavirtualenv.command.script.instructions.EngineContext;
+package com.github.fracpete.wekavirtualenv.command;
 
 /**
- * Interface for a command that can only be run within a script.
+ * Interface for classes that handle errors.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
- * @see Script
  */
-public interface ScriptCommand
-  extends Command {
+public interface ErrorHandler {
 
   /**
-   * Sets the script context.
+   * Stores and outputs the error message.
    *
-   * @param value	the context
+   * @param msg		the message
+   * @param t 		the associated exception
    */
-  public void setContext(EngineContext value);
+  public void addError(String msg, Throwable t);
 
   /**
-   * Returns the script context.
+   * Stores and outputs the error message.
    *
-   * @return		the context, null if none set
+   * @param msg		the message
    */
-  public EngineContext getContext();
+  public void addError(String msg);
+
+  /**
+   * Returns whether any errors were recorded.
+   *
+   * @return		true if errors present
+   */
+  public boolean hasErrors();
+
+  /**
+   * Returns the errors.
+   *
+   * @return		the errors, null if none present
+   */
+  public String getErrors();
 }

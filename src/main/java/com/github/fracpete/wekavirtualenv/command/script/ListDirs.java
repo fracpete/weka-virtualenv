@@ -151,14 +151,14 @@ public class ListDirs
         pattern = Pattern.compile(regexp);
       }
       catch (Exception e) {
-        addError("Failed to parse regular expression: " + regexp);
+        addError("Failed to parse regular expression: " + regexp, e);
         return false;
       }
     }
 
     search(dir, recursive, pattern, files);
 
-    getContext().setVariable(ns.getString("var"), files.toArray(new String[files.size()]));
+    getContext().getVariables().set(ns.getString("var"), files.toArray(new String[files.size()]));
 
     return true;
   }

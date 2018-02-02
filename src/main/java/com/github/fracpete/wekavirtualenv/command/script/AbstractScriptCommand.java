@@ -23,6 +23,7 @@ package com.github.fracpete.wekavirtualenv.command.script;
 import com.github.fracpete.simpleargparse4j.Namespace;
 import com.github.fracpete.wekavirtualenv.command.AbstractCommand;
 import com.github.fracpete.wekavirtualenv.command.Script;
+import com.github.fracpete.wekavirtualenv.command.script.instructions.EngineContext;
 import nz.ac.waikato.cms.locator.ClassLocator;
 
 import java.util.ArrayList;
@@ -40,14 +41,14 @@ public abstract class AbstractScriptCommand
   implements ScriptCommand {
 
   /** the script this command belongs to. */
-  protected Script m_Context;
+  protected EngineContext m_Context;
 
   /**
    * Sets the script context.
    *
    * @param value	the context
    */
-  public void setContext(Script value) {
+  public void setContext(EngineContext value) {
     m_Context = value;
   }
 
@@ -56,7 +57,7 @@ public abstract class AbstractScriptCommand
    *
    * @return		the context, null if none set
    */
-  public Script getContext() {
+  public EngineContext getContext() {
     return m_Context;
   }
 

@@ -62,8 +62,8 @@ public class DumpVars
   protected boolean evalCommand(Namespace ns, String[] options) {
     Object	val;
 
-    for (String name: getContext().variableNames()) {
-      val = getContext().getVariable(name);
+    for (String name: getContext().getVariables().names()) {
+      val = getContext().getVariables().get(name);
       if (val instanceof String)
 	System.out.println(name + "=" + val);
       else
