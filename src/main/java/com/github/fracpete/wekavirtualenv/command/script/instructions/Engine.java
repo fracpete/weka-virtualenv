@@ -21,17 +21,21 @@
 package com.github.fracpete.wekavirtualenv.command.script.instructions;
 
 import com.github.fracpete.wekavirtualenv.command.AbstractCommand;
-import com.github.fracpete.wekavirtualenv.command.Command;
 import com.github.fracpete.wekavirtualenv.command.CommandSetup;
 import com.github.fracpete.wekavirtualenv.command.CommandUtils;
+import com.github.fracpete.wekavirtualenv.command.CommandWithFilterSupport;
 import com.github.fracpete.wekavirtualenv.command.Help;
 import com.github.fracpete.wekavirtualenv.command.ListEnvs;
+import com.github.fracpete.wekavirtualenv.command.filter.AbstractFilter;
+import com.github.fracpete.wekavirtualenv.command.filter.FilterSetup;
 import com.github.fracpete.wekavirtualenv.command.script.AbstractScriptCommand;
 import com.github.fracpete.wekavirtualenv.command.script.InstructionBlockHandler;
-import com.github.fracpete.wekavirtualenv.command.script.ScriptCommand;
 import com.github.fracpete.wekavirtualenv.core.InvalidEnvironmentException;
 import com.github.fracpete.wekavirtualenv.core.MissingEnvironmentException;
 import nz.ac.waikato.cms.jenericcmdline.core.OptionUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Executes commands.
@@ -72,27 +76,51 @@ public class Engine {
   }
 
   /**
+   * Adds the filter to the command.
+   *
+   * @param setup	the setup to add the filter to
+   * @param filterArgs	the filter arguments
+   * @return		true if successfully added
+   */
+  protected boolean addFilter(CommandSetup setup, List<String> filterArgs) {
+    FilterSetup filterSetup;
+
+    filterSetup = new FilterSetup();
+    filterSetup.options = filterArgs.toArray(new String[filterArgs.size()]);
+    if (!AbstractFilter.configure(filterSetup)) {
+      System.err.println("Failed to configure filter: " + OptionUtils.joinOptions(filterArgs.toArray(new String[filterArgs.size()])));
+      return false;
+    }
+    else {
+      if (setup.command instanceof CommandWithFilterSupport) {
+	((CommandWithFilterSupport) setup.command).addFilter(filterSetup.filter);
+      }
+      else {
+	System.err.println("Command '" + setup.command.getName() + "' does not support filters!");
+	return false;
+      }
+    }
+
+    filterArgs.clear();
+
+    return true;
+  }
+
+  /**
    * Configures the command setup for the script.
    *
    * @param setup	the setup to update
    * @return		the command, null if failed to configure
    */
   public boolean configureScriptSetup(CommandSetup setup) {
-    for (Command c: AbstractCommand.getCommands()) {
-      if (c.getName().equals(setup.options[0])) {
-	setup.command = c;
-	break;
-      }
-    }
+    List<String>	filterArgs;
+    int			firstFilterPos;
+    int			i;
+
+    setup.command = AbstractCommand.getCommand(setup.options[0]);
     // check script commands
-    if (setup.command == null) {
-      for (ScriptCommand c: AbstractScriptCommand.getScriptCommands()) {
-	if (c.getName().equals(setup.options[0])) {
-	  setup.command = c;
-	  break;
-	}
-      }
-    }
+    if (setup.command == null)
+      setup.command = AbstractScriptCommand.getScriptCommand(setup.options[0]);
     if (setup.command == null) {
       System.err.println("Unknown command: " + setup.options[0]);
       new Help().execute(new String[0]);
@@ -127,6 +155,31 @@ public class Engine {
         new ListEnvs().execute(new String[0]);
 	return false;
       }
+    }
+
+    // filters?
+    firstFilterPos = -1;
+    filterArgs     = new ArrayList<>();
+    for (i = 0; i < setup.options.length; i++) {
+      if (setup.options[i].equals("|")) {
+        if (filterArgs.size() > 0) {
+          if (!addFilter(setup, filterArgs))
+            return false;
+	}
+        if (firstFilterPos == -1)
+	  firstFilterPos = i;
+	filterArgs = new ArrayList<>();
+        continue;
+      }
+      if (firstFilterPos > -1)
+	filterArgs.add(setup.options[i]);
+    }
+    if (firstFilterPos > -1) {
+      if (filterArgs.size() > 0) {
+	if (!addFilter(setup, filterArgs))
+	  return false;
+      }
+      setup.options = CommandUtils.removeFrom(setup.options, firstFilterPos);
     }
 
     if (setup.command instanceof AbstractScriptCommand)
