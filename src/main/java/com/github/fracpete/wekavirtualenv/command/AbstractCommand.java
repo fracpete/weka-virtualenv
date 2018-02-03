@@ -90,7 +90,8 @@ public abstract class AbstractCommand
 
     result.append(getName() + (requiresEnvironment() ? " <env>" : "")
       + (getParser() != null ? " <options>" : "")
-      + (supportsAdditionalArguments() ? " <args>" : "") + "\n");
+      + (supportsAdditionalArguments() ? " <args>" : "")
+      + (this instanceof CommandWithFilterSupport ? " | output filter(s)" : "")+ "\n");
 
     for (String line: getHelp().split("\n"))
       result.append("\t").append(line).append("\n");
