@@ -115,4 +115,24 @@ public abstract class AbstractScriptCommand
 
     return result;
   }
+
+  /**
+   * Returns the command associated with the command name.
+   *
+   * @param name	the name of the command
+   * @return		the command, null if not available
+   */
+  public static ScriptCommand getScriptCommand(String name) {
+    ScriptCommand	result;
+
+    result = null;
+    for (ScriptCommand cmd: getScriptCommands()) {
+      if (cmd.getName().equals(name)) {
+        result = cmd;
+        break;
+      }
+    }
+
+    return result;
+  }
 }
