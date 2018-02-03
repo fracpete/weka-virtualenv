@@ -11,7 +11,8 @@ or, when executing a classifier using the `run` command, any additional option
 will get passed to the Weka class.
 
 You can use the tool either through the command-line or through its user 
-interface.
+interface. Some basic scripting support is avaiilable through the `script`
+command-line command (see `Scripting` section).
 
 
 **Note**
