@@ -67,9 +67,9 @@ public class Calc
       .dest("expr")
       .help("the expression to calculate.")
       .required(true);
-    result.addOption("--var")
-      .dest("var")
-      .help("the name of the var to store the result in.")
+    result.addOption("--dest")
+      .dest("dest")
+      .help("the name of the variable to store the result in.")
       .required(true);
 
     return result;
@@ -87,7 +87,7 @@ public class Calc
     Expression		expr;
 
     expr = new Expression(ns.getString("expr"));
-    getContext().getVariables().set(ns.getString("var"), "" + expr.calculate());
+    getContext().getVariables().set(ns.getString("dest"), "" + expr.calculate());
 
     return true;
   }

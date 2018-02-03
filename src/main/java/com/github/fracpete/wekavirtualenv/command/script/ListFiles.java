@@ -79,9 +79,9 @@ public class ListFiles
       .dest("regexp")
       .help("the regular expression to match file names against.")
       .setDefault(".*");
-    result.addOption("--var")
-      .dest("var")
-      .help("the name of the var to store the result in.")
+    result.addOption("--dest")
+      .dest("dest")
+      .help("the name of the variable to store the result in.")
       .required(true);
 
     return result;
@@ -158,7 +158,7 @@ public class ListFiles
 
     search(dir, recursive, pattern, files);
 
-    getContext().getVariables().set(ns.getString("var"), files.toArray(new String[files.size()]));
+    getContext().getVariables().set(ns.getString("dest"), files.toArray(new String[files.size()]));
 
     return true;
   }

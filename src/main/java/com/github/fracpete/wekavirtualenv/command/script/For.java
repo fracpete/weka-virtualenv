@@ -98,8 +98,8 @@ public class For
       .type(Type.INTEGER)
       .help("the step amount for each iteration.")
       .setDefault(1);
-    result.addOption("--var")
-      .dest("var")
+    result.addOption("--dest")
+      .dest("dest")
       .help("the name of the var to store current value under.")
       .required(true);
     result.addOption("--verbose")
@@ -177,7 +177,7 @@ public class For
     m_Upper    = ns.getDouble("to");
     m_Current  = ns.getDouble("from") - m_Step;
     m_Verbose  = ns.getBoolean("verbose");
-    m_Variable = ns.getString("var");
+    m_Variable = ns.getString("dest");
 
     result = true;
 

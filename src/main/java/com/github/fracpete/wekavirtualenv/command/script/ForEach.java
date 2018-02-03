@@ -84,9 +84,9 @@ public class ForEach
       .dest("iterate")
       .help("the variable to iterate.")
       .required(true);
-    result.addOption("--var")
-      .dest("var")
-      .help("the name of the var to store the result in.")
+    result.addOption("--dest")
+      .dest("dest")
+      .help("the name of the variable to store the result in.")
       .required(true);
     result.addOption("--verbose")
       .dest("verbose")
@@ -170,7 +170,7 @@ public class ForEach
     }
 
     m_Verbose = ns.getBoolean("verbose");
-    m_Variable = ns.getString("var");
+    m_Variable = ns.getString("dest");
 
     result = true;
 

@@ -83,8 +83,8 @@ public class ReadLines
       .dest("invertmatching")
       .help("whether to invert the matching sense of the regular expression")
       .argument(false);
-    result.addOption("--var")
-      .dest("var")
+    result.addOption("--dest")
+      .dest("dest")
       .help("the name of the var to store the lines in.")
       .required(true);
 
@@ -162,7 +162,7 @@ public class ReadLines
 	i++;
     }
 
-    getContext().getVariables().set(ns.getString("var"), lines.toArray(new String[lines.size()]));
+    getContext().getVariables().set(ns.getString("dest"), lines.toArray(new String[lines.size()]));
 
     return true;
   }
