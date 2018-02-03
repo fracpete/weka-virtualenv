@@ -23,6 +23,8 @@ package com.github.fracpete.wekavirtualenv.command;
 import com.github.fracpete.processoutput4j.core.StreamingProcessOutputType;
 import com.github.fracpete.processoutput4j.core.StreamingProcessOwner;
 import com.github.fracpete.processoutput4j.output.StreamingProcessOutput;
+import com.github.fracpete.wekavirtualenv.command.filter.Filter;
+import com.github.fracpete.wekavirtualenv.command.filter.FilterChain;
 import com.github.fracpete.wekavirtualenv.env.Environments;
 import nz.ac.waikato.cms.jenericcmdline.core.OptionUtils;
 import org.apache.commons.lang3.SystemUtils;
@@ -42,7 +44,7 @@ import java.util.Set;
  */
 public abstract class AbstractLaunchCommand
   extends AbstractCommand
-  implements StreamingProcessOwner {
+  implements StreamingProcessOwner, CommandWithFilterSupport {
 
   /** the output listeners. */
   protected Set<OutputListener> m_OutputListeners;
@@ -50,11 +52,15 @@ public abstract class AbstractLaunchCommand
   /** the output. */
   protected StreamingProcessOutput m_Output;
 
+  /** for intercepting the process output. */
+  protected FilterChain m_FilterChain;
+
   /**
    * Initializes the command.
    */
   public AbstractLaunchCommand() {
     m_OutputListeners = new HashSet<>();
+    m_FilterChain = new FilterChain();
   }
 
   /**
@@ -73,6 +79,15 @@ public abstract class AbstractLaunchCommand
    */
   public void removeOutputListener(OutputListener l) {
     m_OutputListeners.remove(l);
+  }
+
+  /**
+   * Adds the filter.
+   *
+   * @param value	the filter to add
+   */
+  public void addFilter(Filter value) {
+    m_FilterChain.addFilter(value);
   }
 
   /**
@@ -186,13 +201,15 @@ public abstract class AbstractLaunchCommand
    * @param stdout	whether stdout or stderr
    */
   public synchronized void processOutput(String line, boolean stdout) {
-    if (stdout)
-      System.out.println(line);
-    else
-      System.err.println(line);
+    if (m_FilterChain.intercept(line, stdout)) {
+      if (stdout)
+	System.out.println(line);
+      else
+	System.err.println(line);
 
-    for (OutputListener l: m_OutputListeners)
-      l.outputOccurred(line, stdout);
+      for (OutputListener l : m_OutputListeners)
+	l.outputOccurred(line, stdout);
+    }
   }
 
   /**

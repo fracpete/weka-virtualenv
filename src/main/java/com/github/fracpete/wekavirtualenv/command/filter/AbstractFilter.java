@@ -21,6 +21,10 @@
 package com.github.fracpete.wekavirtualenv.command.filter;
 
 import com.github.fracpete.simpleargparse4j.ArgumentParser;
+import com.github.fracpete.simpleargparse4j.Namespace;
+import com.github.fracpete.wekavirtualenv.command.CommandUtils;
+import com.github.fracpete.wekavirtualenv.command.Help;
+import nz.ac.waikato.cms.core.Utils;
 import nz.ac.waikato.cms.locator.ClassLocator;
 
 import java.util.ArrayList;
@@ -37,6 +41,12 @@ public abstract class AbstractFilter
 
   /** for storing any errors. */
   protected StringBuilder m_Errors;
+
+  /** whether to capture stdout. */
+  protected boolean m_StdOut;
+
+  /** whether to capture stderr. */
+  protected boolean m_StdErr;
 
   /**
    * Initializes the filter.
@@ -62,8 +72,7 @@ public abstract class AbstractFilter
     }
 
     result.append(getName()
-      + (getParser() != null ? " <options>" : "")
-      + (supportsAdditionalArguments() ? " <args>" : "") + "\n");
+      + (getParser() != null ? " <options>" : "") + "\n");
 
     for (String line: getHelp().split("\n"))
       result.append("\t").append(line).append("\n");
@@ -81,8 +90,18 @@ public abstract class AbstractFilter
    * Stores and outputs the error message.
    *
    * @param msg		the message
+   * @param t 		the associated exception
    */
-  protected void addError(String msg) {
+  public void addError(String msg, Throwable t) {
+    addError(msg + "\n" + Utils.throwableToString(t));
+  }
+
+  /**
+   * Stores and outputs the error message.
+   *
+   * @param msg		the message
+   */
+  public void addError(String msg) {
     if (m_Errors == null)
       m_Errors = new StringBuilder();
     else
@@ -117,16 +136,54 @@ public abstract class AbstractFilter
    * @return		the parser, null if no arguments to parse
    */
   public ArgumentParser getParser() {
-    return null;
+    ArgumentParser 	result;
+
+    result = new ArgumentParser(getName());
+    result.addOption("--stdout")
+      .dest("stdout")
+      .help("for capturing output from stdout.")
+      .argument(false);
+    result.addOption("--stderr")
+      .dest("stderr")
+      .help("for capturing output from stderr.")
+      .argument(false);
+
+    return result;
   }
 
   /**
-   * Returns whether the filter utilizes additional arguments that get passed on.
+   * Initializes the filter with the parsed options.
    *
-   * @return		true if additional options
+   * @param ns		the parsed options
+   * @return		true if successfully parsed
    */
-  public boolean supportsAdditionalArguments() {
-    return false;
+  public boolean initialize(Namespace ns) {
+    m_StdOut = ns.getBoolean("stdout");
+    m_StdErr = ns.getBoolean("stderr");
+    return true;
+  }
+
+  /**
+   * Intercepts the process output.
+   *
+   * @param line	the output to process
+   * @param stdout	whether stdout or stderr
+   * @return		true if to keep
+   */
+  protected abstract boolean doIntercept(String line, boolean stdout);
+
+  /**
+   * Intercepts the process output.
+   *
+   * @param line	the output to process
+   * @param stdout	whether stdout or stderr
+   * @return		true if to keep
+   */
+  public boolean intercept(String line, boolean stdout) {
+    if ((m_StdOut && stdout) || (m_StdErr && !stdout))
+      return doIntercept(line, stdout);
+    else
+      return true;
   }
 
   /**
@@ -150,6 +207,42 @@ public abstract class AbstractFilter
   @Override
   public boolean equals(Object obj) {
     return (obj instanceof Filter) && (compareTo((Filter) obj) == 0);
+  }
+
+  /**
+   * Configures the filter.
+   *
+   * @param setup	the setup to update
+   * @return		the filter, null if failed to configure
+   */
+  public static boolean configure(FilterSetup setup) {
+    Namespace 	ns;
+
+    for (Filter f : getFilters()) {
+      if (f.getName().equals(setup.options[0])) {
+	setup.filter = f;
+	break;
+      }
+    }
+    if (setup.filter == null) {
+      System.err.println("Unknown filter: " + setup.options[0]);
+      new Help().execute(new String[0]);
+      return false;
+    }
+
+    // remove filter from array
+    setup.options[0] = "";
+    setup.options = CommandUtils.compress(setup.options);
+
+    try {
+      ns = setup.filter.getParser().parseArgs(setup.options, true);
+      return setup.filter.initialize(ns);
+    }
+    catch (Exception e) {
+      System.err.println("Failed to parse options!");
+      e.printStackTrace();
+      return false;
+    }
   }
 
   /**

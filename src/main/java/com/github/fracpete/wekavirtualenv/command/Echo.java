@@ -22,6 +22,8 @@ package com.github.fracpete.wekavirtualenv.command;
 
 import com.github.fracpete.simpleargparse4j.ArgumentParser;
 import com.github.fracpete.simpleargparse4j.Namespace;
+import com.github.fracpete.wekavirtualenv.command.filter.Filter;
+import com.github.fracpete.wekavirtualenv.command.filter.FilterChain;
 import nz.ac.waikato.cms.jenericcmdline.core.OptionUtils;
 
 /**
@@ -30,7 +32,18 @@ import nz.ac.waikato.cms.jenericcmdline.core.OptionUtils;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public class Echo
-  extends AbstractCommand {
+  extends AbstractCommand
+  implements CommandWithFilterSupport {
+
+  /** for intercepting the process output. */
+  protected FilterChain m_FilterChain;
+
+  /**
+   * Initializes the command.
+   */
+  public Echo() {
+    m_FilterChain = new FilterChain();
+  }
 
   /**
    * The name of the command (used on the commandline).
@@ -74,6 +87,15 @@ public class Echo
   }
 
   /**
+   * Adds the filter.
+   *
+   * @param value	the filter to add
+   */
+  public void addFilter(Filter value) {
+    m_FilterChain.addFilter(value);
+  }
+
+  /**
    * Un-backquotes tab and newline.
    *
    * @param message	the message to process
@@ -92,10 +114,17 @@ public class Echo
    */
   @Override
   protected boolean doExecute(Namespace ns, String[] options) {
-    if (ns.getBoolean("stderr"))
-      System.err.println(unbackquote(ns.getString("message")));
-    else
-      System.out.println(unbackquote(ns.getString("message")));
+    String	line;
+    boolean	stdout;
+
+    line   = unbackquote(ns.getString("message"));
+    stdout = !ns.getBoolean("stderr");
+    if (m_FilterChain.intercept(line, stdout)) {
+      if (stdout)
+	System.out.println(line);
+      else
+	System.err.println(line);
+    }
     return true;
   }
 }

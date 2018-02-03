@@ -48,4 +48,25 @@ public class CommandUtils {
 
     return result.toArray(new String[result.size()]);
   }
+
+  /**
+   * Removes all options starting at the specified position.
+   *
+   * @param options	the options to process
+   * @param pos		the position from which to remove arguments
+   * @return		the updated options
+   */
+  public static String[] removeFrom(String[] options, int pos) {
+    List<String>	result;
+    int			i;
+
+    result = new ArrayList<>();
+    for (i = 0; i < options.length; i++) {
+      if (i == pos)
+        break;
+      result.add(options[i]);
+    }
+
+    return result.toArray(new String[result.size()]);
+  }
 }

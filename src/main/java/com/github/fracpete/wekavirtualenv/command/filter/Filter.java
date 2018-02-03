@@ -21,6 +21,9 @@
 package com.github.fracpete.wekavirtualenv.command.filter;
 
 import com.github.fracpete.simpleargparse4j.ArgumentParser;
+import com.github.fracpete.simpleargparse4j.Namespace;
+import com.github.fracpete.wekavirtualenv.command.ErrorHandler;
+import com.github.fracpete.wekavirtualenv.command.ProcessOutputInterceptor;
 
 /**
  * Interface for string filters.
@@ -28,7 +31,7 @@ import com.github.fracpete.simpleargparse4j.ArgumentParser;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public interface Filter
-  extends Comparable<Filter> {
+  extends Comparable<Filter>, ErrorHandler, ProcessOutputInterceptor {
 
   /**
    * The name of the filter (used on the filterline).
@@ -73,19 +76,12 @@ public interface Filter
   public ArgumentParser getParser();
 
   /**
-   * Returns whether the filter utilizes additional arguments that get passed on.
+   * Initializes the filter with the parsed options.
    *
-   * @return		true if additional options
+   * @param ns		the parsed options
+   * @return		true if successfully parsed
    */
-  public boolean supportsAdditionalArguments();
-
-  /**
-   * Filters the given string, potentially alters it.
-   *
-   * @param s		the string to filter
-   * @return		the filtered string, or null if removed
-   */
-  public String filter(String s);
+  public boolean initialize(Namespace ns);
 
   /**
    * Simply uses the filter for comparing.

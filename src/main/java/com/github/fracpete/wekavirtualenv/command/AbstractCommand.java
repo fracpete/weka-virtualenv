@@ -23,6 +23,8 @@ package com.github.fracpete.wekavirtualenv.command;
 import com.github.fracpete.simpleargparse4j.ArgumentParser;
 import com.github.fracpete.simpleargparse4j.ArgumentParserException;
 import com.github.fracpete.simpleargparse4j.Namespace;
+import com.github.fracpete.wekavirtualenv.command.filter.AbstractFilter;
+import com.github.fracpete.wekavirtualenv.command.filter.FilterSetup;
 import com.github.fracpete.wekavirtualenv.core.InvalidEnvironmentException;
 import com.github.fracpete.wekavirtualenv.core.MissingEnvironmentException;
 import com.github.fracpete.wekavirtualenv.env.Environment;
@@ -326,6 +328,44 @@ public abstract class AbstractCommand
   }
 
   /**
+   * Adds the filter to the command.
+   *
+   * @param setup	the setup to add the filter to
+   * @param exit	whether to allow System.exit
+   * @param filterArgs	the filter arguments
+   * @return		true if successfully added
+   */
+  protected static boolean addFilter(CommandSetup setup, boolean exit, List<String> filterArgs) {
+    FilterSetup		filterSetup;
+
+    filterSetup = new FilterSetup();
+    filterSetup.options = filterArgs.toArray(new String[filterArgs.size()]);
+    if (!AbstractFilter.configure(filterSetup)) {
+      System.err.println("Failed to configure filter: " + OptionUtils.joinOptions(filterArgs.toArray(new String[filterArgs.size()])));
+      if (exit)
+	System.exit(1);
+      else
+	return false;
+    }
+    else {
+      if (setup.command instanceof CommandWithFilterSupport) {
+	((CommandWithFilterSupport) setup.command).addFilter(filterSetup.filter);
+      }
+      else {
+	System.err.println("Command '" + setup.command.getName() + "' does not support filters!");
+	if (exit)
+	  System.exit(1);
+	else
+	  return false;
+      }
+    }
+
+    filterArgs.clear();
+
+    return true;
+  }
+
+  /**
    * Configures the command setup.
    *
    * @param setup	the setup to update
@@ -333,6 +373,10 @@ public abstract class AbstractCommand
    * @return		the command, null if failed to configure
    */
   public static boolean configureSetup(CommandSetup setup, boolean exit) {
+    List<String>	filterArgs;
+    int			firstFilterPos;
+    int			i;
+
     for (Command c: AbstractCommand.getCommands()) {
       if (c.getName().equals(setup.options[0])) {
 	setup.command = c;
@@ -385,6 +429,31 @@ public abstract class AbstractCommand
         else
           return false;
       }
+    }
+
+    // filters?
+    firstFilterPos = -1;
+    filterArgs     = new ArrayList<>();
+    for (i = 0; i < setup.options.length; i++) {
+      if (setup.options[i].equals("|")) {
+        if (filterArgs.size() > 0) {
+          if (!addFilter(setup, exit, filterArgs))
+            return false;
+	}
+        if (firstFilterPos == -1)
+	  firstFilterPos = i;
+	filterArgs = new ArrayList<>();
+        continue;
+      }
+      if (firstFilterPos > -1)
+	filterArgs.add(setup.options[i]);
+    }
+    if (firstFilterPos > -1) {
+      if (filterArgs.size() > 0) {
+	if (!addFilter(setup, exit, filterArgs))
+	  return false;
+      }
+      setup.options = CommandUtils.removeFrom(setup.options, firstFilterPos);
     }
 
     return true;
