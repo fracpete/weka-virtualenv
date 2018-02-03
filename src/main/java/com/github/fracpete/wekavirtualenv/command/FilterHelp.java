@@ -95,7 +95,7 @@ public class FilterHelp
     System.out.println();
     System.out.println("Notes:");
     System.out.println("<options>");
-    System.out.println("\tthe command supports additional options,");
+    System.out.println("\tthe filter supports additional options,");
     System.out.println("\tspecify the filter's name to output detailed help.");
 
     return true;
