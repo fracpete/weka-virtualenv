@@ -71,6 +71,9 @@ public class ListCommands
     System.out.println("<args>");
     System.out.println("\tthe command passes on all unconsumed options to the ");
     System.out.println("\tunderlying process");
+    System.out.println("| output filter(s)");
+    System.out.println("\tthe command generates output which can filtered, ");
+    System.out.println("\tthese filters can be chained, one '|' per filter");
 
     return true;
   }
