@@ -377,12 +377,7 @@ public abstract class AbstractCommand
     int			firstFilterPos;
     int			i;
 
-    for (Command c: AbstractCommand.getCommands()) {
-      if (c.getName().equals(setup.options[0])) {
-	setup.command = c;
-	break;
-      }
-    }
+    setup.command = AbstractCommand.getCommand(setup.options[0]);
     if (setup.command == null) {
       System.err.println("Unknown command: " + setup.options[0]);
       new Help().execute(new String[0]);
