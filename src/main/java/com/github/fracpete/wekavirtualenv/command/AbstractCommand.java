@@ -248,7 +248,7 @@ public abstract class AbstractCommand
     if (!supportsAdditionalArguments()) {
       options = CommandUtils.compress(options);
       if (OptionUtils.joinOptions(options).trim().length() > 0)
-        System.err.println("Unparsed options ('" + getName() + "' does pass on any options): " + OptionUtils.joinOptions(options));
+        System.err.println("Unparsed options ('" + getName() + "' does not pass on any options): " + OptionUtils.joinOptions(options));
       options = new String[0];
     }
 
