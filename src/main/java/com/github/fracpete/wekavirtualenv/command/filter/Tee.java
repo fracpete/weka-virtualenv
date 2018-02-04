@@ -113,16 +113,16 @@ public class Tee
    *
    * @param line	the output to process
    * @param stdout	whether stdout or stderr
-   * @return		true if to keep
+   * @return		the string to keep or null
    */
   @Override
-  protected boolean doIntercept(String line, boolean stdout) {
+  protected String doIntercept(String line, boolean stdout) {
     if (!m_OutputOccurred) {
       if (!m_Append &&  m_Output.exists())
         m_Output.delete();
     }
     FileUtils.writeToFileMsg(m_Output.getAbsolutePath(), line, true, null);
     m_OutputOccurred = true;
-    return true;
+    return line;
   }
 }

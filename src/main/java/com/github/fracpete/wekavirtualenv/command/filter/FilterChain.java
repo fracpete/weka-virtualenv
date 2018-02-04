@@ -57,17 +57,17 @@ public class FilterChain
    *
    * @param line	the output to process
    * @param stdout	whether stdout or stderr
-   * @return		true if to keep
+   * @return		the string to keep or null
    */
   @Override
-  public boolean intercept(String line, boolean stdout) {
-    boolean	result;
+  public String intercept(String line, boolean stdout) {
+    String	result;
 
-    result = true;
+    result = line;
 
     for (Filter filter: m_Filters) {
-      result = filter.intercept(line, stdout);
-      if (!result)
+      result = filter.intercept(result, stdout);
+      if (result == null)
         break;
     }
 

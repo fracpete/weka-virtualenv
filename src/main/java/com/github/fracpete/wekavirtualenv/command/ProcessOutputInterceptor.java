@@ -32,7 +32,7 @@ public interface ProcessOutputInterceptor {
    *
    * @param line	the output to process
    * @param stdout	whether stdout or stderr
-   * @return		true if to keep
+   * @return		the string to keep or null
    */
-  public boolean intercept(String line, boolean stdout);
+  public String intercept(String line, boolean stdout);
 }

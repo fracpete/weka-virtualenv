@@ -119,7 +119,8 @@ public class Echo
 
     line   = unbackquote(ns.getString("message"));
     stdout = !ns.getBoolean("stderr");
-    if (m_FilterChain.intercept(line, stdout)) {
+    line   = m_FilterChain.intercept(line, stdout);
+    if (line != null) {
       if (stdout)
 	System.out.println(line);
       else

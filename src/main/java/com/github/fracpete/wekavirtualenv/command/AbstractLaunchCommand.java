@@ -201,7 +201,8 @@ public abstract class AbstractLaunchCommand
    * @param stdout	whether stdout or stderr
    */
   public synchronized void processOutput(String line, boolean stdout) {
-    if (m_FilterChain.intercept(line, stdout)) {
+    line = m_FilterChain.intercept(line, stdout);
+    if (line != null) {
       if (stdout)
 	System.out.println(line);
       else

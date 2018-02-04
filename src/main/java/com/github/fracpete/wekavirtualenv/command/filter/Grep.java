@@ -111,11 +111,14 @@ public class Grep
    *
    * @param line	the output to process
    * @param stdout	whether stdout or stderr
-   * @return		true if to keep
+   * @return		the string to keep or null
    */
   @Override
-  protected boolean doIntercept(String line, boolean stdout) {
-    return (!m_Invert && m_RegExp.matcher(line).matches())
-      || (m_Invert && !m_RegExp.matcher(line).matches());
+  protected String doIntercept(String line, boolean stdout) {
+    if ((!m_Invert && m_RegExp.matcher(line).matches())
+      || (m_Invert && !m_RegExp.matcher(line).matches())) {
+      return line;
+    }
+    return null;
   }
 }

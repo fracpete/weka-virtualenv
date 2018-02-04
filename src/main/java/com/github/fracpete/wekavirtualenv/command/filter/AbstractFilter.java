@@ -168,22 +168,22 @@ public abstract class AbstractFilter
    *
    * @param line	the output to process
    * @param stdout	whether stdout or stderr
-   * @return		true if to keep
+   * @return		the string to keep or null
    */
-  protected abstract boolean doIntercept(String line, boolean stdout);
+  protected abstract String doIntercept(String line, boolean stdout);
 
   /**
    * Intercepts the process output.
    *
    * @param line	the output to process
    * @param stdout	whether stdout or stderr
-   * @return		true if to keep
+   * @return		the string to keep or null
    */
-  public boolean intercept(String line, boolean stdout) {
+  public String intercept(String line, boolean stdout) {
     if ((m_StdOut && stdout) || (m_StdErr && !stdout))
       return doIntercept(line, stdout);
     else
-      return true;
+      return line;
   }
 
   /**
