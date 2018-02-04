@@ -39,6 +39,12 @@ public class Variables {
   /** the closing of a variable. */
   public final static String VAR_END = "}";
 
+  /** the opening of an environment variable. */
+  public final static String ENV_START = "@{";
+
+  /** the closing of an environment variable. */
+  public final static String ENV_END = "}";
+
   /** the variables. */
   protected Map<String,Object> m_Variables;
 
@@ -135,6 +141,11 @@ public class Variables {
     // recursive expansion?
     if (result.contains(VAR_START) && !result.equals(orig))
       result = expand(result);
+
+    for (String name: System.getenv().keySet()) {
+      val    = System.getenv(name);
+      result = result.replace(ENV_START + name + ENV_END, (String) val);
+    }
 
     return result;
   }
