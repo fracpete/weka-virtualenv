@@ -159,6 +159,31 @@ public class Block
   }
 
   /**
+   * Combines lines that end with a backslash with the next one.
+   *
+   * @param cmds	the commands to combine
+   */
+  protected static void combine(List<String> cmds) {
+    int		i;
+    String	current;
+    String	next;
+
+    i = 0;
+    while (i < cmds.size()) {
+      if (cmds.get(i).trim().endsWith("\\")) {
+        if (i < cmds.size() - 1) {
+          current = cmds.get(i);
+          next    = cmds.get(i + 1);
+	  cmds.set(i, current.substring(0, current.length() - 1) + next);
+	  cmds.remove(i + 1);
+	  continue;
+	}
+      }
+      i++;
+    }
+  }
+
+  /**
    * Calculates the indentation level of the line.
    * Either tabs or blanks can be used (but not mixed).
    *
@@ -213,13 +238,16 @@ public class Block
    * @throws InvalidIndentationException	if indentation mixes tabs/blanks
    */
   public static Block parse(List<String> lines) throws InvalidIndentationException {
-    Block result;
-    Block inner;
+    Block 		result;
+    Block 		inner;
     Stack<Block> 	nesting;
-    int				i;
-    int 			indentation;
+    int			i;
+    int 		indentation;
 
+    // preprocess
     clean(lines);
+    combine(lines);
+
     result = new Block(null, 0);
     nesting = new Stack<>();
     nesting.push(result);
