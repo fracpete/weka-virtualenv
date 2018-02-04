@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * Executes a class with parmaeters.
+ * Executes a class with parameters.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
