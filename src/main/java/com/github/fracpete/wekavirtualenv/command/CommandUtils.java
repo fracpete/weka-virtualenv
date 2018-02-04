@@ -20,6 +20,8 @@
 
 package com.github.fracpete.wekavirtualenv.command;
 
+import nz.ac.waikato.cms.jenericcmdline.core.OptionUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,5 +70,18 @@ public class CommandUtils {
     }
 
     return result.toArray(new String[result.size()]);
+  }
+
+  /**
+   * Un-backquotes tab and newline and carriage return.
+   *
+   * @param s		the string to process
+   * @return		the processed string
+   */
+  public static String unbackquote(String s) {
+    return OptionUtils.unbackQuoteChars(
+      s,
+      new String[]{"\\n" , "\\t", "\\r"},
+      new char[]{'\n', '\t', '\r'});
   }
 }
