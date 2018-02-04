@@ -24,7 +24,6 @@ import com.github.fracpete.simpleargparse4j.ArgumentParser;
 import com.github.fracpete.simpleargparse4j.Namespace;
 import com.github.fracpete.wekavirtualenv.command.filter.Filter;
 import com.github.fracpete.wekavirtualenv.command.filter.FilterChain;
-import nz.ac.waikato.cms.jenericcmdline.core.OptionUtils;
 
 /**
  * Just outputs a message.
@@ -76,7 +75,7 @@ public class Echo
     result = new ArgumentParser(getName());
     result.addOption("--message")
       .dest("message")
-      .help("the message to output. Use \\n and \\t for newline and tab.")
+      .help("the message to output. Use \\n, \\r and \\t for newline, carriage return and tab.")
       .required(true);
     result.addOption("--stderr")
       .dest("stderr")
@@ -96,16 +95,6 @@ public class Echo
   }
 
   /**
-   * Un-backquotes tab and newline.
-   *
-   * @param message	the message to process
-   * @return		the processed message
-   */
-  protected String unbackquote(String message) {
-    return OptionUtils.unbackQuoteChars(message, new String[]{"\\n" , "\\t"}, new char[]{'\n', '\t'});
-  }
-
-  /**
    * Executes the command.
    *
    * @param ns		the namespace of the parsed options, null if no options to parse
@@ -117,7 +106,7 @@ public class Echo
     String	line;
     boolean	stdout;
 
-    line   = unbackquote(ns.getString("message"));
+    line   = CommandUtils.unbackquote(ns.getString("message"));
     stdout = !ns.getBoolean("stderr");
     line   = m_FilterChain.intercept(line, stdout);
     if (line != null) {
