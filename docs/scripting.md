@@ -68,6 +68,9 @@ dir_name <options>
 dump_vars
 	Just outputs all the currently set variables.
 
+flatten <options>
+	Flattens an array variable into a single string variable.
+
 for <options>
 	Iterates through the numeric values from lower to upper bound, using the specified step amount.
 
