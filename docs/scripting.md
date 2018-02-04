@@ -104,6 +104,9 @@ set <args>
 	Sets a variable in the form of 'name=value'.
 	The value can contain other variables, which will get evaluated in a lazy fashion.
 
+split <options>
+	Splits a string variable into a string array variable.
+
 unset <args>
 	Removes the specified variable.
 
