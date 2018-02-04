@@ -50,8 +50,20 @@ The following script commands are available:
 ```
 Available script commands:
 
+base_name <options>
+	Extracts the file name without the path from the specified variable.
+
 calc <options>
 	Calculates the result of a mathematical expression.
+
+del_dir <options>
+	Deletes the specified directory (recursively).
+
+del_file <options>
+	Deletes the specified file.
+
+dir_name <options>
+	Extracts the path from the specified file variable.
 
 dump_vars
 	Just outputs all the currently set variables.
@@ -74,6 +86,13 @@ read_lines <options>
 	Reads all the lines in a text file into a variable.
 	Can skip empty lines and lines that match regular expression.
 
+replace <options>
+	Performs string replacement, simple or regular expression based.
+	If no replacement string is provided the empty string is used.
+
+replace_ext <options>
+	Replaces the extension of the file stored in the variable with the supplied one.
+
 set <args>
 	Sets a variable in the form of 'name=value'.
 	The value can contain other variables, which will get evaluated in a lazy fashion.
@@ -86,6 +105,9 @@ Notes:
 <options>
 	the command supports additional options,
 	specify the script's name to output detailed help.
+<args>
+	the command supports additional arguments
+	see script's help.
 ```
 
 
@@ -96,6 +118,9 @@ Available filters:
 
 grep <options>
 	For capturing strings that match a regular expression.
+
+replace <options>
+	Performs string replacement, simple or regular expression based.
 
 tee <options>
 	Tees off the output to a file.

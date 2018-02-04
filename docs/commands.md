@@ -18,7 +18,7 @@ alias-list <options>
 	Lists aliases and their associated options.
 	Listing can be for global aliases, per environment, or for all.
 
-arffviewer <env> <args>
+arffviewer <env> <args> | output filter(s)
 	Launches the Weka Arff viewer.
 	You can supply dataset filenames to load immediately in the viewer.
 
@@ -33,20 +33,26 @@ create <options>
 delete <options>
 	Deletes an existing environment.
 
-experimenter <env> <args>
+echo <options> | output filter(s)
+	Outputs the specified message.
+
+experimenter <env> <args> | output filter(s)
 	Launches the Weka Experimenter.
 
-explorer <env> <args>
+explorer <env> <args> | output filter(s)
 	Launches the Weka Explorer.
 	You can supply a dataset filename to load immediately in the Explorer.
 
-guichooser <env>
+filter_help <options>
+	Prints help on the available output filters.
+
+guichooser <env> | output filter(s)
 	Launches the Weka GUIChooser.
 
 help
 	Outputs help information.
 
-knowledgeflow <env> <args>
+knowledgeflow <env> <args> | output filter(s)
 	Launches the Weka KnowledgeFlow.
 	You can supply a flow file to load immediately.
 
@@ -56,20 +62,27 @@ list_cmds
 list_envs <options>
 	Lists all available environments.
 
-pkgmgr <env> <args>
+pkgmgr <env> <args> | output filter(s)
 	Executes the commandline package manager.
 	You can supply additional options to the package manager, like '-list-packages'.
 
-pkgmgr-gui <env>
+pkgmgr-gui <env> | output filter(s)
 	Launches the package manager user interface.
 
 reset <options>
 	Deletes an existing environment, i.e., deletes the "wekafiles" sub-directory.
 
-run <env> <options> <args>
+run <env> <options> <args> | output filter(s)
 	Executes an arbitrary class with the unconsumed command-line options.
 
-sqlviewer <env>
+script <options>
+	Executes the commands in the specified script file.
+	Empty lines and lines starting with # get skipped.
+
+script_help <options>
+	Prints help on the available script commands.
+
+sqlviewer <env> | output filter(s)
 	Launches the Weka SQL Viewer.
 
 status
@@ -78,7 +91,7 @@ status
 update <env> <options>
 	Allows adjusting of parameters of an existing environment.
 
-workbench <env>
+workbench <env> | output filter(s)
 	Launches the Weka Workbench.
 
 
@@ -91,4 +104,7 @@ Notes:
 <args>
 	the command passes on all unconsumed options to the 
 	underlying process
+| output filter(s)
+	the command generates output which can filtered, 
+	these filters can be chained, one '|' per filter
 ```

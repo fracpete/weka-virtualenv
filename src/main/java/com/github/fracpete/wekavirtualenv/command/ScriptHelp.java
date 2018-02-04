@@ -97,6 +97,9 @@ public class ScriptHelp
     System.out.println("<options>");
     System.out.println("\tthe command supports additional options,");
     System.out.println("\tspecify the script's name to output detailed help.");
+    System.out.println("<args>");
+    System.out.println("\tthe command supports additional arguments");
+    System.out.println("\tsee script's help.");
 
     return true;
   }
