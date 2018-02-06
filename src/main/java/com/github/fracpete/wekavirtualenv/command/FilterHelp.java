@@ -80,23 +80,23 @@ public class FilterHelp
   @Override
   protected boolean doExecute(Namespace ns, String[] options) {
     if (ns.getString("filter").isEmpty()) {
-      System.out.println("Available filters:\n");
+      println("Available filters:\n", false);
       for (Filter f : AbstractFilter.getFilters())
-        System.out.println(f.generateHelpScreen(false, false));
+        println(f.generateHelpScreen(false, false), true);
     }
     else {
       Filter f = AbstractFilter.getFilter(ns.getString("filter"));
       if (f == null) {
-        System.err.println("Unknown filter: " + ns.getString("filter"));
+        println("Unknown filter: " + ns.getString("filter"), false);
         return false;
       }
-      System.out.println(f.getParser().generateHelpScreen(false));
+      println(f.getParser().generateHelpScreen(false), true);
     }
-    System.out.println();
-    System.out.println("Notes:");
-    System.out.println("<options>");
-    System.out.println("\tthe filter supports additional options,");
-    System.out.println("\tspecify the filter's name to output detailed help.");
+    println("", true);
+    println("Notes:", true);
+    println("<options>", true);
+    println("\tthe filter supports additional options,", true);
+    println("\tspecify the filter's name to output detailed help.", true);
 
     return true;
   }

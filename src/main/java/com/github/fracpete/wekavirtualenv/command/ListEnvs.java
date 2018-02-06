@@ -85,13 +85,13 @@ public class ListEnvs
 
     envs = Environments.list();
     if (envs.size() == 0) {
-      System.out.println("No environments available");
+      println("No environments available", true);
     }
     else {
-      System.out.println("Available environments:\n");
+      println("Available environments:\n", true);
       for (Environment env : envs) {
-	System.out.println(env.toString("", ns.getBoolean("verbose")));
-	System.out.println();
+	println(env.toString("", ns.getBoolean("verbose")), true);
+	println("", true);
       }
     }
 

@@ -151,7 +151,7 @@ public class Update
     if (msg != null)
       addError(msg);
     else
-      System.out.println("Updated environment:\n" + newEnv);
+      println("Updated environment:\n" + newEnv, true);
 
     return (msg == null);
   }

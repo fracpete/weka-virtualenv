@@ -36,7 +36,7 @@ import java.util.List;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public class ForEach
-  extends AbstractScriptCommandWithOutputListeners
+  extends AbstractScriptCommand
   implements InstructionBlockHandler, IteratingScriptCommand, Destroyable {
 
   /** the instructions to execute with each element. */
@@ -136,7 +136,7 @@ public class ForEach
     next = m_Elements.remove(0);
     getVariables().set(m_Variable, next);
     if (m_Verbose)
-      System.err.println("[FOREACH] " + next);
+      println("[FOREACH] " + next, false);
     m_Current = new Engine(m_Context, m_Instructions, m_Verbose, m_OutputListeners);
     result    = m_Current.execute();
     m_Current = null;

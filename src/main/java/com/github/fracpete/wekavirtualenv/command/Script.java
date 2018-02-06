@@ -40,7 +40,7 @@ import java.util.List;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public class Script
-  extends AbstractCommandWithOutputListeners
+  extends AbstractCommand
   implements VariablesHandler, EngineContext, Destroyable {
 
   /** whether we are in verbose mode. */

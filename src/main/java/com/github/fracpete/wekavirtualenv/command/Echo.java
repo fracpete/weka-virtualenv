@@ -31,7 +31,7 @@ import com.github.fracpete.wekavirtualenv.command.filter.FilterChain;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public class Echo
-  extends AbstractCommandWithOutputListeners
+  extends AbstractCommand
   implements CommandWithFilterSupport {
 
   /** for intercepting the process output. */
@@ -97,21 +97,6 @@ public class Echo
   }
 
   /**
-   * For outputting the line.
-   *
-   * @param line	the line to output
-   * @param stdout	true if to output on stdout
-   */
-  protected void output(String line, boolean stdout) {
-    if (stdout)
-      System.out.println(line);
-    else
-      System.err.println(line);
-    for (OutputListener l: m_OutputListeners)
-      l.outputOccurred(line, stdout);
-  }
-
-  /**
    * Executes the command.
    *
    * @param ns		the namespace of the parsed options, null if no options to parse
@@ -127,7 +112,7 @@ public class Echo
     stdout = !ns.getBoolean("stderr");
     line   = m_FilterChain.intercept(line, stdout);
     if (line != null)
-      output(line, stdout);
+      println(line, stdout);
     return true;
   }
 }

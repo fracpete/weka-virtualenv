@@ -35,7 +35,9 @@ import nz.ac.waikato.cms.locator.ClassLocator;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Ancestor for virtual environment commands.
@@ -51,6 +53,9 @@ public abstract class AbstractCommand
   /** for storing any errors. */
   protected StringBuilder m_Errors;
 
+  /** the output listeners. */
+  protected Set<OutputListener> m_OutputListeners;
+
   /**
    * Initializes the command.
    */
@@ -63,7 +68,8 @@ public abstract class AbstractCommand
    * For initializing the members.
    */
   protected void initialize() {
-    m_Errors = null;
+    m_Errors          = null;
+    m_OutputListeners = new HashSet<>();
   }
 
   /**
@@ -163,6 +169,51 @@ public abstract class AbstractCommand
       return null;
     else
       return m_Errors.toString();
+  }
+
+  /**
+   * Adds the output listener.
+   *
+   * @param l		the listener
+   */
+  public void addOutputListener(OutputListener l) {
+    m_OutputListeners.add(l);
+  }
+
+  /**
+   * Removes the output listener.
+   *
+   * @param l		the listener
+   */
+  public void removeOutputListener(OutputListener l) {
+    m_OutputListeners.remove(l);
+  }
+
+  /**
+   * Outputs the specified string to either stdout or stderr.
+   *
+   * @param line	the line to output
+   * @param stdout	whether to output on stdout or stderr
+   */
+  @Override
+  public void println(String line, boolean stdout) {
+    if (stdout)
+      System.out.println(line);
+    else
+      System.err.println(line);
+    for (OutputListener l: m_OutputListeners)
+      l.outputOccurred(line, stdout);
+  }
+
+  /**
+   * Outputs the specified message on stderr.
+   *
+   * @param msg		the message to output
+   * @param t 		the exception
+   */
+  @Override
+  public void println(String msg, Throwable t) {
+    println(msg + "\n" + Utils.throwableToString(t), false);
   }
 
   /**

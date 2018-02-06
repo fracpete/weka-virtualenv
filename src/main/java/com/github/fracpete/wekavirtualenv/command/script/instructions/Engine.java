@@ -36,6 +36,7 @@ import com.github.fracpete.wekavirtualenv.command.script.InstructionBlockHandler
 import com.github.fracpete.wekavirtualenv.core.Destroyable;
 import com.github.fracpete.wekavirtualenv.core.InvalidEnvironmentException;
 import com.github.fracpete.wekavirtualenv.core.MissingEnvironmentException;
+import nz.ac.waikato.cms.core.Utils;
 import nz.ac.waikato.cms.jenericcmdline.core.OptionUtils;
 
 import java.util.ArrayList;
@@ -124,6 +125,31 @@ public class Engine
   }
 
   /**
+   * Outputs the specified string to either stdout or stderr.
+   *
+   * @param line	the line to output
+   * @param stdout	whether to output on stdout or stderr
+   */
+  public void println(String line, boolean stdout) {
+    if (stdout)
+      System.out.println(line);
+    else
+      System.err.println(line);
+    for (OutputListener l: m_OutputListeners)
+      l.outputOccurred(line, stdout);
+  }
+
+  /**
+   * Outputs the specified message on stderr.
+   *
+   * @param msg		the message to output
+   * @param t 		the exception
+   */
+  public void println(String msg, Throwable t) {
+    println(msg + "\n" + Utils.throwableToString(t), false);
+  }
+
+  /**
    * Adds the filter to the command.
    *
    * @param setup	the setup to add the filter to
@@ -136,7 +162,7 @@ public class Engine
     filterSetup = new FilterSetup();
     filterSetup.options = filterArgs.toArray(new String[filterArgs.size()]);
     if (!AbstractFilter.configure(filterSetup)) {
-      System.err.println("Failed to configure filter: " + OptionUtils.joinOptions(filterArgs.toArray(new String[filterArgs.size()])));
+      println("Failed to configure filter: " + OptionUtils.joinOptions(filterArgs.toArray(new String[filterArgs.size()])), false);
       return false;
     }
     else {
@@ -144,7 +170,7 @@ public class Engine
 	((CommandWithFilterSupport) setup.command).addFilter(filterSetup.filter);
       }
       else {
-	System.err.println("Command '" + setup.command.getName() + "' does not support filters!");
+	println("Command '" + setup.command.getName() + "' does not support filters!", false);
 	return false;
       }
     }
@@ -170,7 +196,7 @@ public class Engine
     if (setup.command == null)
       setup.command = AbstractScriptCommand.getScriptCommand(setup.options[0]);
     if (setup.command == null) {
-      System.err.println("Unknown command: " + setup.options[0]);
+      println("Unknown command: " + setup.options[0], false);
       new Help().execute(new String[0]);
       return false;
     }
@@ -182,7 +208,7 @@ public class Engine
     // check for help
     for (String option: setup.options) {
       if (option.equals("--help")) {
-        System.out.println(setup.command.generateHelpScreen(true, true));
+        println(setup.command.generateHelpScreen(true, true), true);
 	return true;
       }
     }
@@ -194,12 +220,12 @@ public class Engine
 	setup.options = CommandUtils.compress(setup.options);
       }
       catch (MissingEnvironmentException e) {
-        System.err.println("No environment supplied!");
-        System.out.println(setup.command.generateHelpScreen(false, true));
+        println("No environment supplied!", false);
+        println(setup.command.generateHelpScreen(false, true), false);
 	return false;
       }
       catch (InvalidEnvironmentException ie) {
-        System.err.println("Invalid environment supplied: " + (setup.options[0]));
+        println("Invalid environment supplied: " + (setup.options[0]), false);
         new ListEnvs().execute(new String[0]);
 	return false;
       }
@@ -247,10 +273,10 @@ public class Engine
     CommandSetup setup;
 
     if (m_Verbose)
-      System.err.println("[RAW] " + cmd);
+      println("[RAW] " + cmd, false);
     cmd = m_Context.getVariables().expand(cmd);
     if (m_Verbose)
-      System.err.println("[EXP] " + cmd);
+      println("[EXP] " + cmd, false);
 
     try {
       setup = new CommandSetup();
@@ -261,7 +287,7 @@ public class Engine
 	((InstructionBlockHandler) setup.command).setInstructions(block);
       if (setup.command instanceof OutputListenerSupporter) {
         for (OutputListener l: m_OutputListeners)
-	  ((OutputListenerSupporter) setup.command).addOutputListener(l);
+	  setup.command.addOutputListener(l);
       }
 
       // execute

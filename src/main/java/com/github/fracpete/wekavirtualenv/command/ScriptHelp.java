@@ -80,26 +80,26 @@ public class ScriptHelp
   @Override
   protected boolean doExecute(Namespace ns, String[] options) {
     if (ns.getString("cmd").isEmpty()) {
-      System.out.println("Available script commands:\n");
+      println("Available script commands:\n", true);
       for (ScriptCommand cmd : AbstractScriptCommand.getScriptCommands())
-        System.out.println(cmd.generateHelpScreen(false, false));
+        println(cmd.generateHelpScreen(false, false), true);
     }
     else {
       ScriptCommand cmd = AbstractScriptCommand.getScriptCommand(ns.getString("cmd"));
       if (cmd == null) {
-        System.err.println("Unknown script command: " + ns.getString("cmd"));
+        println("Unknown script command: " + ns.getString("cmd"), false);
         return false;
       }
-      System.out.println(cmd.getParser().generateHelpScreen(false));
+      println(cmd.getParser().generateHelpScreen(false), true);
     }
-    System.out.println();
-    System.out.println("Notes:");
-    System.out.println("<options>");
-    System.out.println("\tthe command supports additional options,");
-    System.out.println("\tspecify the script's name to output detailed help.");
-    System.out.println("<args>");
-    System.out.println("\tthe command supports additional arguments");
-    System.out.println("\tsee script's help.");
+    println("", true);
+    println("Notes:", true);
+    println("<options>", true);
+    println("\tthe command supports additional options,", true);
+    println("\tspecify the script's name to output detailed help.", true);
+    println("<args>", true);
+    println("\tthe command supports additional arguments", true);
+    println("\tsee script's help.", true);
 
     return true;
   }

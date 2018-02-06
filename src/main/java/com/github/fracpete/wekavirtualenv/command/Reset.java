@@ -87,7 +87,7 @@ public class Reset
     if (!result)
       addError("Failed to reset environment '" + ns.getString("name") + "':\n" + result);
     else
-      System.out.println("Environment successfully reset: " + ns.getString("name"));
+      println("Environment successfully reset: " + ns.getString("name"), true);
 
     return result;
   }

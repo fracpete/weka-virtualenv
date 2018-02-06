@@ -29,7 +29,7 @@ import com.github.fracpete.wekavirtualenv.env.Environment;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public interface Command
-  extends Comparable<Command>, ErrorHandler {
+  extends Comparable<Command>, ErrorHandler, OutputListenerSupporter {
 
   /**
    * The name of the command (used on the commandline).
@@ -96,6 +96,22 @@ public interface Command
    * @return		true if additional options
    */
   public boolean supportsAdditionalArguments();
+
+  /**
+   * Outputs the specified string to either stdout or stderr.
+   *
+   * @param line	the line to output
+   * @param stdout	whether to output on stdout or stderr
+   */
+  public void println(String line, boolean stdout);
+
+  /**
+   * Outputs the specified message on stderr.
+   *
+   * @param msg		the message to output
+   * @param t 		the exception
+   */
+  public void println(String msg, Throwable t);
 
   /**
    * Executes the command.

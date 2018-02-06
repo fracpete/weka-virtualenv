@@ -108,7 +108,7 @@ public class AliasAdd
 	addError(msg);
 	return false;
       }
-      System.out.println("Successfully added global alias: " + ns.getString("name"));
+      println("Successfully added global alias: " + ns.getString("name"), true);
     }
     else {
       msg = Aliases.add(ns.getString("env"), ns.getString("name"), options);
@@ -116,7 +116,7 @@ public class AliasAdd
 	addError(msg);
 	return false;
       }
-      System.out.println("Successfully added alias for env=" + ns.getString("env") + ": " + ns.getString("name"));
+      println("Successfully added alias for env=" + ns.getString("env") + ": " + ns.getString("name"), true);
     }
 
     return true;

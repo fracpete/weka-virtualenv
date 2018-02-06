@@ -84,7 +84,7 @@ public class Delete
     if (msg != null)
       addError("Failed to delete environment '" + ns.getString("name") + "':\n" + msg);
     else
-      System.out.println("Environment successfully deleted: " + ns.getString("name"));
+      println("Environment successfully deleted: " + ns.getString("name"), true);
 
     return (msg == null);
   }

@@ -195,7 +195,7 @@ public class AliasList
       return false;
     }
     else {
-      System.out.println(toString(header, definitions));
+      println(toString(header, definitions), true);
     }
 
     return true;

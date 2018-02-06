@@ -59,9 +59,9 @@ public class Help
   @Override
   protected boolean doExecute(Namespace ns, String[] options) {
     new ListCommands().execute(new String[0]);
-    System.out.println();
+    println("", true);
     new ListEnvs().execute(new String[0]);
-    System.out.println();
+    println("", true);
     return true;
   }
 }

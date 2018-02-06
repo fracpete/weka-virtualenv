@@ -60,8 +60,8 @@ public class Status
    */
   @Override
   protected boolean doExecute(Namespace ns, String[] options) {
-    System.out.println("Home directory: " + Project.getHomeDir());
-    System.out.println("# envs: " + Environments.list().size());
+    println("Home directory: " + Project.getHomeDir(), true);
+    println("# envs: " + Environments.list().size(), true);
 
     return true;
   }

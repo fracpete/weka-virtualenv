@@ -42,7 +42,7 @@ import java.util.Map;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public abstract class AbstractLaunchCommand
-  extends AbstractCommandWithOutputListeners
+  extends AbstractCommand
   implements StreamingProcessOwner, CommandWithFilterSupport, Destroyable {
 
   /** the output. */
@@ -143,7 +143,7 @@ public abstract class AbstractLaunchCommand
     vars = result.environment();
     vars.put("WEKA_HOME", Environments.getWekaFilesDir(m_Env.name));
     if ((m_Env.envvars != null) && !m_Env.envvars.isEmpty()) {
-      System.out.println("Using environment variables: " + m_Env.envvars);
+      println("Using environment variables: " + m_Env.envvars, true);
       try {
 	envvars = OptionUtils.splitOptions(m_Env.envvars);
 	for (String envvar: envvars) {
@@ -151,12 +151,11 @@ public abstract class AbstractLaunchCommand
 	  if (parts.length == 2)
 	    vars.put(parts[0], parts[1]);
 	  else
-	    System.err.println("Wrong format for environment variable (key=value)? " + envvar);
+	    println("Wrong format for environment variable (key=value)? " + envvar, true);
 	}
       }
       catch (Exception e) {
-        System.err.println("Failed to parse environment variables (blank separated list, key=value pairs): " + m_Env.envvars);
-        e.printStackTrace();
+        println("Failed to parse environment variables (blank separated list, key=value pairs): " + m_Env.envvars, e);
       }
     }
 
@@ -180,15 +179,8 @@ public abstract class AbstractLaunchCommand
    */
   public synchronized void processOutput(String line, boolean stdout) {
     line = m_FilterChain.intercept(line, stdout);
-    if (line != null) {
-      if (stdout)
-	System.out.println(line);
-      else
-	System.err.println(line);
-
-      for (OutputListener l : m_OutputListeners)
-	l.outputOccurred(line, stdout);
-    }
+    if (line != null)
+      println(line, stdout);
   }
 
   /**

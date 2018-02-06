@@ -33,7 +33,7 @@ import com.github.fracpete.wekavirtualenv.core.Destroyable;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public class For
-  extends AbstractScriptCommandWithOutputListeners
+  extends AbstractScriptCommand
   implements InstructionBlockHandler, IteratingScriptCommand, Destroyable {
 
   /** the instructions to execute with each element. */
@@ -154,7 +154,7 @@ public class For
       current = "" + m_Amount;
     getVariables().set(m_Variable, current);
     if (m_Verbose)
-      System.err.println("[FOR] " + m_Amount);
+      println("[FOR] " + m_Amount, false);
     m_Current = new Engine(m_Context, m_Instructions, m_Verbose, m_OutputListeners);
     result   = m_Current.execute();
     m_Current = null;

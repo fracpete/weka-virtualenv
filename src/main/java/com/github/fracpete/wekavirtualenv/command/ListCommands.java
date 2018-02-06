@@ -58,22 +58,22 @@ public class ListCommands
    */
   @Override
   protected boolean doExecute(Namespace ns, String[] options) {
-    System.out.println("Available commands:\n");
+    println("Available commands:\n", true);
     for (Command cmd: AbstractCommand.getCommands())
-      System.out.println(cmd.generateHelpScreen(false, false));
-    System.out.println();
-    System.out.println("Notes:");
-    System.out.println("<env>");
-    System.out.println("\tthe name of the environment to use for the command.");
-    System.out.println("<options>");
-    System.out.println("\tthe command supports additional options,");
-    System.out.println("\tyou can use --help as argument to see further details.");
-    System.out.println("<args>");
-    System.out.println("\tthe command passes on all unconsumed options to the ");
-    System.out.println("\tunderlying process");
-    System.out.println("| output filter(s)");
-    System.out.println("\tthe command generates output which can filtered, ");
-    System.out.println("\tthese filters can be chained, one '|' per filter");
+      println(cmd.generateHelpScreen(false, false), true);
+    println("", true);
+    println("Notes:", true);
+    println("<env>", true);
+    println("\tthe name of the environment to use for the command.", true);
+    println("<options>", true);
+    println("\tthe command supports additional options,", true);
+    println("\tyou can use --help as argument to see further details.", true);
+    println("<args>", true);
+    println("\tthe command passes on all unconsumed options to the ", true);
+    println("\tunderlying process", true);
+    println("| output filter(s)", true);
+    println("\tthe command generates output which can filtered, ", true);
+    println("\tthese filters can be chained, one '|' per filter", true);
 
     return true;
   }

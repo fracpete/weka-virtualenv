@@ -190,7 +190,7 @@ public class Clone
     if (msg != null)
       addError("Failed to create environment:\n" + msg);
     else
-      System.out.println("Created environment:\n\n" + newEnv);
+      println("Created environment:\n\n" + newEnv, true);
 
     return (msg == null);
   }

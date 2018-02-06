@@ -92,7 +92,7 @@ public class AliasDelete
 	addError(msg);
 	return false;
       }
-      System.out.println("Successfully remove global alias: " + ns.getString("name"));
+      println("Successfully remove global alias: " + ns.getString("name"), true);
     }
     else {
       msg = Aliases.remove(ns.getString("env"), ns.getString("name"));
@@ -100,7 +100,7 @@ public class AliasDelete
 	addError(msg);
 	return false;
       }
-      System.out.println("Successfully removed alias for env=" + ns.getString("env") + ": " + ns.getString("name"));
+      println("Successfully removed alias for env=" + ns.getString("env") + ": " + ns.getString("name"), true);
     }
 
     return true;
