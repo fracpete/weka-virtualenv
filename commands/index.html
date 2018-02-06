@@ -83,6 +83,13 @@
           
             <li>
     <li class="toctree-l1 ">
+        <a class="" href="../scripting/">Scripting</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
         <a class="" href="../maven/">Maven</a>
         
     </li>
@@ -150,7 +157,7 @@ alias-list &lt;options&gt;
     Lists aliases and their associated options.
     Listing can be for global aliases, per environment, or for all.
 
-arffviewer &lt;env&gt; &lt;args&gt;
+arffviewer &lt;env&gt; &lt;args&gt; | output filter(s)
     Launches the Weka Arff viewer.
     You can supply dataset filenames to load immediately in the viewer.
 
@@ -165,20 +172,26 @@ create &lt;options&gt;
 delete &lt;options&gt;
     Deletes an existing environment.
 
-experimenter &lt;env&gt; &lt;args&gt;
+echo &lt;options&gt; | output filter(s)
+    Outputs the specified message.
+
+experimenter &lt;env&gt; &lt;args&gt; | output filter(s)
     Launches the Weka Experimenter.
 
-explorer &lt;env&gt; &lt;args&gt;
+explorer &lt;env&gt; &lt;args&gt; | output filter(s)
     Launches the Weka Explorer.
     You can supply a dataset filename to load immediately in the Explorer.
 
-guichooser &lt;env&gt;
+filter_help &lt;options&gt;
+    Prints help on the available output filters.
+
+guichooser &lt;env&gt; | output filter(s)
     Launches the Weka GUIChooser.
 
 help
     Outputs help information.
 
-knowledgeflow &lt;env&gt; &lt;args&gt;
+knowledgeflow &lt;env&gt; &lt;args&gt; | output filter(s)
     Launches the Weka KnowledgeFlow.
     You can supply a flow file to load immediately.
 
@@ -188,20 +201,27 @@ list_cmds
 list_envs &lt;options&gt;
     Lists all available environments.
 
-pkgmgr &lt;env&gt; &lt;args&gt;
+pkgmgr &lt;env&gt; &lt;args&gt; | output filter(s)
     Executes the commandline package manager.
     You can supply additional options to the package manager, like '-list-packages'.
 
-pkgmgr-gui &lt;env&gt;
+pkgmgr-gui &lt;env&gt; | output filter(s)
     Launches the package manager user interface.
 
 reset &lt;options&gt;
     Deletes an existing environment, i.e., deletes the &quot;wekafiles&quot; sub-directory.
 
-run &lt;env&gt; &lt;options&gt; &lt;args&gt;
+run &lt;env&gt; &lt;options&gt; &lt;args&gt; | output filter(s)
     Executes an arbitrary class with the unconsumed command-line options.
 
-sqlviewer &lt;env&gt;
+script &lt;options&gt;
+    Executes the commands in the specified script file.
+    Empty lines and lines starting with # get skipped.
+
+script_help &lt;options&gt;
+    Prints help on the available script commands.
+
+sqlviewer &lt;env&gt; | output filter(s)
     Launches the Weka SQL Viewer.
 
 status
@@ -210,7 +230,7 @@ status
 update &lt;env&gt; &lt;options&gt;
     Allows adjusting of parameters of an existing environment.
 
-workbench &lt;env&gt;
+workbench &lt;env&gt; | output filter(s)
     Launches the Weka Workbench.
 
 
@@ -223,6 +243,9 @@ Notes:
 &lt;args&gt;
     the command passes on all unconsumed options to the 
     underlying process
+| output filter(s)
+    the command generates output which can filtered, 
+    these filters can be chained, one '|' per filter
 </code></pre>
               
             </div>

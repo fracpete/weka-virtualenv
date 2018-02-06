@@ -69,13 +69,25 @@
         
             <ul>
             
-                <li class="toctree-l3"><a href="#dataset-filenames">Dataset filenames</a></li>
+                <li class="toctree-l3"><a href="#automatic-class-discovery">Automatic class discovery</a></li>
                 
             
-                <li class="toctree-l3"><a href="#handling-arguments">Handling arguments</a></li>
+                <li class="toctree-l3"><a href="#command-line">Command-line</a></li>
+                
+                    <li><a class="toctree-l4" href="#dataset-filenames">Dataset filenames</a></li>
+                
+                    <li><a class="toctree-l4" href="#handling-arguments">Handling arguments</a></li>
+                
+                    <li><a class="toctree-l4" href="#executing-class-with-main-method">Executing class with main method</a></li>
                 
             
-                <li class="toctree-l3"><a href="#executing-class-with-main-method">Executing class with main method</a></li>
+                <li class="toctree-l3"><a href="#script-command">Script command</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#filter">Filter</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#user-interface">User interface</a></li>
                 
             
             </ul>
@@ -86,6 +98,13 @@
             <li>
     <li class="toctree-l1 ">
         <a class="" href="../examples/">Examples</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../scripting/">Scripting</a>
         
     </li>
 <li>
@@ -140,22 +159,24 @@
           <div role="main">
             <div class="section">
               
-                <p>It is quite easy to add new commands to the tool:</p>
+                <h1 id="automatic-class-discovery">Automatic class discovery</h1>
+<p>Thanks to the automatic class discovery (provided by 
+<a href="https://github.com/Waikato/jclasslocator">jclasslocator</a>), you don't have
+to register anything, you only have to place the command in the same package
+as the abstract superclass or interface.</p>
+<h1 id="command-line">Command-line</h1>
+<p>It is quite easy to add new commands to the tool:</p>
 <ul>
 <li>create a class derived from <code>com.github.fracpete.wekavirtualenv.command.AbstractCommand</code></li>
 <li>place the class in package <code>com.github.fracpete.wekavirtualenv.command</code></li>
 </ul>
-<p>Thanks to the automatic class discovery (provided by 
-<a href="https://github.com/Waikato/jclasslocator">jclasslocator</a>), you don't have
-to register anything, you only have to place the command in that particular 
-package.</p>
-<h1 id="dataset-filenames">Dataset filenames</h1>
+<h2 id="dataset-filenames">Dataset filenames</h2>
 <p>If your command should handle additional arguments as dataset filenames, then
 implement the indicator interface <code>com.github.fracpete.wekavirtualenv.command.DatasetHandler</code>.</p>
 <p>This interface is used by the <code>com.github.fracpete.wekavirtualenv.gui.ArffCommandSelector</code>
 tool, listing all the tools in the dropdown box that implement this interface.
 By default, these are by default only the <em>Explorer</em> and <em>ArffViewer</em>.  </p>
-<h1 id="handling-arguments">Handling arguments</h1>
+<h2 id="handling-arguments">Handling arguments</h2>
 <p>The <code>Delete</code> command just takes a single option, which is the name of the
 environment to delete. In order for the parsing to work, you have to define
 a <code>ArgumentParser</code> object in the <code>getParser</code> method and then access the
@@ -194,7 +215,7 @@ parsed options in the <code>doExecute</code> method, using the <code>Namespace</
 <p>For more information on the parsing, check out the 
 <a href="https://github.com/fracpete/simple-argparse4j">simple-argparse4j</a>
 project page.</p>
-<h1 id="executing-class-with-main-method">Executing class with main method</h1>
+<h2 id="executing-class-with-main-method">Executing class with main method</h2>
 <p>The <code>AbstractLaunchCommand</code> class makes it easier to execute a class that
 has a <code>main</code> method.</p>
 <p>The class for launching the Weka Explorer is quite simple:</p>
@@ -223,6 +244,160 @@ has a <code>main</code> method.</p>
 <p>In the <code>doExecute</code> method, the <code>build</code> method takes the class name and any
 options that the class should process. In the Explorer's case an optional 
 dataset to load.</p>
+<h1 id="script-command">Script command</h1>
+<p>If you want to add a script command, you just have to derive it from the
+<code>com.github.fracpete.wekavirtualenv.command.script.AbstractScriptCommand</code>
+super class and place it in the <code>com.github.fracpete.wekavirtualenv.command.script</code>
+package.</p>
+<p>Here is the code for the <code>DirName</code> command:</p>
+<pre><code class="java">public class DirName extends AbstractScriptCommand {
+
+  public String getName() {
+    return &quot;dir_name&quot;;
+  }
+
+  public String getHelp() {
+    return &quot;Extracts the path from the specified file variable.&quot;;
+  }
+
+  public ArgumentParser getParser() {
+    ArgumentParser result = new ArgumentParser(getName());
+    result.addOption(&quot;--file&quot;)
+      .dest(&quot;file&quot;)
+      .help(&quot;the full path to extract the path from.&quot;)
+      .required(true);
+    result.addOption(&quot;--dest&quot;)
+      .dest(&quot;dest&quot;)
+      .help(&quot;the name of the variable to store the result in.&quot;)
+      .required(true);
+    return result;
+  }
+
+  protected boolean evalCommand(Namespace ns, String[] options) {
+    File file = new File(ns.getString(&quot;file&quot;));
+    getContext().getVariables().set(ns.getString(&quot;dest&quot;), file.getParentFile().getAbsolutePath());
+    return true;
+  }
+}
+</code></pre>
+
+<h1 id="filter">Filter</h1>
+<p>If you want to add a custom output filter (like grep or tee), then you only
+have to implement the <code>com.github.fracpete.wekavirtualenv.command.filter.Filter</code>
+interface (or use the abstract superclass <code>AbstractFilter</code> for convenience)
+and place it in the <code>com.github.fracpete.wekavirtualenv.command.filter</code> package.</p>
+<p>Here is the code for the <code>Grep</code> filter:</p>
+<pre><code class="java">public class Grep
+  extends AbstractFilter {
+
+  /** the pattern for matching. */
+  protected Pattern m_RegExp;
+
+  protected boolean m_Invert;
+
+  public String getName() {
+    return &quot;grep&quot;;
+  }
+
+  @Override
+  public String getHelp() {
+    return &quot;For capturing strings that match a regular expression.&quot;;
+  }
+
+  public ArgumentParser getParser() {
+    ArgumentParser result = super.getParser();
+    result.addOption(&quot;--regexp&quot;)
+      .dest(&quot;regexp&quot;)
+      .help(&quot;the regular expression that the output must match to be kept.&quot;)
+      .required(true);
+    result.addOption(&quot;--invert&quot;)
+      .dest(&quot;invert&quot;)
+      .help(&quot;whether to invert the matching sense.&quot;)
+      .argument(false);
+    return result;
+  }
+
+  public boolean initialize(Namespace ns) {
+    boolean result = super.initialize(ns);
+    if (result) {
+      try {
+    m_RegExp = Pattern.compile(ns.getString(&quot;regexp&quot;));
+      }
+      catch (Exception e) {
+        addError(&quot;Invalid regular expression: &quot; + ns.getString(&quot;regexp&quot;), e);
+        return false;
+      }
+      m_Invert = ns.getBoolean(&quot;invert&quot;);
+    }
+    return result;
+  }
+
+  protected String doIntercept(String line, boolean stdout) {
+    if ((!m_Invert &amp;&amp; m_RegExp.matcher(line).matches())
+      || (m_Invert &amp;&amp; !m_RegExp.matcher(line).matches())) {
+      return line;
+    }
+    return null;
+  }
+}
+</code></pre>
+
+<h1 id="user-interface">User interface</h1>
+<p>For adding a command in the user interface, you have to subclass the
+abstract class <code>com.github.fracpete.wekavirtualenv.gui.command.AbstractGUICommand</code>
+and place the class in the <code>com.github.fracpete.wekavirtualenv.gui.command</code> package.</p>
+<p>If you want to capture the output of the process, then let the method
+<code>generatesOutput()</code> return <code>true</code>.</p>
+<p>If you the command is to be run in the context of a Weka environment, then
+the method <code>requiresEnvironment()</code> needs to return <code>true</code>. 
+Methods that return <code>true</code> automatically show up in the drop-down list of
+an environment. Ones that return <code>false</code>, show up in the main menu.</p>
+<p>The <code>destroy()</code> method is used for stopping any process that got launched.</p>
+<p>Here is the code for launching the Weka Explorer, which requires an environment
+and also captures the output of the launched process:</p>
+<pre><code class="java">public class Explorer
+  extends AbstractGUICommand {
+
+  protected com.github.fracpete.wekavirtualenv.command.Explorer m_Command;
+
+  public String getName() {
+    return &quot;Explorer&quot;;
+  }
+
+  public String getGroup() {
+    return &quot;gui&quot;;
+  }
+
+  public boolean requiresEnvironment() {
+    return true;
+  }
+
+  public boolean generatesOutput() {
+    return true;
+  }
+
+  @Override
+  protected String doExecute() {
+    String result = null;
+    m_Command = new com.github.fracpete.wekavirtualenv.command.Explorer();
+    m_Command.setEnv(m_Environment);
+    transferOutputListeners(m_Command);
+    if (!m_Command.execute(new String[0])) {
+      if (m_Command.hasErrors())
+        result = m_Command.getErrors();
+      else
+        result = &quot;Failed to launch Explorer!&quot;;
+    }
+    m_Command = null;
+    return result;
+  }
+
+  public void destroy() {
+    if (m_Command != null)
+      m_Command.destroy();
+  }
+}
+</code></pre>
               
             </div>
           </div>
