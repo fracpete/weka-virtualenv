@@ -18,7 +18,7 @@
  * Copyright (C) 2018 University of Waikato, Hamilton, NZ
  */
 
-package com.github.fracpete.wekavirtualenv.gui.action;
+package com.github.fracpete.wekavirtualenv.gui.command;
 
 /**
  * Starts the PackageManager GUI.
@@ -26,7 +26,7 @@ package com.github.fracpete.wekavirtualenv.gui.action;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public class PackageManagerGUI
-  extends AbstractEnvironmentAction {
+  extends AbstractGUICommand {
 
   /** the command. */
   protected com.github.fracpete.wekavirtualenv.command.PackageManagerGUI m_Command;
@@ -49,6 +49,16 @@ public class PackageManagerGUI
   @Override
   public String getGroup() {
     return "gui";
+  }
+
+  /**
+   * Returns whether the action requires an environment.
+   *
+   * @return		true if the action requires an environment
+   */
+  @Override
+  public boolean requiresEnvironment() {
+    return true;
   }
 
   /**

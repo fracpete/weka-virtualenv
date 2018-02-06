@@ -14,11 +14,11 @@
  */
 
 /*
- * Create.java
+ * Clone.java
  * Copyright (C) 2017-2018 University of Waikato, Hamilton, NZ
  */
 
-package com.github.fracpete.wekavirtualenv.gui.action;
+package com.github.fracpete.wekavirtualenv.gui.command;
 
 import nz.ac.waikato.cms.gui.core.ApprovalDialog;
 import nz.ac.waikato.cms.gui.core.GUIHelper;
@@ -34,15 +34,15 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * Creates the environment.
+ * Clones the environment.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
-public class Create
-  extends AbstractAction {
+public class Clone
+  extends AbstractGUICommand{
 
   /** the command. */
-  protected com.github.fracpete.wekavirtualenv.command.Create m_Command;
+  protected com.github.fracpete.wekavirtualenv.command.Clone m_Command;
 
   /**
    * Returns the name of the action (displayed in GUI).
@@ -51,7 +51,7 @@ public class Create
    */
   @Override
   public String getName() {
-    return "Create";
+    return "Clone";
   }
 
   /**
@@ -62,6 +62,16 @@ public class Create
   @Override
   public String getGroup() {
     return "admin";
+  }
+
+  /**
+   * Returns whether the action requires an environment.
+   *
+   * @return		true if the action requires an environment
+   */
+  @Override
+  public boolean requiresEnvironment() {
+    return true;
   }
 
   /**
@@ -90,9 +100,9 @@ public class Create
 
     panel = new PropertiesParameterPanel();
 
-    panel.addPropertyType("name", PropertyType.STRING);
-    panel.setLabel("name", "Environment name");
-    panel.setHelp("name", "The name for the environment");
+    panel.addPropertyType("newname", PropertyType.STRING);
+    panel.setLabel("newname", "New name");
+    panel.setHelp("newname", "The new name for the environment");
 
     panel.addPropertyType("java", PropertyType.FILE);
     panel.setLabel("java", "Java executable");
@@ -111,7 +121,7 @@ public class Create
     panel.setHelp("envvars", "Additional environment variables, blank-separated list of key=value pairs");
 
     panel.setPropertyOrder(new String[]{
-      "name",
+      "newname",
       "java",
       "memory",
       "weka",
@@ -119,18 +129,18 @@ public class Create
     });
 
     props = new Properties();
-    props.setProperty("name", "");
-    props.setProperty("java", "");
-    props.setProperty("memory", "");
-    props.setProperty("weka", "");
-    props.setProperty("envvars", "");
+    props.setProperty("newname", getEnvironment().name + ".clone");
+    props.setProperty("java", getEnvironment().java);
+    props.setProperty("memory", getEnvironment().memory);
+    props.setProperty("weka", getEnvironment().weka);
+    props.setProperty("envvars", getEnvironment().envvars);
     panel.setProperties(props);
-    if (GUIHelper.getParentDialog(getAction().getTabbedPane()) != null)
-      dialog = new ApprovalDialog(GUIHelper.getParentDialog(getAction().getTabbedPane()), ModalityType.DOCUMENT_MODAL);
+    if (GUIHelper.getParentDialog(getTabbedPane()) != null)
+      dialog = new ApprovalDialog(GUIHelper.getParentDialog(getTabbedPane()), ModalityType.DOCUMENT_MODAL);
     else
-      dialog = new ApprovalDialog(GUIHelper.getParentFrame(getAction().getTabbedPane()), true);
+      dialog = new ApprovalDialog(GUIHelper.getParentFrame(getTabbedPane()), true);
     dialog.setDefaultCloseOperation(ApprovalDialog.DISPOSE_ON_CLOSE);
-    dialog.setTitle("Enter parameters");
+    dialog.setTitle("Enter clone parameters");
     dialog.getContentPane().add(panel, BorderLayout.CENTER);
     dialog.pack();
     dialog.setLocationRelativeTo(dialog.getParent());
@@ -143,8 +153,10 @@ public class Create
     file      = new File(props.getProperty("java"));
     if (file.isDirectory())
       props.setProperty("java", "");
+
     options = new ArrayList<>();
-    options.add("--name"); options.add(props.getProperty("name"));
+    options.add("--old"); options.add(getEnvironment().name);
+    options.add("--new"); options.add(props.getProperty("newname"));
     options.add("--java"); options.add(props.getProperty("java"));
     options.add("--memory"); options.add(props.getProperty("memory"));
     options.add("--weka"); options.add(props.getProperty("weka"));
@@ -160,12 +172,15 @@ public class Create
         return "Failed to split blank-separated list of environment variables (key=value) pairs: " + e;
       }
     }
-    m_Command = new com.github.fracpete.wekavirtualenv.command.Create();
+    else {
+      options.add("--no-envvars");
+    }
+    m_Command = new com.github.fracpete.wekavirtualenv.command.Clone();
     if (!m_Command.execute(options.toArray(new String[options.size()]))) {
       if (m_Command.hasErrors())
         result = m_Command.getErrors();
       else
-	result = "Failed to create environment!";
+	result = "Failed to clone environment!";
     }
     m_Command = null;
     return result;

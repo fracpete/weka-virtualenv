@@ -22,7 +22,7 @@ package com.github.fracpete.wekavirtualenv.gui.env;
 
 import com.github.fracpete.wekavirtualenv.env.Environment;
 import com.github.fracpete.wekavirtualenv.env.Environments;
-import com.github.fracpete.wekavirtualenv.gui.action.Create;
+import com.github.fracpete.wekavirtualenv.gui.command.Create;
 import com.github.fracpete.wekavirtualenv.gui.core.IconHelper;
 import nz.ac.waikato.cms.gui.core.BasePanel;
 import nz.ac.waikato.cms.gui.core.BaseScrollPane;

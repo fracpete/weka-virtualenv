@@ -14,11 +14,11 @@
  */
 
 /*
- * Update.java
+ * Create.java
  * Copyright (C) 2017-2018 University of Waikato, Hamilton, NZ
  */
 
-package com.github.fracpete.wekavirtualenv.gui.action;
+package com.github.fracpete.wekavirtualenv.gui.command;
 
 import nz.ac.waikato.cms.gui.core.ApprovalDialog;
 import nz.ac.waikato.cms.gui.core.GUIHelper;
@@ -34,15 +34,15 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * Updates the environment.
+ * Creates the environment.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
-public class Update
-  extends AbstractEnvironmentAction {
+public class Create
+  extends AbstractGUICommand {
 
   /** the command. */
-  protected com.github.fracpete.wekavirtualenv.command.Update m_Command;
+  protected com.github.fracpete.wekavirtualenv.command.Create m_Command;
 
   /**
    * Returns the name of the action (displayed in GUI).
@@ -51,7 +51,7 @@ public class Update
    */
   @Override
   public String getName() {
-    return "Update";
+    return "Create";
   }
 
   /**
@@ -62,6 +62,16 @@ public class Update
   @Override
   public String getGroup() {
     return "admin";
+  }
+
+  /**
+   * Returns whether the action requires an environment.
+   *
+   * @return		true if the action requires an environment
+   */
+  @Override
+  public boolean requiresEnvironment() {
+    return false;
   }
 
   /**
@@ -90,6 +100,10 @@ public class Update
 
     panel = new PropertiesParameterPanel();
 
+    panel.addPropertyType("name", PropertyType.STRING);
+    panel.setLabel("name", "Environment name");
+    panel.setHelp("name", "The name for the environment");
+
     panel.addPropertyType("java", PropertyType.FILE);
     panel.setLabel("java", "Java executable");
     panel.setHelp("java", "System default is used when pointing to a directory");
@@ -107,6 +121,7 @@ public class Update
     panel.setHelp("envvars", "Additional environment variables, blank-separated list of key=value pairs");
 
     panel.setPropertyOrder(new String[]{
+      "name",
       "java",
       "memory",
       "weka",
@@ -114,17 +129,18 @@ public class Update
     });
 
     props = new Properties();
-    props.setProperty("java", getEnvironment().java);
-    props.setProperty("memory", getEnvironment().memory);
-    props.setProperty("weka", getEnvironment().weka);
-    props.setProperty("envvars", getEnvironment().envvars);
+    props.setProperty("name", "");
+    props.setProperty("java", "");
+    props.setProperty("memory", "");
+    props.setProperty("weka", "");
+    props.setProperty("envvars", "");
     panel.setProperties(props);
-    if (GUIHelper.getParentDialog(getAction().getTabbedPane()) != null)
-      dialog = new ApprovalDialog(GUIHelper.getParentDialog(getAction().getTabbedPane()), ModalityType.DOCUMENT_MODAL);
+    if (GUIHelper.getParentDialog(getTabbedPane()) != null)
+      dialog = new ApprovalDialog(GUIHelper.getParentDialog(getTabbedPane()), ModalityType.DOCUMENT_MODAL);
     else
-      dialog = new ApprovalDialog(GUIHelper.getParentFrame(getAction().getTabbedPane()), true);
+      dialog = new ApprovalDialog(GUIHelper.getParentFrame(getTabbedPane()), true);
     dialog.setDefaultCloseOperation(ApprovalDialog.DISPOSE_ON_CLOSE);
-    dialog.setTitle("Update environment settings");
+    dialog.setTitle("Enter parameters");
     dialog.getContentPane().add(panel, BorderLayout.CENTER);
     dialog.pack();
     dialog.setLocationRelativeTo(dialog.getParent());
@@ -137,8 +153,8 @@ public class Update
     file      = new File(props.getProperty("java"));
     if (file.isDirectory())
       props.setProperty("java", "");
-
     options = new ArrayList<>();
+    options.add("--name"); options.add(props.getProperty("name"));
     options.add("--java"); options.add(props.getProperty("java"));
     options.add("--memory"); options.add(props.getProperty("memory"));
     options.add("--weka"); options.add(props.getProperty("weka"));
@@ -154,16 +170,12 @@ public class Update
         return "Failed to split blank-separated list of environment variables (key=value) pairs: " + e;
       }
     }
-    else {
-      options.add("--no-envvars");
-    }
-    m_Command = new com.github.fracpete.wekavirtualenv.command.Update();
-    m_Command.setEnv(getEnvironment());
+    m_Command = new com.github.fracpete.wekavirtualenv.command.Create();
     if (!m_Command.execute(options.toArray(new String[options.size()]))) {
       if (m_Command.hasErrors())
         result = m_Command.getErrors();
       else
-        result = "Failed to update environment!";
+	result = "Failed to create environment!";
     }
     m_Command = null;
     return result;

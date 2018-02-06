@@ -56,6 +56,13 @@ public abstract class AbstractCommand
    */
   public AbstractCommand() {
     super();
+    initialize();
+  }
+
+  /**
+   * For initializing the members.
+   */
+  protected void initialize() {
     m_Errors = null;
   }
 

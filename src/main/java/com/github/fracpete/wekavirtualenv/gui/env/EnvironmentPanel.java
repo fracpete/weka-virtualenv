@@ -21,8 +21,8 @@
 package com.github.fracpete.wekavirtualenv.gui.env;
 
 import com.github.fracpete.wekavirtualenv.env.Environment;
-import com.github.fracpete.wekavirtualenv.gui.action.AbstractEnvironmentAction;
-import com.github.fracpete.wekavirtualenv.gui.action.GUIChooser;
+import com.github.fracpete.wekavirtualenv.gui.command.AbstractGUICommand;
+import com.github.fracpete.wekavirtualenv.gui.command.GUIChooser;
 import com.github.fracpete.wekavirtualenv.gui.core.IconHelper;
 import nz.ac.waikato.cms.gui.core.BasePanel;
 
@@ -83,7 +83,7 @@ public class EnvironmentPanel
   protected JPopupMenu m_ActionMenu;
 
   /** the menu items. */
-  protected List<EnvironmentAction> m_Actions;
+  protected List<AbstractGUICommand> m_Commands;
 
   /**
    * Initializes the members.
@@ -91,21 +91,21 @@ public class EnvironmentPanel
   @Override
   protected void initialize() {
     String		group;
-    EnvironmentAction 	envaction;
 
     super.initialize();
 
     setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
 
     m_Environment = null;
-    m_Actions = new ArrayList<>();
+    m_Commands = new ArrayList<>();
     group         = "";
-    for (AbstractEnvironmentAction action: AbstractEnvironmentAction.getAbstractEnvironmentActions()) {
-      if (!group.equals(action.getGroup()))
-        m_Actions.add(null);
-      envaction = action.getAction();
-      m_Actions.add(envaction);
-      group = action.getGroup();
+    for (AbstractGUICommand cmd : AbstractGUICommand.getCommands()) {
+      if (!cmd.requiresEnvironment())
+        continue;
+      if (!group.equals(cmd.getGroup()))
+        m_Commands.add(null);
+      m_Commands.add(cmd);
+      group = cmd.getGroup();
     }
 
     m_Prefixes = new ArrayList<>();
@@ -270,16 +270,15 @@ public class EnvironmentPanel
     }
     else {
       menu = new JPopupMenu();
-      for (EnvironmentAction action : m_Actions) {
-        if (action == null) {
+      for (AbstractGUICommand cmd : m_Commands) {
+        if (cmd == null) {
 	  menu.addSeparator();
 	}
         else {
-          action.setEnvironment(getEnvironment());
-          action.setEnvironmentsPanel(getOwner());
-	  action.setTabbedPane(getOwner().getTabbedPane());
-	  action.setEnabled(action.getOwner().isAvailable());
-	  menu.add(action);
+          cmd.setEnvironment(getEnvironment());
+          cmd.setEnvironmentsPanel(getOwner());
+	  cmd.setTabbedPane(getOwner().getTabbedPane());
+	  menu.add(cmd.getAction());
 	}
       }
     }
@@ -290,16 +289,13 @@ public class EnvironmentPanel
    * Starts the GUIChooser.
    */
   protected void startGuichooser() {
-    EnvironmentAction	envaction;
     GUIChooser		action;
 
-    action    = new GUIChooser();
+    action = new GUIChooser();
     action.setEnvironment(getEnvironment());
-    envaction = new EnvironmentAction();
-    envaction.setEnvironmentsPanel(getOwner());
-    envaction.setTabbedPane(getOwner().getTabbedPane());
-    envaction.setEnvironment(getEnvironment());
-    envaction.setOwner(action);
-    envaction.actionPerformed(null);
+    action.setEnvironmentsPanel(getOwner());
+    action.setTabbedPane(getOwner().getTabbedPane());
+    action.setEnvironment(getEnvironment());
+    action.getAction().actionPerformed(null);
   }
 }

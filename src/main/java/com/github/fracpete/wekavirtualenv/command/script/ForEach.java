@@ -24,6 +24,7 @@ import com.github.fracpete.simpleargparse4j.ArgumentParser;
 import com.github.fracpete.simpleargparse4j.Namespace;
 import com.github.fracpete.wekavirtualenv.command.script.instructions.Block;
 import com.github.fracpete.wekavirtualenv.command.script.instructions.Engine;
+import com.github.fracpete.wekavirtualenv.core.Destroyable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,8 +36,8 @@ import java.util.List;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public class ForEach
-  extends AbstractScriptCommand
-  implements InstructionBlockHandler, IteratingScriptCommand {
+  extends AbstractScriptCommandWithOutputListeners
+  implements InstructionBlockHandler, IteratingScriptCommand, Destroyable {
 
   /** the instructions to execute with each element. */
   protected Block m_Instructions;
@@ -49,6 +50,12 @@ public class ForEach
 
   /** whether we are in verbose mode. */
   protected boolean m_Verbose;
+
+  /** whether the iteration got stopped. */
+  protected boolean m_Stopped;
+
+  /** the execution of the current iteration. */
+  protected Engine m_Current;
 
   /**
    * The name of the command (used on the commandline).
@@ -113,7 +120,7 @@ public class ForEach
    */
   @Override
   public boolean canIterate() {
-    return (m_Elements.size() > 0);
+    return !m_Stopped && (m_Elements.size() > 0);
   }
 
   /**
@@ -123,15 +130,17 @@ public class ForEach
    */
   @Override
   public boolean iterate() {
-    Engine	engine;
+    boolean	result;
     String	next;
 
     next = m_Elements.remove(0);
     getVariables().set(m_Variable, next);
     if (m_Verbose)
       System.err.println("[FOREACH] " + next);
-    engine = new Engine(m_Context, m_Instructions, m_Verbose);
-    return engine.execute();
+    m_Current = new Engine(m_Context, m_Instructions, m_Verbose, m_OutputListeners);
+    result    = m_Current.execute();
+    m_Current = null;
+    return result;
   }
 
   /**
@@ -181,5 +190,14 @@ public class ForEach
     }
 
     return result;
+  }
+
+  /**
+   * Destroys the process if possible.
+   */
+  public void destroy() {
+    m_Stopped = true;
+    if (m_Current != null)
+      m_Current.destroy();
   }
 }

@@ -14,22 +14,22 @@
  */
 
 /*
- * Explorer.java
+ * Experimenter.java
  * Copyright (C) 2017 University of Waikato, Hamilton, NZ
  */
 
-package com.github.fracpete.wekavirtualenv.gui.action;
+package com.github.fracpete.wekavirtualenv.gui.command;
 
 /**
- * Starts the Explorer.
+ * Starts the Experimenter.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
-public class Explorer
-  extends AbstractEnvironmentAction {
+public class Experimenter
+  extends AbstractGUICommand {
 
   /** the command. */
-  protected com.github.fracpete.wekavirtualenv.command.Explorer m_Command;
+  protected com.github.fracpete.wekavirtualenv.command.Experimenter m_Command;
 
   /**
    * Returns the name of the action (displayed in GUI).
@@ -38,7 +38,7 @@ public class Explorer
    */
   @Override
   public String getName() {
-    return "Explorer";
+    return "Experimenter";
   }
 
   /**
@@ -49,6 +49,16 @@ public class Explorer
   @Override
   public String getGroup() {
     return "gui";
+  }
+
+  /**
+   * Returns whether the action requires an environment.
+   *
+   * @return		true if the action requires an environment
+   */
+  @Override
+  public boolean requiresEnvironment() {
+    return true;
   }
 
   /**
@@ -70,14 +80,14 @@ public class Explorer
     String	result;
 
     result    = null;
-    m_Command = new com.github.fracpete.wekavirtualenv.command.Explorer();
+    m_Command = new com.github.fracpete.wekavirtualenv.command.Experimenter();
     m_Command.setEnv(m_Environment);
     transferOutputListeners(m_Command);
     if (!m_Command.execute(new String[0])) {
       if (m_Command.hasErrors())
         result = m_Command.getErrors();
       else
-        result = "Failed to launch Explorer!";
+        result = "Failed to launch Experimenter!";
     }
     m_Command = null;
     return result;

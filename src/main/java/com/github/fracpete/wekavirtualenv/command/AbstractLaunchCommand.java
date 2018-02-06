@@ -15,7 +15,7 @@
 
 /*
  * AbstractLaunchCommand.java
- * Copyright (C) 2017 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2018 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.command;
@@ -25,6 +25,7 @@ import com.github.fracpete.processoutput4j.core.StreamingProcessOwner;
 import com.github.fracpete.processoutput4j.output.StreamingProcessOutput;
 import com.github.fracpete.wekavirtualenv.command.filter.Filter;
 import com.github.fracpete.wekavirtualenv.command.filter.FilterChain;
+import com.github.fracpete.wekavirtualenv.core.Destroyable;
 import com.github.fracpete.wekavirtualenv.env.Environments;
 import nz.ac.waikato.cms.jenericcmdline.core.OptionUtils;
 import org.apache.commons.lang3.SystemUtils;
@@ -32,10 +33,8 @@ import org.apache.commons.lang3.SystemUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Ancestor for commands that launch commands.
@@ -43,11 +42,8 @@ import java.util.Set;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public abstract class AbstractLaunchCommand
-  extends AbstractCommand
-  implements StreamingProcessOwner, CommandWithFilterSupport {
-
-  /** the output listeners. */
-  protected Set<OutputListener> m_OutputListeners;
+  extends AbstractCommandWithOutputListeners
+  implements StreamingProcessOwner, CommandWithFilterSupport, Destroyable {
 
   /** the output. */
   protected StreamingProcessOutput m_Output;
@@ -56,29 +52,11 @@ public abstract class AbstractLaunchCommand
   protected FilterChain m_FilterChain;
 
   /**
-   * Initializes the command.
+   * For initializing the members.
    */
-  public AbstractLaunchCommand() {
-    m_OutputListeners = new HashSet<>();
+  protected void initialize() {
+    super.initialize();
     m_FilterChain = new FilterChain();
-  }
-
-  /**
-   * Adds the output listener.
-   *
-   * @param l		the listener
-   */
-  public void addOutputListener(OutputListener l) {
-    m_OutputListeners.add(l);
-  }
-
-  /**
-   * Removes the output listener.
-   *
-   * @param l		the listener
-   */
-  public void removeOutputListener(OutputListener l) {
-    m_OutputListeners.remove(l);
   }
 
   /**
@@ -228,6 +206,9 @@ public abstract class AbstractLaunchCommand
     catch (Exception e) {
       addError("Failed to launch command:\n" + builder.command());
       return false;
+    }
+    finally {
+      m_OutputListeners.clear();
     }
   }
 

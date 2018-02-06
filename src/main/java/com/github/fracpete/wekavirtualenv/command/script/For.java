@@ -25,6 +25,7 @@ import com.github.fracpete.simpleargparse4j.Namespace;
 import com.github.fracpete.simpleargparse4j.Option.Type;
 import com.github.fracpete.wekavirtualenv.command.script.instructions.Block;
 import com.github.fracpete.wekavirtualenv.command.script.instructions.Engine;
+import com.github.fracpete.wekavirtualenv.core.Destroyable;
 
 /**
  * Good ole for loop.
@@ -32,8 +33,8 @@ import com.github.fracpete.wekavirtualenv.command.script.instructions.Engine;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public class For
-  extends AbstractScriptCommand
-  implements InstructionBlockHandler, IteratingScriptCommand {
+  extends AbstractScriptCommandWithOutputListeners
+  implements InstructionBlockHandler, IteratingScriptCommand, Destroyable {
 
   /** the instructions to execute with each element. */
   protected Block m_Instructions;
@@ -42,7 +43,7 @@ public class For
   protected String m_Variable;
 
   /** the current amount. */
-  protected double m_Current;
+  protected double m_Amount;
 
   /** the upper bound. */
   protected double m_Upper;
@@ -52,6 +53,12 @@ public class For
 
   /** whether we are in verbose mode. */
   protected boolean m_Verbose;
+
+  /** whether the iteration got stopped. */
+  protected boolean m_Stopped;
+
+  /** for executing the current iteration. */
+  protected Engine m_Current;
 
   /**
    * The name of the command (used on the commandline).
@@ -127,7 +134,7 @@ public class For
    */
   @Override
   public boolean canIterate() {
-    return (m_Current + m_Step < m_Upper);
+    return !m_Stopped && (m_Amount + m_Step < m_Upper);
   }
 
   /**
@@ -137,19 +144,21 @@ public class For
    */
   @Override
   public boolean iterate() {
-    Engine	engine;
+    boolean	result;
     String	current;
 
-    m_Current += m_Step;
-    if ((int) m_Current == m_Current)
-      current = "" + (int) m_Current;
+    m_Amount += m_Step;
+    if ((int) m_Amount == m_Amount)
+      current = "" + (int) m_Amount;
     else
-      current = "" + m_Current;
+      current = "" + m_Amount;
     getVariables().set(m_Variable, current);
     if (m_Verbose)
-      System.err.println("[FOR] " + m_Current);
-    engine = new Engine(m_Context, m_Instructions, m_Verbose);
-    return engine.execute();
+      System.err.println("[FOR] " + m_Amount);
+    m_Current = new Engine(m_Context, m_Instructions, m_Verbose, m_OutputListeners);
+    result   = m_Current.execute();
+    m_Current = null;
+    return result;
   }
 
   /**
@@ -175,7 +184,7 @@ public class For
 
     m_Step     = ns.getDouble("step");
     m_Upper    = ns.getDouble("to");
-    m_Current  = ns.getDouble("from") - m_Step;
+    m_Amount = ns.getDouble("from") - m_Step;
     m_Verbose  = ns.getBoolean("verbose");
     m_Variable = ns.getString("dest");
 
@@ -188,5 +197,14 @@ public class For
     }
 
     return result;
+  }
+
+  /**
+   * Destroys the process if possible.
+   */
+  public void destroy() {
+    m_Stopped = true;
+    if (m_Current != null)
+      m_Current.destroy();
   }
 }

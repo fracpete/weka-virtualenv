@@ -31,16 +31,18 @@ import com.github.fracpete.wekavirtualenv.command.filter.FilterChain;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public class Echo
-  extends AbstractCommand
+  extends AbstractCommandWithOutputListeners
   implements CommandWithFilterSupport {
 
   /** for intercepting the process output. */
   protected FilterChain m_FilterChain;
 
   /**
-   * Initializes the command.
+   * Initializes the members.
    */
-  public Echo() {
+  @Override
+  protected void initialize() {
+    super.initialize();
     m_FilterChain = new FilterChain();
   }
 
@@ -95,6 +97,21 @@ public class Echo
   }
 
   /**
+   * For outputting the line.
+   *
+   * @param line	the line to output
+   * @param stdout	true if to output on stdout
+   */
+  protected void output(String line, boolean stdout) {
+    if (stdout)
+      System.out.println(line);
+    else
+      System.err.println(line);
+    for (OutputListener l: m_OutputListeners)
+      l.outputOccurred(line, stdout);
+  }
+
+  /**
    * Executes the command.
    *
    * @param ns		the namespace of the parsed options, null if no options to parse
@@ -109,12 +126,8 @@ public class Echo
     line   = CommandUtils.unbackquote(ns.getString("message"));
     stdout = !ns.getBoolean("stderr");
     line   = m_FilterChain.intercept(line, stdout);
-    if (line != null) {
-      if (stdout)
-	System.out.println(line);
-      else
-	System.err.println(line);
-    }
+    if (line != null)
+      output(line, stdout);
     return true;
   }
 }

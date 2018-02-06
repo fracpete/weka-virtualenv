@@ -14,22 +14,22 @@
  */
 
 /*
- * ArffViewer.java
- * Copyright (C) 2018 University of Waikato, Hamilton, NZ
+ * Explorer.java
+ * Copyright (C) 2017 University of Waikato, Hamilton, NZ
  */
 
-package com.github.fracpete.wekavirtualenv.gui.action;
+package com.github.fracpete.wekavirtualenv.gui.command;
 
 /**
- * Starts the ArffViewer.
+ * Starts the Explorer.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
-public class ArffViewer
-  extends AbstractEnvironmentAction {
+public class Explorer
+  extends AbstractGUICommand {
 
   /** the command. */
-  protected com.github.fracpete.wekavirtualenv.command.ArffViewer m_Command;
+  protected com.github.fracpete.wekavirtualenv.command.Explorer m_Command;
 
   /**
    * Returns the name of the action (displayed in GUI).
@@ -38,7 +38,7 @@ public class ArffViewer
    */
   @Override
   public String getName() {
-    return "ArffViewer";
+    return "Explorer";
   }
 
   /**
@@ -49,6 +49,16 @@ public class ArffViewer
   @Override
   public String getGroup() {
     return "gui";
+  }
+
+  /**
+   * Returns whether the action requires an environment.
+   *
+   * @return		true if the action requires an environment
+   */
+  @Override
+  public boolean requiresEnvironment() {
+    return true;
   }
 
   /**
@@ -70,14 +80,14 @@ public class ArffViewer
     String	result;
 
     result    = null;
-    m_Command = new com.github.fracpete.wekavirtualenv.command.ArffViewer();
+    m_Command = new com.github.fracpete.wekavirtualenv.command.Explorer();
     m_Command.setEnv(m_Environment);
     transferOutputListeners(m_Command);
     if (!m_Command.execute(new String[0])) {
       if (m_Command.hasErrors())
         result = m_Command.getErrors();
       else
-        result = "Failed to launch ArffViewer!";
+        result = "Failed to launch Explorer!";
     }
     m_Command = null;
     return result;

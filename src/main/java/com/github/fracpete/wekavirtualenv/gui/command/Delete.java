@@ -14,22 +14,26 @@
  */
 
 /*
- * GUIChooser.java
+ * Delete.java
  * Copyright (C) 2017 University of Waikato, Hamilton, NZ
  */
 
-package com.github.fracpete.wekavirtualenv.gui.action;
+package com.github.fracpete.wekavirtualenv.gui.command;
+
+import nz.ac.waikato.cms.gui.core.GUIHelper;
+
+import javax.swing.JOptionPane;
 
 /**
- * Starts the GUIChooser.
+ * Deletes the environment.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
-public class GUIChooser
-  extends AbstractEnvironmentAction {
+public class Delete
+  extends AbstractGUICommand {
 
   /** the command. */
-  protected com.github.fracpete.wekavirtualenv.command.GUIChooser m_Command;
+  protected com.github.fracpete.wekavirtualenv.command.Delete m_Command;
 
   /**
    * Returns the name of the action (displayed in GUI).
@@ -38,7 +42,7 @@ public class GUIChooser
    */
   @Override
   public String getName() {
-    return "GUIChooser";
+    return "Delete";
   }
 
   /**
@@ -48,7 +52,17 @@ public class GUIChooser
    */
   @Override
   public String getGroup() {
-    return "gui";
+    return "admin";
+  }
+
+  /**
+   * Returns whether the action requires an environment.
+   *
+   * @return		true if the action requires an environment
+   */
+  @Override
+  public boolean requiresEnvironment() {
+    return true;
   }
 
   /**
@@ -57,7 +71,7 @@ public class GUIChooser
    * @return		true if the action generates console output
    */
   public boolean generatesOutput() {
-    return true;
+    return false;
   }
 
   /**
@@ -68,26 +82,23 @@ public class GUIChooser
   @Override
   protected String doExecute() {
     String	result;
+    int		retVal;
+
+    retVal = JOptionPane.showConfirmDialog(
+      GUIHelper.getParentComponent(getEnvironmentsPanel()),
+      "Delete environment '" + getEnvironment().name + "'?");
+    if (retVal != JOptionPane.OK_OPTION)
+      return null;
 
     result    = null;
-    m_Command = new com.github.fracpete.wekavirtualenv.command.GUIChooser();
-    m_Command.setEnv(m_Environment);
-    transferOutputListeners(m_Command);
-    if (!m_Command.execute(new String[0])) {
+    m_Command = new com.github.fracpete.wekavirtualenv.command.Delete();
+    if (!m_Command.execute(new String[]{"--name", getEnvironment().name})) {
       if (m_Command.hasErrors())
         result = m_Command.getErrors();
       else
-	result = "Failed to launch GUIChooser!";
+	result = "Failed to delete environment!";
     }
     m_Command = null;
     return result;
-  }
-
-  /**
-   * Destroys the process if possible.
-   */
-  public void destroy() {
-    if (m_Command != null)
-      m_Command.destroy();
   }
 }

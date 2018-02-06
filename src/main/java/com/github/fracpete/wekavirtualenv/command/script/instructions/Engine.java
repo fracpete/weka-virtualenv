@@ -21,28 +21,36 @@
 package com.github.fracpete.wekavirtualenv.command.script.instructions;
 
 import com.github.fracpete.wekavirtualenv.command.AbstractCommand;
+import com.github.fracpete.wekavirtualenv.command.Command;
 import com.github.fracpete.wekavirtualenv.command.CommandSetup;
 import com.github.fracpete.wekavirtualenv.command.CommandUtils;
 import com.github.fracpete.wekavirtualenv.command.CommandWithFilterSupport;
 import com.github.fracpete.wekavirtualenv.command.Help;
 import com.github.fracpete.wekavirtualenv.command.ListEnvs;
+import com.github.fracpete.wekavirtualenv.command.OutputListener;
+import com.github.fracpete.wekavirtualenv.command.OutputListenerSupporter;
 import com.github.fracpete.wekavirtualenv.command.filter.AbstractFilter;
 import com.github.fracpete.wekavirtualenv.command.filter.FilterSetup;
 import com.github.fracpete.wekavirtualenv.command.script.AbstractScriptCommand;
 import com.github.fracpete.wekavirtualenv.command.script.InstructionBlockHandler;
+import com.github.fracpete.wekavirtualenv.core.Destroyable;
 import com.github.fracpete.wekavirtualenv.core.InvalidEnvironmentException;
 import com.github.fracpete.wekavirtualenv.core.MissingEnvironmentException;
 import nz.ac.waikato.cms.jenericcmdline.core.OptionUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Executes commands.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
-public class Engine {
+public class Engine
+  implements OutputListenerSupporter {
 
   /** the context. */
   protected EngineContext m_Context;
@@ -53,6 +61,15 @@ public class Engine {
   /** whether we are in verbose mode. */
   protected boolean m_Verbose;
 
+  /** the output listeners. */
+  protected Set<OutputListener> m_OutputListeners;
+
+  /** whether the execution got stopped. */
+  protected boolean m_Stopped;
+
+  /** the current command being executed. */
+  protected Command m_Current;
+
   /**
    * Initializes the engine.
    *
@@ -61,9 +78,22 @@ public class Engine {
    * @param verbose		whether to use verbose mode
    */
   public Engine(EngineContext context, Block instructions, boolean verbose) {
-    m_Context      = context;
-    m_Instructions = instructions;
-    m_Verbose      = verbose;
+    this(context, instructions, verbose, new ArrayList<>());
+  }
+
+  /**
+   * Initializes the engine.
+   *
+   * @param context		the context
+   * @param instructions	the instructions to execute
+   * @param verbose		whether to use verbose mode
+   * @param listeners 		the output listeners
+   */
+  public Engine(EngineContext context, Block instructions, boolean verbose, Collection<OutputListener> listeners) {
+    m_Context         = context;
+    m_Instructions    = instructions;
+    m_Verbose         = verbose;
+    m_OutputListeners = new HashSet<>(listeners);
   }
 
   /**
@@ -73,6 +103,24 @@ public class Engine {
    */
   public boolean isVerbose() {
     return m_Verbose;
+  }
+
+  /**
+   * Adds the output listener.
+   *
+   * @param l		the listener
+   */
+  public void addOutputListener(OutputListener l) {
+    m_OutputListeners.add(l);
+  }
+
+  /**
+   * Removes the output listener.
+   *
+   * @param l		the listener
+   */
+  public void removeOutputListener(OutputListener l) {
+    m_OutputListeners.remove(l);
   }
 
   /**
@@ -211,13 +259,21 @@ public class Engine {
 	return false;
       if ((setup.command instanceof InstructionBlockHandler) && (block != null))
 	((InstructionBlockHandler) setup.command).setInstructions(block);
+      if (setup.command instanceof OutputListenerSupporter) {
+        for (OutputListener l: m_OutputListeners)
+	  ((OutputListenerSupporter) setup.command).addOutputListener(l);
+      }
 
       // execute
+      m_Current = setup.command;
       return AbstractCommand.executeSetup(setup);
     }
     catch (Exception e) {
       m_Context.addError("Failed to execute command: " + cmd, e);
       return false;
+    }
+    finally {
+      m_Current = null;
     }
   }
 
@@ -232,10 +288,13 @@ public class Engine {
     Block	block;
     Instruction	instruction;
 
-    result = true;
+    result    = true;
+    m_Stopped = false;
 
     i = 0;
     while (i < m_Instructions.size()) {
+      if (m_Stopped)
+        break;
       instruction = m_Instructions.get(i);
       block       = null;
       if (i < m_Instructions.size() - 1) {
@@ -255,6 +314,19 @@ public class Engine {
       i++;
     }
 
+    m_OutputListeners.clear();
+
     return result;
+  }
+
+  /**
+   * Destroys the process if possible.
+   */
+  public void destroy() {
+    m_Stopped = true;
+    if (m_Current != null) {
+      if (m_Current instanceof Destroyable)
+	((Destroyable) m_Current).destroy();
+    }
   }
 }

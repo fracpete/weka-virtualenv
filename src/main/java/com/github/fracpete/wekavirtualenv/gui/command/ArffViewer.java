@@ -14,22 +14,22 @@
  */
 
 /*
- * SqlViewer.java
+ * ArffViewer.java
  * Copyright (C) 2018 University of Waikato, Hamilton, NZ
  */
 
-package com.github.fracpete.wekavirtualenv.gui.action;
+package com.github.fracpete.wekavirtualenv.gui.command;
 
 /**
- * Starts the SqlViewer.
+ * Starts the ArffViewer.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
-public class SqlViewer
-  extends AbstractEnvironmentAction {
+public class ArffViewer
+  extends AbstractGUICommand {
 
   /** the command. */
-  protected com.github.fracpete.wekavirtualenv.command.SqlViewer m_Command;
+  protected com.github.fracpete.wekavirtualenv.command.ArffViewer m_Command;
 
   /**
    * Returns the name of the action (displayed in GUI).
@@ -38,7 +38,7 @@ public class SqlViewer
    */
   @Override
   public String getName() {
-    return "SqlViewer";
+    return "ArffViewer";
   }
 
   /**
@@ -49,6 +49,16 @@ public class SqlViewer
   @Override
   public String getGroup() {
     return "gui";
+  }
+
+  /**
+   * Returns whether the action requires an environment.
+   *
+   * @return		true if the action requires an environment
+   */
+  @Override
+  public boolean requiresEnvironment() {
+    return true;
   }
 
   /**
@@ -70,14 +80,14 @@ public class SqlViewer
     String	result;
 
     result    = null;
-    m_Command = new com.github.fracpete.wekavirtualenv.command.SqlViewer();
+    m_Command = new com.github.fracpete.wekavirtualenv.command.ArffViewer();
     m_Command.setEnv(m_Environment);
     transferOutputListeners(m_Command);
     if (!m_Command.execute(new String[0])) {
       if (m_Command.hasErrors())
         result = m_Command.getErrors();
       else
-        result = "Failed to launch SQL Viewer!";
+        result = "Failed to launch ArffViewer!";
     }
     m_Command = null;
     return result;

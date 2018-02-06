@@ -27,6 +27,7 @@ import com.github.fracpete.wekavirtualenv.command.script.VariablesHandler;
 import com.github.fracpete.wekavirtualenv.command.script.instructions.Block;
 import com.github.fracpete.wekavirtualenv.command.script.instructions.Engine;
 import com.github.fracpete.wekavirtualenv.command.script.instructions.EngineContext;
+import com.github.fracpete.wekavirtualenv.core.Destroyable;
 import com.github.fracpete.wekavirtualenv.core.InvalidIndentationException;
 
 import java.io.File;
@@ -39,14 +40,26 @@ import java.util.List;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public class Script
-  extends AbstractCommand
-  implements VariablesHandler, EngineContext {
+  extends AbstractCommandWithOutputListeners
+  implements VariablesHandler, EngineContext, Destroyable {
 
   /** whether we are in verbose mode. */
   protected boolean m_Verbose;
 
   /** the variables. */
   protected Variables m_Variables;
+
+  /** the engine for executing the commands. */
+  protected Engine m_Engine;
+
+  /**
+   * Initializes the members.
+   */
+  @Override
+  protected void initialize() {
+    super.initialize();
+    m_Engine = null;
+  }
 
   /**
    * The name of the command (used on the commandline).
@@ -111,7 +124,6 @@ public class Script
     File 		scriptfile;
     List<String>	cmds;
     Block		instructions;
-    Engine		engine;
 
     scriptfile = new File(ns.getString("file"));
     if (!scriptfile.exists()) {
@@ -136,12 +148,24 @@ public class Script
 
     try {
       instructions = Block.parse(cmds);
-      engine       = new Engine(this, instructions, m_Verbose);
-      return engine.execute();
+      m_Engine = new Engine(this, instructions, m_Verbose, m_OutputListeners);
+      return m_Engine.execute();
     }
     catch (InvalidIndentationException e) {
       addError("Failed to parse instructions!", e);
       return false;
     }
+    finally {
+      m_OutputListeners.clear();
+      m_Engine = null;
+    }
+  }
+
+  /**
+   * Destroys the process if possible.
+   */
+  public void destroy() {
+    if (m_Engine != null)
+      m_Engine.destroy();
   }
 }

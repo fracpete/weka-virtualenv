@@ -21,6 +21,7 @@
 package com.github.fracpete.wekavirtualenv.command.script;
 
 import com.github.fracpete.simpleargparse4j.Namespace;
+import com.github.fracpete.wekavirtualenv.command.OutputListener;
 import nz.ac.waikato.cms.core.Utils;
 
 /**
@@ -29,7 +30,7 @@ import nz.ac.waikato.cms.core.Utils;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public class DumpVars
-  extends AbstractScriptCommand {
+  extends AbstractScriptCommandWithOutputListeners {
 
   /**
    * The name of the command (used on the commandline).
@@ -52,6 +53,17 @@ public class DumpVars
   }
 
   /**
+   * For outputting the line.
+   *
+   * @param line	the line to output
+   */
+  protected void output(String line) {
+    System.out.println(line);
+    for (OutputListener l: m_OutputListeners)
+      l.outputOccurred(line, true);
+  }
+
+  /**
    * Evaluates the script command.
    *
    * @param ns		the namespace
@@ -65,9 +77,9 @@ public class DumpVars
     for (String name: getContext().getVariables().names()) {
       val = getContext().getVariables().get(name);
       if (val instanceof String)
-	System.out.println(name + "=" + val);
+	output(name + "=" + val);
       else
-        System.out.println(name + "=" + Utils.flatten((String[]) val, ", "));
+        output(name + "=" + Utils.flatten((String[]) val, ", "));
     }
     return true;
   }

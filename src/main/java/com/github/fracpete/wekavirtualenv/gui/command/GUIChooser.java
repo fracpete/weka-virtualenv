@@ -14,22 +14,22 @@
  */
 
 /*
- * Workbench.java
- * Copyright (C) 2018 University of Waikato, Hamilton, NZ
+ * GUIChooser.java
+ * Copyright (C) 2017 University of Waikato, Hamilton, NZ
  */
 
-package com.github.fracpete.wekavirtualenv.gui.action;
+package com.github.fracpete.wekavirtualenv.gui.command;
 
 /**
- * Starts the Workbench.
+ * Starts the GUIChooser.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
-public class Workbench
-  extends AbstractEnvironmentAction {
+public class GUIChooser
+  extends AbstractGUICommand {
 
   /** the command. */
-  protected com.github.fracpete.wekavirtualenv.command.Workbench m_Command;
+  protected com.github.fracpete.wekavirtualenv.command.GUIChooser m_Command;
 
   /**
    * Returns the name of the action (displayed in GUI).
@@ -38,7 +38,7 @@ public class Workbench
    */
   @Override
   public String getName() {
-    return "Workbench";
+    return "GUIChooser";
   }
 
   /**
@@ -52,26 +52,22 @@ public class Workbench
   }
 
   /**
+   * Returns whether the action requires an environment.
+   *
+   * @return		true if the action requires an environment
+   */
+  @Override
+  public boolean requiresEnvironment() {
+    return true;
+  }
+
+  /**
    * Returns whether the action generates console output.
    *
    * @return		true if the action generates console output
    */
   public boolean generatesOutput() {
     return true;
-  }
-
-  /**
-   * Returns whether the action is available.
-   *
-   * @return		true if available
-   */
-  public boolean isAvailable() {
-    com.github.fracpete.wekavirtualenv.command.Workbench  cmd;
-
-    cmd = new com.github.fracpete.wekavirtualenv.command.Workbench();
-    cmd.setEnv(getEnvironment());
-
-    return cmd.isAvailable();
   }
 
   /**
@@ -84,14 +80,14 @@ public class Workbench
     String	result;
 
     result    = null;
-    m_Command = new com.github.fracpete.wekavirtualenv.command.Workbench();
+    m_Command = new com.github.fracpete.wekavirtualenv.command.GUIChooser();
     m_Command.setEnv(m_Environment);
     transferOutputListeners(m_Command);
     if (!m_Command.execute(new String[0])) {
       if (m_Command.hasErrors())
         result = m_Command.getErrors();
       else
-        result = "Failed to launch Workbench!";
+	result = "Failed to launch GUIChooser!";
     }
     m_Command = null;
     return result;

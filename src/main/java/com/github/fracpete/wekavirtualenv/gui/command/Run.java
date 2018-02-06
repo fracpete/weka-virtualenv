@@ -18,7 +18,7 @@
  * Copyright (C) 2017 University of Waikato, Hamilton, NZ
  */
 
-package com.github.fracpete.wekavirtualenv.gui.action;
+package com.github.fracpete.wekavirtualenv.gui.command;
 
 import nz.ac.waikato.cms.gui.core.ApprovalDialog;
 import nz.ac.waikato.cms.gui.core.GUIHelper;
@@ -39,7 +39,7 @@ import java.util.Properties;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public class Run
-  extends AbstractEnvironmentAction {
+  extends AbstractGUICommand {
 
   /** the command. */
   protected com.github.fracpete.wekavirtualenv.command.Run m_Command;
@@ -62,6 +62,16 @@ public class Run
   @Override
   public String getGroup() {
     return "run";
+  }
+
+  /**
+   * Returns whether the action requires an environment.
+   *
+   * @return		true if the action requires an environment
+   */
+  @Override
+  public boolean requiresEnvironment() {
+    return true;
   }
 
   /**
@@ -106,10 +116,10 @@ public class Run
     props.setProperty("class", "weka.classifiers.trees.J48");
     props.setProperty("options", "");
     panel.setProperties(props);
-    if (GUIHelper.getParentDialog(getAction().getTabbedPane()) != null)
-      dialog = new ApprovalDialog(GUIHelper.getParentDialog(getAction().getTabbedPane()), ModalityType.DOCUMENT_MODAL);
+    if (GUIHelper.getParentDialog(getTabbedPane()) != null)
+      dialog = new ApprovalDialog(GUIHelper.getParentDialog(getTabbedPane()), ModalityType.DOCUMENT_MODAL);
     else
-      dialog = new ApprovalDialog(GUIHelper.getParentFrame(getAction().getTabbedPane()), true);
+      dialog = new ApprovalDialog(GUIHelper.getParentFrame(getTabbedPane()), true);
     dialog.setDefaultCloseOperation(ApprovalDialog.DISPOSE_ON_CLOSE);
     dialog.setTitle("Execute class");
     dialog.getContentPane().add(panel, BorderLayout.CENTER);

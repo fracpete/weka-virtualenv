@@ -14,26 +14,22 @@
  */
 
 /*
- * Delete.java
+ * KnowledgeFlow.java
  * Copyright (C) 2017 University of Waikato, Hamilton, NZ
  */
 
-package com.github.fracpete.wekavirtualenv.gui.action;
-
-import nz.ac.waikato.cms.gui.core.GUIHelper;
-
-import javax.swing.JOptionPane;
+package com.github.fracpete.wekavirtualenv.gui.command;
 
 /**
- * Deletes the environment.
+ * Starts the KnowledgeFlow.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
-public class Delete
-  extends AbstractEnvironmentAction {
+public class KnowledgeFlow
+  extends AbstractGUICommand {
 
   /** the command. */
-  protected com.github.fracpete.wekavirtualenv.command.Delete m_Command;
+  protected com.github.fracpete.wekavirtualenv.command.KnowledgeFlow m_Command;
 
   /**
    * Returns the name of the action (displayed in GUI).
@@ -42,7 +38,7 @@ public class Delete
    */
   @Override
   public String getName() {
-    return "Delete";
+    return "KnowledgeFlow";
   }
 
   /**
@@ -52,7 +48,17 @@ public class Delete
    */
   @Override
   public String getGroup() {
-    return "admin";
+    return "gui";
+  }
+
+  /**
+   * Returns whether the action requires an environment.
+   *
+   * @return		true if the action requires an environment
+   */
+  @Override
+  public boolean requiresEnvironment() {
+    return true;
   }
 
   /**
@@ -61,7 +67,7 @@ public class Delete
    * @return		true if the action generates console output
    */
   public boolean generatesOutput() {
-    return false;
+    return true;
   }
 
   /**
@@ -72,23 +78,26 @@ public class Delete
   @Override
   protected String doExecute() {
     String	result;
-    int		retVal;
-
-    retVal = JOptionPane.showConfirmDialog(
-      GUIHelper.getParentComponent(getAction().getEnvironmentsPanel()),
-      "Delete environment '" + getEnvironment().name + "'?");
-    if (retVal != JOptionPane.OK_OPTION)
-      return null;
 
     result    = null;
-    m_Command = new com.github.fracpete.wekavirtualenv.command.Delete();
-    if (!m_Command.execute(new String[]{"--name", getEnvironment().name})) {
+    m_Command = new com.github.fracpete.wekavirtualenv.command.KnowledgeFlow();
+    m_Command.setEnv(m_Environment);
+    transferOutputListeners(m_Command);
+    if (!m_Command.execute(new String[0])) {
       if (m_Command.hasErrors())
         result = m_Command.getErrors();
       else
-	result = "Failed to delete environment!";
+        result = "Failed to launch KnowledgeFlow!";
     }
     m_Command = null;
     return result;
+  }
+
+  /**
+   * Destroys the process if possible.
+   */
+  public void destroy() {
+    if (m_Command != null)
+      m_Command.destroy();
   }
 }

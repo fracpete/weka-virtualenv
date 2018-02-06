@@ -15,13 +15,14 @@
 
 /*
  * WekaVirtualEnv.java
- * Copyright (C) 2017 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2018 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.gui;
 
+import com.github.fracpete.wekavirtualenv.gui.command.AbstractGUICommand;
 import com.github.fracpete.wekavirtualenv.gui.core.IconHelper;
-import com.github.fracpete.wekavirtualenv.gui.env.ActionOutputPanel;
+import com.github.fracpete.wekavirtualenv.gui.core.Stoppable;
 import com.github.fracpete.wekavirtualenv.gui.env.EnvironmentsPanel;
 import nz.ac.waikato.cms.gui.core.BaseFrame;
 import nz.ac.waikato.cms.gui.core.BasePanel;
@@ -83,18 +84,23 @@ public class WekaVirtualEnv
    * @return		the menu bar
    */
   public JMenuBar getMenuBar() {
-    JMenuBar	result;
-    JMenu	menu;
-    JMenuItem	menuitem;
+    JMenuBar			result;
+    JMenu			menu;
+    JMenuItem			menuitem;
 
     result = new JMenuBar();
 
     menu = new JMenu("Environments");
     result.add(menu);
 
-    menuitem = new JMenuItem("Create", IconHelper.getIcon("Create"));
-    menuitem.addActionListener((ActionEvent e) -> m_PanelEnvs.create());
-    menu.add(menuitem);
+    for (AbstractGUICommand cmd: AbstractGUICommand.getCommands()) {
+      if (cmd.requiresEnvironment())
+        continue;
+      cmd.setTabbedPane(m_TabbedPaneOutputs);
+      cmd.setEnvironmentsPanel(m_PanelEnvs);
+      menuitem = new JMenuItem(cmd.getAction());
+      menu.add(menuitem);
+    }
 
     menuitem = new JMenuItem("Reload", IconHelper.getIcon("Reload"));
     menuitem.addActionListener((ActionEvent e) -> m_PanelEnvs.reload());
@@ -114,11 +120,11 @@ public class WekaVirtualEnv
    */
   public void close() {
     int			i;
-    ActionOutputPanel	panel;
 
     for (i = m_TabbedPaneOutputs.getTabCount() - 1; i >= 0; i--) {
-      panel = (ActionOutputPanel) m_TabbedPaneOutputs.getComponentAt(i);
-      panel.close();
+      if (m_TabbedPaneOutputs.getComponentAt(i) instanceof Stoppable)
+	((Stoppable) m_TabbedPaneOutputs.getComponentAt(i)).stop();
+      m_TabbedPaneOutputs.removeTabAt(i);
     }
 
     GUIHelper.closeParent(this);
@@ -137,7 +143,7 @@ public class WekaVirtualEnv
     frame.getContentPane().setLayout(new BorderLayout());
     frame.getContentPane().add(panel, BorderLayout.CENTER);
     frame.setJMenuBar(panel.getMenuBar());
-    frame.setSize(new Dimension(1024, 768));
+    frame.setSize(new Dimension(1200, 800));
     frame.setLocationRelativeTo(null);
     frame.addWindowListener(new WindowAdapter() {
       @Override

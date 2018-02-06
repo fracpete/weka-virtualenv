@@ -22,8 +22,10 @@ package com.github.fracpete.wekavirtualenv.gui.env;
 
 import com.github.fracpete.jclipboardhelper.ClipboardHelper;
 import com.github.fracpete.wekavirtualenv.command.OutputListener;
+import com.github.fracpete.wekavirtualenv.gui.command.AbstractGUICommand;
 import com.github.fracpete.wekavirtualenv.gui.core.FileChooser;
 import com.github.fracpete.wekavirtualenv.gui.core.IconHelper;
+import com.github.fracpete.wekavirtualenv.gui.core.Stoppable;
 import nz.ac.waikato.cms.core.FileUtils;
 import nz.ac.waikato.cms.gui.core.BasePanel;
 import nz.ac.waikato.cms.gui.core.BaseScrollPane;
@@ -50,13 +52,13 @@ import java.awt.event.ActionEvent;
  */
 public class ActionOutputPanel
   extends BasePanel
-  implements OutputListener {
+  implements OutputListener, Stoppable {
 
   /** the tabbed pane this panel belongs to. */
   protected JTabbedPane m_TabbedPane;
 
-  /** the action that generated the output. */
-  protected EnvironmentAction m_Action;
+  /** the command that generated the output. */
+  protected AbstractGUICommand m_Command;
 
   /** the text area. */
   protected BaseTextPaneWithWordWrap m_TextArea;
@@ -193,21 +195,21 @@ public class ActionOutputPanel
   }
 
   /**
-   * Sets the action that generated the output.
+   * Sets the command that generated the output.
    *
    * @param value	the action
    */
-  public void setAction(EnvironmentAction value) {
-    m_Action = value;
+  public void setCommand(AbstractGUICommand value) {
+    m_Command = value;
   }
 
   /**
-   * Returns the action that generated the output.
+   * Returns the command that generated the output.
    *
    * @return		the action
    */
-  public EnvironmentAction getAction() {
-    return m_Action;
+  public AbstractGUICommand getCommand() {
+    return m_Command;
   }
 
   /**
@@ -271,7 +273,7 @@ public class ActionOutputPanel
    * Stops the process.
    */
   public void stop() {
-    m_Action.getOwner().destroy();
+    m_Command.destroy();
   }
 
   /**
