@@ -1,4 +1,4 @@
-Add the following dependency to you `pom.xml`:
+Add the following dependency to your `pom.xml`:
 ```xml
   <dependency>
     <groupId>com.github.fracpete</groupId>
