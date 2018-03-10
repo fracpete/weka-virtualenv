@@ -15,11 +15,6 @@ interface. Some basic scripting support is avaiilable through the `script`
 command-line command (see `Scripting` section).
 
 
-**Note**
-You still need to install Weka yourself, *weka-virtualenv* only helps you
-separating your various Weka installations. It is mainly aimed at separating
-packages.
-
 ## How it works
 
 The tool simply uses existing Weka functionality, namely the `WEKA_HOME`
