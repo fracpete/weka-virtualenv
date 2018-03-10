@@ -130,13 +130,13 @@ public class Install
   }
 
   /**
-   * Installs the specified Weka version.
+   * Downloads the specified Weka version.
    *
    * @param version	the version to install
    * @param installDir 	the installation directory
    * @return		true if successful
    */
-  protected boolean install(String version, String installDir) {
+  protected boolean download(String version, String installDir) {
     boolean		result;
     String		url;
     String 		tmpZip;
@@ -213,7 +213,7 @@ public class Install
         if (!Versions.isVersionsFilePresent())
           result = update();
         if (result)
-	  result = install(ns.getString("version"), ns.getString("install-dir"));
+	  result = download(ns.getString("version"), ns.getString("install-dir"));
         break;
 
       default:
