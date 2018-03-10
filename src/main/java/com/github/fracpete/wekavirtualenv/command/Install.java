@@ -115,10 +115,11 @@ public class Install
     try {
       list = Versions.getAvailableVersions();
       for (i = 0; i < list.size(); i++) {
-        if (i % 10 == 0)
+        if (i > 0)
           versions.append("\n");
         versions.append(list.get(i));
       }
+      System.out.println("Available versions:\n" + versions);
     }
     catch (Exception e) {
       addError("Failed to list versions!\n" + Utils.throwableToString(e));
