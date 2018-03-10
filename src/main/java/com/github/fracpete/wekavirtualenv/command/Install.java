@@ -70,15 +70,15 @@ public class Install
     result = new ArgumentParser(getName());
     result.addOption("--action")
       .dest("action")
-      .help("the action to perform: update|list|install")
+      .help("the action to perform: update|list|download")
       .required(true);
     result.addOption("--version")
       .dest("version")
-      .help("the version to install (for action 'install')")
+      .help("the version to install (for action 'download')")
       .setDefault("");
     result.addOption("--install-dir")
       .dest("install-dir")
-      .help("the directory to install Weka in (for action 'install')")
+      .help("the directory to install Weka in (for action 'download')")
       .setDefault("");
 
     return result;
@@ -201,7 +201,7 @@ public class Install
 	  result = list();
         break;
 
-      case "install":
+      case "download":
         if (ns.getString("version").isEmpty()) {
           addError("No Weka version specified!");
           return false;
