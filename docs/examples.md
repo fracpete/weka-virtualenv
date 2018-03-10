@@ -3,6 +3,57 @@ directory for the following examples. Also, remove the trailing backslashes
 in the commands and place the whole command on a single line.
 
 
+## Installing Weka
+
+Using the `install` command, you can download and install versions of Weka.
+A platform-independent zip is downloaded and unzipped to a directory that you
+specify. Each zip file contains a directory with the Weka version, so you only
+need to supply a top-level directory as the installation directory.
+
+To start with, you need to update the list of available updates (downloads
+a CSV file from github.com):
+```bash
+wenv.sh install \
+  --action update
+```
+
+Once downloaded, you can list the versions for which we have download links:
+```bash
+wenv.sh install \
+  --action list
+```
+
+This will output something like this:
+```
+Available versions:
+3.6.0
+...
+3.7.13
+3.8.0
+3.8.1
+3.8.2
+3.9.0
+3.9.1
+3.9.2
+```
+
+Choose a version and install it in a directory, e.g., `/home/fracpete/weka`:
+```bash
+wenv.sh install \
+  --action download \
+  --version 3.6.10 \
+  --install-dir /home/fracpete/weka
+```
+
+Once successfully finished, you will have the following directory containing
+Weka 3.6.10:
+```
+/home/fracpete/weka/weka-3-6-10
+```
+
+You can use this directory now for environments.
+
+
 ## Environments
 
 Create an environment for Weka 3.8.1:

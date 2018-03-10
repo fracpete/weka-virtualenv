@@ -16,12 +16,6 @@ You can use the tool either through the command-line or through its user
 interface.
 
 
-**Note**
-You still need to install Weka yourself, *weka-virtualenv* only helps you
-separating your various Weka installations. It is mainly aimed at separating
-packages.
-
-
 ## Links
 
 * [Releases](https://fracpete.github.io/weka-virtualenv/releases/)

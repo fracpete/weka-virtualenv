@@ -52,6 +52,10 @@ guichooser <env> | output filter(s)
 help
 	Outputs help information.
 
+install <options>
+	Downloads and installs a specific Weka version.
+	NB: The downloaded zip file contains a sub-directory with the version of Weka.
+
 knowledgeflow <env> <args> | output filter(s)
 	Launches the Weka KnowledgeFlow.
 	You can supply a flow file to load immediately.
