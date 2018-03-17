@@ -59,6 +59,8 @@ public class Internet {
     HttpURLConnection 		conn;
     DecimalFormat 		dformat;
 
+    ProxyUtils.applyProxy();
+
     input    = null;
     output   = null;
     fos      = null;
