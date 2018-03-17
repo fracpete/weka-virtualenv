@@ -21,6 +21,7 @@
 package com.github.fracpete.wekavirtualenv.command;
 
 import com.github.fracpete.simpleargparse4j.ArgumentParser;
+import com.github.fracpete.wekavirtualenv.core.OutputCapture;
 import com.github.fracpete.wekavirtualenv.env.Environment;
 
 /**
@@ -29,7 +30,7 @@ import com.github.fracpete.wekavirtualenv.env.Environment;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public interface Command
-  extends Comparable<Command>, ErrorHandler, OutputListenerSupporter {
+  extends Comparable<Command>, ErrorHandler, OutputListenerSupporter, OutputCapture {
 
   /**
    * The name of the command (used on the commandline).

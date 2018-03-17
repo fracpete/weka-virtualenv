@@ -92,7 +92,7 @@ public class Install
   protected boolean update() {
     String	msg;
 
-    msg = Versions.update(true);
+    msg = Versions.update(true, this);
     if (msg != null)
       addError(msg);
 
@@ -119,7 +119,7 @@ public class Install
           versions.append("\n");
         versions.append(list.get(i));
       }
-      System.out.println("Available versions:\n" + versions);
+      println("Available versions:\n" + versions, true);
     }
     catch (Exception e) {
       addError("Failed to list versions!\n" + Utils.throwableToString(e));
@@ -148,14 +148,14 @@ public class Install
       // download redirect file
       url    = Versions.getURL(version);
       tmpZip = System.getProperty("java.io.tmpdir") + File.separator + version + ".zip";
-      msg    = Internet.download(url, tmpZip, true);
+      msg    = Internet.download(url, tmpZip, true, this);
       if (msg != null) {
         addError(msg);
         return false;
       }
 
       // unzip
-      System.out.println("Unzipping " + tmpZip + " to " + installDir + "...");
+      println("Unzipping " + tmpZip + " to " + installDir + "...", true);
       errors = new StringBuilder();
       ZipUtils.decompress(new File(tmpZip), new File(installDir), true, errors);
       if (errors.length() > 0) {
@@ -169,9 +169,9 @@ public class Install
     }
 
     if (result)
-      System.out.println("Successfully installed " + version + " to " + installDir);
+      println("Successfully installed " + version + " to " + installDir, true);
     else
-      System.out.println("Failed to install " + version);
+      println("Failed to install " + version, true);
 
     return result;
   }

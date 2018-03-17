@@ -60,10 +60,11 @@ public class Versions {
    * Updates the versions file.
    *
    * @param verbose	whether to output some progress information
+   * @param capture 	for capturing output
    * @return		null if successful, otherwise error message
    */
-  public static String update(boolean verbose) {
-    return Internet.download(VERSIONS_URL, getVersionsFile(), verbose);
+  public static String update(boolean verbose, OutputCapture capture) {
+    return Internet.download(VERSIONS_URL, getVersionsFile(), verbose, capture);
   }
 
   /**

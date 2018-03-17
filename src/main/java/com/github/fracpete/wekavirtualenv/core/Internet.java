@@ -44,9 +44,10 @@ public class Internet {
    * @param remote	the URL to download
    * @param local	the local destination
    * @param verbose	whether to output some progress information
+   * @param capture 	for capturing the output
    * @return		null if successful, otherwise error message
    */
-  public static String download(String remote, String local, boolean verbose) {
+  public static String download(String remote, String local, boolean verbose, OutputCapture capture) {
     String			result;
     URL 			url;
     BufferedInputStream 	input;
@@ -83,12 +84,12 @@ public class Internet {
 	if (count % 100 == 0) {
 	  output.flush();
 	  if (verbose)
-	    System.out.println(dformat.format((double) size / 1024.0) + "KB");
+	    capture.println(dformat.format((double) size / 1024.0) + "KB", true);
 	}
       }
       output.flush();
       if (verbose)
-	System.out.println(dformat.format((double) size / 1024.0) + "KB");
+	capture.println(dformat.format((double) size / 1024.0) + "KB", true);
 
       result = null;
     }
