@@ -91,6 +91,7 @@ public class WekaVirtualEnv
     result = new JMenuBar();
 
     menu = new JMenu("Environments");
+    menu.setMnemonic('E');
     result.add(menu);
 
     for (AbstractGUICommand cmd: AbstractGUICommand.getCommands()) {
@@ -110,6 +111,24 @@ public class WekaVirtualEnv
 
     menuitem = new JMenuItem("Exit", IconHelper.getIcon("Close"));
     menuitem.addActionListener((ActionEvent e) -> close());
+    menu.add(menuitem);
+
+    menu = new JMenu("Install");
+    menu.setMnemonic('I');
+    result.add(menu);
+
+    menuitem = new JMenuItem("Proxy");
+    menuitem.addActionListener((ActionEvent e) -> m_PanelEnvs.manageProxy());
+    menu.add(menuitem);
+
+    menu.addSeparator();
+
+    menuitem = new JMenuItem("Update");
+    menuitem.addActionListener((ActionEvent e) -> m_PanelEnvs.updateVersions());
+    menu.add(menuitem);
+
+    menuitem = new JMenuItem("Download");
+    menuitem.addActionListener((ActionEvent e) -> m_PanelEnvs.downloadVersion());
     menu.add(menuitem);
 
     return result;
