@@ -211,6 +211,7 @@ public abstract class AbstractGUICommand
     if (icon != null)
       result.putValue(javax.swing.AbstractAction.SMALL_ICON, icon);
     result.putValue(KEY_OWNER, this);
+    result.setEnabled(isAvailable());
 
     return result;
   }
