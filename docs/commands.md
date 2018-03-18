@@ -73,6 +73,9 @@ pkgmgr <env> <args> | output filter(s)
 pkgmgr-gui <env> | output filter(s)
 	Launches the package manager user interface.
 
+proxy <options>
+	For managing proxy settings: listing, setting, removing.
+
 reset <options>
 	Deletes an existing environment, i.e., deletes the "wekafiles" sub-directory.
 
