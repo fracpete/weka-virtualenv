@@ -15,12 +15,10 @@
 
 /*
  * Experimenter.java
- * Copyright (C) 2017 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2018 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.command;
-
-import com.github.fracpete.simpleargparse4j.Namespace;
 
 /**
  * Launches the Weka Experimenter.
@@ -28,7 +26,7 @@ import com.github.fracpete.simpleargparse4j.Namespace;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public class Experimenter
-  extends AbstractLaunchCommand {
+  extends AbstractGUILaunchCommand {
 
   /**
    * The name of the command (used on the commandline).
@@ -60,13 +58,11 @@ public class Experimenter
   }
 
   /**
-   * Executes the command.
+   * Returns the GUI classes to check.
    *
-   * @param ns		the namespace of the parsed options, null if no options to parse
-   * @param options	additional command-line options
-   * @return		true if successful
+   * @return		the class names
    */
-  protected boolean doExecute(Namespace ns, String[] options) {
-    return launch(build("weka.gui.experiment.Experimenter", options));
+  protected String[] getGUIClasses() {
+    return new String[]{"weka.gui.experiment.Experimenter"};
   }
 }

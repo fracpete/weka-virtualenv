@@ -20,15 +20,13 @@
 
 package com.github.fracpete.wekavirtualenv.command;
 
-import com.github.fracpete.simpleargparse4j.Namespace;
-
 /**
  * Launches the Weka ArffViewer.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public class ArffViewer
-  extends AbstractLaunchCommand
+  extends AbstractGUILaunchCommand
   implements DatasetHandler {
 
   /**
@@ -62,13 +60,11 @@ public class ArffViewer
   }
 
   /**
-   * Executes the command.
+   * Returns the GUI classes to check.
    *
-   * @param ns		the namespace of the parsed options, null if no options to parse
-   * @param options	additional command-line options
-   * @return		true if successful
+   * @return		the class names
    */
-  protected boolean doExecute(Namespace ns, String[] options) {
-    return launch(build("weka.gui.arffviewer.ArffViewer", options));
+  protected String[] getGUIClasses() {
+    return new String[]{"weka.gui.arffviewer.ArffViewer"};
   }
 }

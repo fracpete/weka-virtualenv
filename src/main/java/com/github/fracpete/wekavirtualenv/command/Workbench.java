@@ -20,18 +20,13 @@
 
 package com.github.fracpete.wekavirtualenv.command;
 
-import com.github.fracpete.simpleargparse4j.Namespace;
-import com.github.fracpete.wekavirtualenv.env.Environment;
-
 /**
  * Launches the Weka Workbench.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public class Workbench
-  extends AbstractLaunchCommand {
-
-  public static final String CLASSNAME = "weka.gui.Workbench";
+  extends AbstractGUILaunchCommand {
 
   /**
    * The name of the command (used on the commandline).
@@ -53,27 +48,11 @@ public class Workbench
   }
 
   /**
-   * Returns whether the action is available.
+   * Returns the GUI classes to check.
    *
-   * @return		true if available
+   * @return		the class names
    */
-  public boolean isAvailable() {
-    return Environment.hasClass(getEnv().weka, CLASSNAME, true);
-  }
-
-  /**
-   * Executes the command.
-   *
-   * @param ns		the namespace of the parsed options, null if no options to parse
-   * @param options	additional command-line options
-   * @return		true if successful
-   */
-  protected boolean doExecute(Namespace ns, String[] options) {
-    if (!isAvailable()) {
-      addError("Workbench is not available in Weka " + getEnv().version() + " (" + CLASSNAME + ")!");
-      return false;
-    }
-
-    return launch(build(CLASSNAME, options));
+  protected String[] getGUIClasses() {
+    return new String[]{"weka.gui.Workbench"};
   }
 }

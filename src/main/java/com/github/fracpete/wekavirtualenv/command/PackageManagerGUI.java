@@ -20,18 +20,13 @@
 
 package com.github.fracpete.wekavirtualenv.command;
 
-import com.github.fracpete.simpleargparse4j.Namespace;
-import com.github.fracpete.wekavirtualenv.env.Environment;
-
 /**
  * Executes the package manager GUI.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public class PackageManagerGUI
-  extends AbstractLaunchCommand {
-
-  public final static String CLASSNAME = "weka.gui.PackageManager";
+  extends AbstractGUILaunchCommand {
 
   /**
    * The name of the command (used on the commandline).
@@ -53,27 +48,11 @@ public class PackageManagerGUI
   }
 
   /**
-   * Returns whether the action is available.
+   * Returns the GUI classes to check.
    *
-   * @return		true if available
+   * @return		the class names
    */
-  @Override
-  public boolean isAvailable() {
-    return Environment.hasClass(getEnv().weka, CLASSNAME, true);
-  }
-
-  /**
-   * Executes the command.
-   *
-   * @param ns		the namespace of the parsed options, null if no options to parse
-   * @param options	additional command-line options
-   * @return		true if successful
-   */
-  protected boolean doExecute(Namespace ns, String[] options) {
-    if (!isAvailable()) {
-      addError("Package manager user interface is not available in Weka " + getEnv().version() + " (" + CLASSNAME + ")!");
-      return false;
-    }
-    return launch(build(CLASSNAME, options));
+  protected String[] getGUIClasses() {
+    return new String[]{"weka.gui.PackageManager"};
   }
 }

@@ -20,16 +20,13 @@
 
 package com.github.fracpete.wekavirtualenv.command;
 
-import com.github.fracpete.simpleargparse4j.Namespace;
-import com.github.fracpete.wekavirtualenv.env.Environment;
-
 /**
  * Launches the Weka KnowledgeFlow.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public class KnowledgeFlow
-  extends AbstractLaunchCommand {
+  extends AbstractGUILaunchCommand {
 
   /**
    * The name of the command (used on the commandline).
@@ -62,18 +59,11 @@ public class KnowledgeFlow
   }
 
   /**
-   * Executes the command.
+   * Returns the GUI classes to check.
    *
-   * @param ns		the namespace of the parsed options, null if no options to parse
-   * @param options	additional command-line options
-   * @return		true if successful
+   * @return		the class names
    */
-  protected boolean doExecute(Namespace ns, String[] options) {
-    String  classname;
-
-    classname = "weka.gui.knowledgeflow.KnowledgeFlow";
-    if (!Environment.hasClass(getEnv().weka, classname, true))
-      classname = "weka.gui.beans.KnowledgeFlow";
-    return launch(build(classname, options));
+  protected String[] getGUIClasses() {
+    return new String[]{"weka.gui.knowledgeflow.KnowledgeFlow", "weka.gui.beans.KnowledgeFlow"};
   }
 }
