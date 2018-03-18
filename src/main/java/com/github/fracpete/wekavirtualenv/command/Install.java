@@ -145,7 +145,7 @@ public class Install
 
     result = true;
     try {
-      // download redirect file
+      // download file
       url    = Versions.getURL(version);
       tmpZip = System.getProperty("java.io.tmpdir") + File.separator + version + ".zip";
       msg    = Internet.download(url, tmpZip, true, this);
