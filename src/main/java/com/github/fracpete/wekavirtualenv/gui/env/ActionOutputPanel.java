@@ -28,7 +28,6 @@ import com.github.fracpete.wekavirtualenv.gui.core.IconHelper;
 import com.github.fracpete.wekavirtualenv.gui.core.Stoppable;
 import nz.ac.waikato.cms.core.FileUtils;
 import nz.ac.waikato.cms.gui.core.BasePanel;
-import nz.ac.waikato.cms.gui.core.BaseScrollPane;
 import nz.ac.waikato.cms.gui.core.BaseTextPaneWithWordWrap;
 import nz.ac.waikato.cms.gui.core.ExtensionFileFilter;
 import nz.ac.waikato.cms.gui.core.GUIHelper;
@@ -124,7 +123,7 @@ public class ActionOutputPanel
     setLayout(new BorderLayout());
     m_TextArea = new BaseTextPaneWithWordWrap();
     m_TextArea.setFont(Font.decode("monospaced"));
-    add(new BaseScrollPane(m_TextArea));
+    add(m_TextArea);
 
     // buttons
     panel = new JPanel(new BorderLayout());
