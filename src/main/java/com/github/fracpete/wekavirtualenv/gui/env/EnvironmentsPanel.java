@@ -210,6 +210,11 @@ public class EnvironmentsPanel
       }
       if (!host.isEmpty() && (port > -1) && (port < 65536))
         ProxyUtils.setProxy(type, host, port);
+      else
+	ProxyUtils.unsetProxy(type);
+    }
+    else {
+      ProxyUtils.unsetProxy(type);
     }
   }
 
