@@ -67,7 +67,7 @@ public class Internet {
     fos      = null;
     dformat  = new DecimalFormat("###,###.###");
     if (verbose)
-      System.out.println("Downloading: " + remote + " to " + local);
+      capture.println("Downloading: " + remote + " to " + local, true);
     try {
       url  = new URL(remote);
       conn = (HttpURLConnection) url.openConnection();
