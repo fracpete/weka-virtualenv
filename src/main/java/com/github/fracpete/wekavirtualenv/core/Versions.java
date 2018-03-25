@@ -64,6 +64,7 @@ public class Versions {
    * @return		null if successful, otherwise error message
    */
   public static String update(boolean verbose, OutputCapture capture) {
+    Project.createHomeDir();
     return Internet.download(VERSIONS_URL, getVersionsFile(), verbose, capture);
   }
 
