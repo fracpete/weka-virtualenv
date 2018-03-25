@@ -15,7 +15,7 @@
 
 /*
  * Project.java
- * Copyright (C) 2017 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2018 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.core;
@@ -52,6 +52,18 @@ public class Project {
   }
 
   /**
+   * Creates the home directory if necessary.
+   *
+   * @return		true if exists or successfully created
+   */
+  public static boolean createHomeDir() {
+    File  	dir;
+
+    dir = new File(getHomeDir());
+    return dir.exists() || dir.mkdirs();
+  }
+
+  /**
    * Returns the directory for the environments.
    *
    * @return 		the environment directory
@@ -59,5 +71,4 @@ public class Project {
   public static String getEnvsDir() {
     return getHomeDir() + File.separator + "envs";
   }
-
 }
