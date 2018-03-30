@@ -297,6 +297,11 @@ public abstract class AbstractGUICommand
       result = doExecute();
     }
 
+    if (result == null) {
+      if (getEnvironmentsPanel() != null)
+        getEnvironmentsPanel().reload();
+    }
+
     return result;
   }
 
