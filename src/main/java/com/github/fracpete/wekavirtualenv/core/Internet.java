@@ -27,8 +27,10 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.text.DecimalFormat;
 
 /**
@@ -37,6 +39,77 @@ import java.text.DecimalFormat;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public class Internet {
+
+  /**
+   * Opens the URL.
+   *
+   * @param url		the URL to open
+   * @return		the connection
+   * @throws IOException	if opening fails
+   */
+  protected static URLConnection openConnection(URL url) throws IOException {
+    return url.openConnection();
+  }
+
+  /**
+   * Gets the connection, handles redirects.
+   * Taken from weka.core.packageManagement.DefaultPackageManager.
+   *
+   * @param url		the URL to open
+   * @return		the connection
+   * @throws IOException	if opening fails
+   */
+  protected static URLConnection getConnection(URL url) throws IOException {
+    URLConnection conn = openConnection(url);
+
+    if (conn instanceof HttpURLConnection) {
+      int status = 0;
+      try {
+        status = ((HttpURLConnection) conn).getResponseCode();
+      }
+      catch (Exception ex) {
+        if (url.toString().startsWith("https://")) {
+          String newURL = url.toString().replace("https://", "http://");
+          conn = openConnection(new URL(newURL));
+          status = ((HttpURLConnection) conn).getResponseCode();
+        }
+        else {
+          throw ex;
+        }
+      }
+      int redirectCount = 0;
+      while (status == HttpURLConnection.HTTP_MOVED_TEMP
+        || status == HttpURLConnection.HTTP_MOVED_PERM
+        || status == HttpURLConnection.HTTP_SEE_OTHER) {
+        redirectCount++;
+        if (redirectCount > 2) {
+          throw new IOException(
+            "Three redirects were generated when trying to " + "download "
+              + url);
+        }
+
+        String newURL = conn.getHeaderField("Location");
+        try {
+          conn = openConnection(new URL(newURL));
+          status = ((HttpURLConnection) conn).getResponseCode();
+        }
+        catch (Exception ex) {
+          if (newURL.startsWith("https://")) {
+            // try http instead
+            System.out.println("Trying http instead of https for " + newURL);
+            newURL = newURL.replace("https://", "http://");
+            conn = openConnection(new URL(newURL));
+            status = ((HttpURLConnection) conn).getResponseCode();
+          }
+          else {
+            throw ex;
+          }
+        }
+      }
+    }
+
+    return conn;
+  }
 
   /**
    * Downloads a file.
@@ -57,7 +130,7 @@ public class Internet {
     int				len;
     int				count;
     int 			size;
-    HttpURLConnection 		conn;
+    URLConnection 		conn;
     DecimalFormat 		dformat;
 
     ProxyUtils.applyProxy();
@@ -69,8 +142,8 @@ public class Internet {
     if (verbose)
       capture.println("Downloading: " + remote + " to " + local, true);
     try {
-      url  = new URL(remote);
-      conn = (HttpURLConnection) url.openConnection();
+      url    = new URL(remote);
+      conn   = getConnection(url);
       input  = new BufferedInputStream(conn.getInputStream());
       fos    = new FileOutputStream(new File(local));
       output = new BufferedOutputStream(fos);
