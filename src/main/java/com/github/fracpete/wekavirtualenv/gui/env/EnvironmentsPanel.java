@@ -38,6 +38,7 @@ import nz.ac.waikato.cms.gui.core.PropertiesParameterPanel;
 import nz.ac.waikato.cms.gui.core.PropertiesParameterPanel.PropertyType;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -172,14 +173,33 @@ public class EnvironmentsPanel
    */
   public void reload() {
     EnvironmentPanel	panel;
+    BasePanel 		panelNone;
+    BasePanel		panelInfo;
+    JLabel		labelNone;
+    JButton		buttonCreate;
+    List<Environment>	envs;
 
     m_PanelEnvs.removeAll();
 
-    for (Environment env: Environments.list()) {
-      panel = new EnvironmentPanel();
-      panel.setEnvironment(env);
-      panel.setOwner(this);
-      m_PanelEnvs.add(panel);
+    envs = Environments.list();
+    if (envs.size() == 0) {
+      panelNone = new BasePanel(new BorderLayout());
+      panelInfo = new BasePanel(new FlowLayout(FlowLayout.CENTER));
+      labelNone = new JLabel("No environment available");
+      buttonCreate = new JButton("Create");
+      buttonCreate.addActionListener((ActionEvent e) -> create());
+      panelInfo.add(labelNone);
+      panelInfo.add(buttonCreate);
+      panelNone.add(panelInfo, BorderLayout.CENTER);
+      m_PanelEnvs.add(panelNone);
+    }
+    else {
+      for (Environment env : envs) {
+	panel = new EnvironmentPanel();
+	panel.setEnvironment(env);
+	panel.setOwner(this);
+	m_PanelEnvs.add(panel);
+      }
     }
 
     invalidate();
