@@ -215,7 +215,7 @@ public class CommandOutputPanel
     atEnd = (m_TextArea.getCaretPosition() == m_TextArea.getText().length());
     m_TextArea.append(line + "\n", stdout ? m_StdOutAttributeSet : m_StdErrAttributeSet);
     if (atEnd)
-      m_TextArea.setCaretPosition(m_TextArea.getText().length());
+      m_TextArea.setCaretPositionLast();
 
     updateButtons();
   }
