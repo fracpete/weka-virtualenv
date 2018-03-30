@@ -81,6 +81,7 @@ public class ProxyUtils {
   protected static synchronized boolean saveProperties() {
     if (m_Properties == null)
       m_Properties = new Properties();
+    Project.createHomeDir();
     return PropsUtils.save(m_Properties, getProxyFile());
   }
 
