@@ -51,7 +51,7 @@ public class Reset
    * @return		the help string
    */
   public String getHelp() {
-    return "Deletes an existing environment, i.e., deletes the \"wekafiles\" sub-directory.";
+    return "Resets an existing environment, i.e., deletes the \"wekafiles\" sub-directory.";
   }
 
   /**
