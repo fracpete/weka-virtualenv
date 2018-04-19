@@ -20,15 +20,19 @@
 
 package com.github.fracpete.wekavirtualenv.env;
 
+import com.github.fracpete.wekavirtualenv.command.Command;
 import gnu.trove.list.TByteList;
 import gnu.trove.list.array.TByteArrayList;
 import nz.ac.waikato.cms.core.FileUtils;
+import nz.ac.waikato.cms.jenericcmdline.core.OptionUtils;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -158,6 +162,39 @@ public class Environment
     }
 
     return result.toString();
+  }
+
+  /**
+   * Splits the environment variables string into a map.
+   *
+   * @param cmd		the command context
+   * @return		the generated map
+   */
+  public Map<String,String> envvarsToMap(Command cmd) {
+    Map<String,String>	result;
+    String[]		vars;
+    String[]		parts;
+
+    result = new HashMap<>();
+
+    if ((envvars != null) && !envvars.isEmpty()) {
+      cmd.println("Using environment variables: " + envvars, true);
+      try {
+	vars = OptionUtils.splitOptions(envvars);
+	for (String var : vars) {
+	  parts = var.split("=");
+	  if (parts.length == 2)
+	    result.put(parts[0], parts[1]);
+	  else
+	    cmd.println("Wrong format for environment variable (key=value)? " + var, true);
+	}
+      }
+      catch (Exception e) {
+        cmd.println("Failed to parse environment variables (blank separated list, key=value pairs): " + envvars, e);
+      }
+    }
+
+    return result;
   }
 
   /**
