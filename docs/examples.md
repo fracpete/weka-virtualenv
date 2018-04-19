@@ -73,6 +73,11 @@ wenv.sh create \
   --memory 4g
 ```
 
+**Custom CLASSPATH:** It is possible to inject custom jars, which will precede
+the `weka.jar` of the environment. For this, you only need to define the
+`CLASSPATH` environment variable (via `--envvar`) when creating (or updating)
+an environment.
+
 ## Launching user interfaces
 
 Launch the GUIChooser from the `weka381` environment:
