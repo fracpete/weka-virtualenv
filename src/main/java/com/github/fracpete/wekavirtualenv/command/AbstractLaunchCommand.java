@@ -27,7 +27,7 @@ import com.github.fracpete.wekavirtualenv.command.filter.Filter;
 import com.github.fracpete.wekavirtualenv.command.filter.FilterChain;
 import com.github.fracpete.wekavirtualenv.core.Destroyable;
 import com.github.fracpete.wekavirtualenv.env.Environments;
-import nz.ac.waikato.cms.jenericcmdline.core.OptionUtils;
+import nz.ac.waikato.cms.core.Utils;
 import org.apache.commons.lang3.SystemUtils;
 
 import java.io.File;
@@ -125,15 +125,23 @@ public abstract class AbstractLaunchCommand
     ProcessBuilder	result;
     List<String>	cmd;
     Map<String, String> vars;
-    String[]		envvars;
-    String[]		parts;
+    Map<String, String>	envvars;
+    String		cp;
+
+    // construct classpath
+    cp      = m_Env.weka;
+    envvars = m_Env.envvarsToMap(this);
+    if (envvars.containsKey("CLASSPATH")) {
+      cp = envvars.get("CLASSPATH") + File.pathSeparator + cp;
+      envvars.remove("CLASSPATH");
+    }
 
     cmd = new ArrayList<>();
     cmd.add(getJava());
     if (!m_Env.memory.isEmpty())
       cmd.add("-Xmx" + m_Env.memory);
     cmd.add("-classpath");
-    cmd.add(m_Env.weka);
+    cmd.add(cp);
     cmd.add(cls);
     if (options != null)
       cmd.addAll(Arrays.asList(options));
@@ -142,22 +150,7 @@ public abstract class AbstractLaunchCommand
     result.command(cmd);
     vars = result.environment();
     vars.put("WEKA_HOME", Environments.getWekaFilesDir(m_Env.name));
-    if ((m_Env.envvars != null) && !m_Env.envvars.isEmpty()) {
-      println("Using environment variables: " + m_Env.envvars, true);
-      try {
-	envvars = OptionUtils.splitOptions(m_Env.envvars);
-	for (String envvar: envvars) {
-	  parts = envvar.split("=");
-	  if (parts.length == 2)
-	    vars.put(parts[0], parts[1]);
-	  else
-	    println("Wrong format for environment variable (key=value)? " + envvar, true);
-	}
-      }
-      catch (Exception e) {
-        println("Failed to parse environment variables (blank separated list, key=value pairs): " + m_Env.envvars, e);
-      }
-    }
+    vars.putAll(envvars);
 
     return result;
   }
@@ -191,6 +184,7 @@ public abstract class AbstractLaunchCommand
    */
   protected boolean launch(ProcessBuilder builder) {
     try {
+      println("Command: " + Utils.flatten(builder.command(), " "), true);
       m_Output = new StreamingProcessOutput(this);
       m_Output.monitor(builder);
       return true;
