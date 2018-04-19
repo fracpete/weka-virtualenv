@@ -56,7 +56,9 @@ public class Create
   public String getHelp() {
     return
       "Creates a new environment.\n"
-      + "Can be initialized with the content of an existing 'wekafiles' directory.";
+      + "Can be initialized with the content of an existing 'wekafiles' directory.\n"
+      + "Additional classpath elements can be injected via the CLASSPATH environment\n"
+      + "that you can define with the '--envvar' option.";
   }
 
   /**
