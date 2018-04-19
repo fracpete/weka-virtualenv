@@ -85,7 +85,7 @@ public class Reset
 
     result = FileUtils.delete(new File(Environments.getWekaFilesDir(ns.getString("name"))));
     if (!result)
-      addError("Failed to reset environment '" + ns.getString("name") + "':\n" + result);
+      addError("Failed to reset environment '" + ns.getString("name") + "'!");
     else
       println("Environment successfully reset: " + ns.getString("name"), true);
 
