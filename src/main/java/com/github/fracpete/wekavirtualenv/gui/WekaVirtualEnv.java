@@ -79,6 +79,15 @@ public class WekaVirtualEnv
   }
 
   /**
+   * Sets the divider location (environments | output) at the specified location.
+   *
+   * @param location	the location in pixels from the left
+   */
+  public void setDividerLocation(int location) {
+    m_SplitPane.setDividerLocation(location);
+  }
+
+  /**
    * Returns the menu bar to use.
    *
    * @return		the menu bar
@@ -163,6 +172,7 @@ public class WekaVirtualEnv
     frame.getContentPane().add(panel, BorderLayout.CENTER);
     frame.setJMenuBar(panel.getMenuBar());
     frame.setSize(new Dimension(1200, 800));
+    panel.setDividerLocation(400);
     frame.setLocationRelativeTo(null);
     frame.addWindowListener(new WindowAdapter() {
       @Override
