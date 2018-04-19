@@ -223,6 +223,10 @@ and 4GB of heap size:</p>
   --memory 4g
 </code></pre>
 
+<p><strong>Custom CLASSPATH:</strong> It is possible to inject custom jars, which will precede
+the <code>weka.jar</code> of the environment. For this, you only need to define the
+<code>CLASSPATH</code> environment variable (via <code>--envvar</code>) when creating (or updating)
+an environment.</p>
 <h2 id="launching-user-interfaces">Launching user interfaces</h2>
 <p>Launch the GUIChooser from the <code>weka381</code> environment:</p>
 <pre><code class="bash">wenv.sh guichooser weka381
