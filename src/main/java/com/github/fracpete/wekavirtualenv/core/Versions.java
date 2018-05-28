@@ -20,6 +20,9 @@
 
 package com.github.fracpete.wekavirtualenv.core;
 
+import com.github.fracpete.inetutils4j.api.Internet;
+import com.github.fracpete.inetutils4j.core.OutputCapture;
+
 import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;

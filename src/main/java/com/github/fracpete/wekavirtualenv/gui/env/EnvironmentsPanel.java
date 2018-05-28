@@ -20,10 +20,10 @@
 
 package com.github.fracpete.wekavirtualenv.gui.env;
 
+import com.github.fracpete.inetutils4j.api.Proxy.ProxyType;
+import com.github.fracpete.inetutils4j.core.DefaultCapture;
 import com.github.fracpete.wekavirtualenv.command.Install;
-import com.github.fracpete.wekavirtualenv.core.DefaultOutputCapture;
 import com.github.fracpete.wekavirtualenv.core.ProxyUtils;
-import com.github.fracpete.wekavirtualenv.core.ProxyUtils.ProxyType;
 import com.github.fracpete.wekavirtualenv.core.Versions;
 import com.github.fracpete.wekavirtualenv.env.Environment;
 import com.github.fracpete.wekavirtualenv.env.Environments;
@@ -318,7 +318,7 @@ public class EnvironmentsPanel
       protected String msg;
       @Override
       protected Object doInBackground() throws Exception {
-	msg = Versions.update(true, new DefaultOutputCapture());
+	msg = Versions.update(true, new DefaultCapture());
 	return null;
       }
       @Override

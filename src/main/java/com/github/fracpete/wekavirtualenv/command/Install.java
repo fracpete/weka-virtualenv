@@ -20,9 +20,9 @@
 
 package com.github.fracpete.wekavirtualenv.command;
 
+import com.github.fracpete.inetutils4j.api.Internet;
 import com.github.fracpete.simpleargparse4j.ArgumentParser;
 import com.github.fracpete.simpleargparse4j.Namespace;
-import com.github.fracpete.wekavirtualenv.core.Internet;
 import com.github.fracpete.wekavirtualenv.core.Versions;
 import com.github.fracpete.wekavirtualenv.core.ZipUtils;
 import nz.ac.waikato.cms.core.Utils;

@@ -20,8 +20,8 @@
 
 package com.github.fracpete.wekavirtualenv.command;
 
+import com.github.fracpete.inetutils4j.core.OutputCapture;
 import com.github.fracpete.simpleargparse4j.ArgumentParser;
-import com.github.fracpete.wekavirtualenv.core.OutputCapture;
 import com.github.fracpete.wekavirtualenv.env.Environment;
 
 /**

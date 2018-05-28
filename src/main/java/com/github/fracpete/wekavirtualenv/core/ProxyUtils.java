@@ -20,6 +20,8 @@
 
 package com.github.fracpete.wekavirtualenv.core;
 
+import com.github.fracpete.inetutils4j.api.Proxy;
+import com.github.fracpete.inetutils4j.api.Proxy.ProxyType;
 import nz.ac.waikato.cms.core.PropsUtils;
 
 import java.io.File;
@@ -40,15 +42,6 @@ public class ProxyUtils {
 
   /** whether the settings need updating. */
   protected static boolean m_Invalid = true;
-
-  /**
-   * The proxy type.
-   */
-  public enum ProxyType {
-    HTTP,
-    FTP,
-    SOCKS,
-  }
 
   /**
    * Returns the properties.
@@ -224,22 +217,7 @@ public class ProxyUtils {
       port = getProxyPort(type);
       if (host.isEmpty() || (port == -1))
 	continue;
-      switch (type) {
-	case HTTP:
-	  System.setProperty("http.proxyHost", host);
-	  System.setProperty("http.proxyPort", "" + port);
-	  break;
-	case FTP:
-	  System.setProperty("ftp.proxyHost", host);
-	  System.setProperty("ftp.proxyPort", "" + port);
-	  break;
-	case SOCKS:
-	  System.setProperty("socksProxyHost", host);
-	  System.setProperty("socksProxyPort", "" + port);
-	  break;
-	default:
-	  throw new IllegalStateException("Unhandled proxy type: " + type);
-      }
+      Proxy.setProxy(type, host, port);
     }
 
     m_Invalid = false;

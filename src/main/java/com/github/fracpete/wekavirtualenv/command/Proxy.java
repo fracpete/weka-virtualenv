@@ -20,10 +20,10 @@
 
 package com.github.fracpete.wekavirtualenv.command;
 
+import com.github.fracpete.inetutils4j.api.Proxy.ProxyType;
 import com.github.fracpete.simpleargparse4j.ArgumentParser;
 import com.github.fracpete.simpleargparse4j.Namespace;
 import com.github.fracpete.wekavirtualenv.core.ProxyUtils;
-import com.github.fracpete.wekavirtualenv.core.ProxyUtils.ProxyType;
 import nz.ac.waikato.cms.core.Utils;
 
 /**
