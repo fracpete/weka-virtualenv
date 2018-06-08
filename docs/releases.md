@@ -1,5 +1,6 @@
 The following releases are available:
 
+* [0.0.22](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.22/weka-virtualenv-0.0.22-bin.zip)
 * [0.0.21](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.21/weka-virtualenv-0.0.21-bin.zip)
 * [0.0.20](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.20/weka-virtualenv-0.0.20-bin.zip)
 * [0.0.19](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.19/weka-virtualenv-0.0.19-bin.zip)
