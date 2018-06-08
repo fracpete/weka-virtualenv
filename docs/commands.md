@@ -29,6 +29,8 @@ clone <options>
 create <options>
 	Creates a new environment.
 	Can be initialized with the content of an existing 'wekafiles' directory.
+	Additional classpath elements can be injected via the CLASSPATH environment
+	that you can define with the '--envvar' option.
 
 delete <options>
 	Deletes an existing environment.
@@ -66,6 +68,9 @@ list_cmds
 list_envs <options>
 	Lists all available environments.
 
+list_pkgs <env> <options> | output filter(s)
+	Lists Weka packages: all, installed or available ones.
+
 pkgmgr <env> <args> | output filter(s)
 	Executes the commandline package manager.
 	You can supply additional options to the package manager, like '-list-packages'.
@@ -77,7 +82,7 @@ proxy <options>
 	For managing proxy settings: listing, setting, removing.
 
 reset <options>
-	Deletes an existing environment, i.e., deletes the "wekafiles" sub-directory.
+	Resets an existing environment, i.e., deletes the "wekafiles" sub-directory.
 
 run <env> <options> <args> | output filter(s)
 	Executes an arbitrary class with the unconsumed command-line options.
