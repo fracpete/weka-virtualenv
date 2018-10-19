@@ -116,7 +116,7 @@
     <dependency>
       <groupId>com.github.waikato</groupId>
       <artifactId>jclasslocator</artifactId>
-      <version>0.0.10</version>
+      <version>0.0.12</version>
     </dependency>
 
     <dependency>
@@ -146,7 +146,7 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-compress</artifactId>
-      <version>1.10</version>
+      <version>1.18</version>
     </dependency>
 
     <dependency>
