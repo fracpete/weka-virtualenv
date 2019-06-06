@@ -48,7 +48,7 @@ if [ ! -x "$JCMD" ] ; then
   exit 1
 fi
 
-REPO=/usr/share/lib/$APPNAME
+REPO=/usr/lib/weka-virtualenv
 CLASSPATH="$REPO/*"
 
 # check options
