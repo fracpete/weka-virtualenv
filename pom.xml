@@ -25,6 +25,10 @@
       <name>GNU General Public License 3</name>
       <url>http://www.gnu.org/licenses/gpl-3.0.txt</url>
     </license>
+    <license>
+      <name>Apache 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
   </licenses>
 
   <developers>
@@ -278,7 +282,7 @@
       <plugin>
         <groupId>com.github.fracpete</groupId>
         <artifactId>debian-maven-plugin</artifactId>
-        <version>1.0.12</version>
+        <version>1.0.15</version>
         <configuration>
           <packageName>weka-virtualenv</packageName>
           <packageTitle>Weka virtual environments</packageTitle>
@@ -290,6 +294,9 @@
           <excludeArtifactsRegExp>
             <param>.*sources.*</param>
           </excludeArtifactsRegExp>
+          <fileFiltering>
+            <enabled>true</enabled>
+          </fileFiltering>
           <useDefaultCopyResources>true</useDefaultCopyResources>
           <copyResources>
             <copyResource>
