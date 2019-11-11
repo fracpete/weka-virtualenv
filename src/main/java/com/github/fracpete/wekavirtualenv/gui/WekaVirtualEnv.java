@@ -22,6 +22,7 @@ package com.github.fracpete.wekavirtualenv.gui;
 
 import com.github.fracpete.wekavirtualenv.gui.command.AbstractGUICommand;
 import com.github.fracpete.wekavirtualenv.gui.core.IconHelper;
+import com.github.fracpete.wekavirtualenv.gui.core.Settings;
 import com.github.fracpete.wekavirtualenv.gui.core.Stoppable;
 import com.github.fracpete.wekavirtualenv.gui.env.EnvironmentsPanel;
 import nz.ac.waikato.cms.gui.core.BaseFrame;
@@ -34,11 +35,14 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Properties;
 
 /**
  * Main gui for managing virtual environments for Weka.
@@ -83,6 +87,15 @@ public class WekaVirtualEnv
   }
 
   /**
+   * Finishes the initialization.
+   */
+  @Override
+  protected void finishInit() {
+    super.finishInit();
+    restoreSettings();
+  }
+
+  /**
    * Sets the divider location (environments | output) at the specified location.
    *
    * @param location	the location in pixels from the left
@@ -106,6 +119,7 @@ public class WekaVirtualEnv
 
     menu = new JMenu("Environments");
     menu.setMnemonic('E');
+    menu.addChangeListener((ChangeEvent e) -> updateMenu());
     result.add(menu);
 
     for (AbstractGUICommand cmd: AbstractGUICommand.getCommands()) {
@@ -133,6 +147,7 @@ public class WekaVirtualEnv
     menu.add(menuitem);
 
     menu = new JMenu("Install");
+    menu.addChangeListener((ChangeEvent e) -> updateMenu());
     menu.setMnemonic('I');
     result.add(menu);
 
@@ -154,6 +169,53 @@ public class WekaVirtualEnv
   }
 
   /**
+   * Updates the menu.
+   */
+  protected void updateMenu() {
+    m_MenuItemCompact.setSelected(m_PanelEnvs.isCompactView());
+  }
+
+  /**
+   * Restores the previous settings.
+   */
+  public void restoreSettings() {
+    Properties	settings;
+    Frame	frame;
+
+    settings = Settings.load();
+    m_PanelEnvs.setCompactView(settings.getProperty("compact", "false").equals("true"));
+    if (settings.getProperty("divider") != null)
+      m_SplitPane.setDividerLocation(Integer.parseInt(settings.getProperty("divider")));
+    frame = GUIHelper.getParentFrame(this);
+    if (frame != null) {
+      if ((settings.getProperty("x") != null) && (settings.getProperty("y") != null))
+	frame.setLocation(Integer.parseInt(settings.getProperty("x")), Integer.parseInt(settings.getProperty("y")));
+      if ((settings.getProperty("width") != null) && (settings.getProperty("height") != null))
+	frame.setSize(Integer.parseInt(settings.getProperty("width")), Integer.parseInt(settings.getProperty("height")));
+    }
+  }
+
+  /**
+   * Stores the current settings.
+   */
+  protected void storeSettings() {
+    Properties	settings;
+    Frame	frame;
+
+    settings = new Properties();
+    settings.setProperty("compact", "" + m_PanelEnvs.isCompactView());
+    settings.setProperty("divider", "" + m_SplitPane.getDividerLocation());
+    frame = GUIHelper.getParentFrame(this);
+    if (frame != null) {
+      settings.setProperty("x", "" + frame.getX());
+      settings.setProperty("y", "" + frame.getY());
+      settings.setProperty("width", "" + frame.getWidth());
+      settings.setProperty("height", "" + frame.getHeight());
+    }
+    Settings.save(settings);
+  }
+
+  /**
    * Closes the application.
    */
   public void close() {
@@ -164,6 +226,8 @@ public class WekaVirtualEnv
 	((Stoppable) m_TabbedPaneOutputs.getComponentAt(i)).stop();
       m_TabbedPaneOutputs.removeTabAt(i);
     }
+
+    storeSettings();
 
     GUIHelper.closeParent(this);
   }
@@ -190,7 +254,7 @@ public class WekaVirtualEnv
         panel.close();
       }
     });
-
+    panel.restoreSettings();
     frame.setVisible(true);
   }
 }
