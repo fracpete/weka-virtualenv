@@ -15,7 +15,7 @@
 
 /*
  * EnvironmentsPanel.java
- * Copyright (C) 2017-2018 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2019 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.gui.env;
@@ -61,6 +61,9 @@ import java.util.Properties;
 public class EnvironmentsPanel
   extends BasePanel {
 
+  /** whether to show compact or normal view. */
+  protected boolean m_CompactView;
+
   /** the tabbed pane for output. */
   protected JTabbedPane m_TabbedPane;
 
@@ -76,11 +79,24 @@ public class EnvironmentsPanel
   /** the environments. */
   protected JPanel m_PanelEnvs;
 
+  /** the list environments. */
+  protected List<EnvironmentPanel> m_ListEnvs;
+
   /** the scroll pane. */
   protected BaseScrollPane m_ScrollPaneEnvs;
 
   /** the panel for the buttons. */
   protected JPanel m_PanelButtons;
+
+  /**
+   * Initializes the members.
+   */
+  @Override
+  protected void initialize() {
+    super.initialize();
+
+    m_ListEnvs = new ArrayList<>();
+  }
 
   /**
    * Initializes the widgets.
@@ -180,6 +196,7 @@ public class EnvironmentsPanel
     List<Environment>	envs;
 
     m_PanelEnvs.removeAll();
+    m_ListEnvs.clear();
 
     envs = Environments.list();
     if (envs.size() == 0) {
@@ -199,6 +216,7 @@ public class EnvironmentsPanel
 	panel.setEnvironment(env);
 	panel.setOwner(this);
 	m_PanelEnvs.add(panel);
+	m_ListEnvs.add(panel);
       }
     }
 
@@ -431,5 +449,25 @@ public class EnvironmentsPanel
       }
     };
     worker.execute();
+  }
+
+  /**
+   * Sets whether to show a compact view.
+   *
+   * @param value	true if to show compact
+   */
+  public void setCompactView(boolean value) {
+    m_CompactView = value;
+    for (EnvironmentPanel env: m_ListEnvs)
+      env.setCompactView(m_CompactView);
+  }
+
+  /**
+   * Returns whether the compact view is shown.
+   *
+   * @return		true if compact shown
+   */
+  public boolean isCompactView() {
+    return m_CompactView;
   }
 }

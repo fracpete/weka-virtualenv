@@ -15,7 +15,7 @@
 
 /*
  * WekaVirtualEnv.java
- * Copyright (C) 2017-2018 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2019 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.gui;
@@ -28,6 +28,7 @@ import nz.ac.waikato.cms.gui.core.BaseFrame;
 import nz.ac.waikato.cms.gui.core.BasePanel;
 import nz.ac.waikato.cms.gui.core.GUIHelper;
 
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -55,6 +56,9 @@ public class WekaVirtualEnv
 
   /** the tabbed pane for the outputs. */
   protected JTabbedPane m_TabbedPaneOutputs;
+
+  /** the menuitem whether to show compact or normal view. */
+  protected JCheckBoxMenuItem m_MenuItemCompact;
 
   /**
    * Initializes the widgets.
@@ -96,6 +100,7 @@ public class WekaVirtualEnv
     JMenuBar			result;
     JMenu			menu;
     JMenuItem			menuitem;
+    JCheckBoxMenuItem		checkmenuitem;
 
     result = new JMenuBar();
 
@@ -111,6 +116,11 @@ public class WekaVirtualEnv
       menuitem = new JMenuItem(cmd.getAction());
       menu.add(menuitem);
     }
+
+    checkmenuitem = new JCheckBoxMenuItem("Compact", IconHelper.getEmptyIcon());
+    checkmenuitem.addActionListener((ActionEvent e) -> m_PanelEnvs.setCompactView(m_MenuItemCompact.isSelected()));
+    menu.add(checkmenuitem);
+    m_MenuItemCompact = checkmenuitem;
 
     menuitem = new JMenuItem("Reload", IconHelper.getIcon("Reload"));
     menuitem.addActionListener((ActionEvent e) -> m_PanelEnvs.reload());

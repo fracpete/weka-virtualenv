@@ -15,7 +15,7 @@
 
 /*
  * EnvironmentPanel.java
- * Copyright (C) 2017-2018 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2019 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.gui.env;
@@ -55,32 +55,50 @@ public class EnvironmentPanel
   /** the underlying environment. */
   protected Environment m_Environment;
 
+  /** whether to show compact or normal view. */
+  protected boolean m_CompactView;
+
+  /** the full layout. */
+  protected JPanel m_NormalPanel;
+
   /** the name. */
-  protected JLabel m_LabelName;
+  protected JLabel m_NormalLabelName;
 
   /** the java executable to use. */
-  protected JLabel m_LabelJava;
+  protected JLabel m_NormalLabelJava;
 
   /** the memory to use. */
-  protected JLabel m_LabelMemory;
+  protected JLabel m_NormalLabelMemory;
 
   /** the weka jar. */
-  protected JLabel m_LabelWeka;
+  protected JLabel m_NormalLabelWeka;
 
   /** the Environmenr vars. */
-  protected JLabel m_LabelEnvVars;
+  protected JLabel m_NormalLabelEnvVars;
 
   /** the prefix labels .*/
-  protected List<JLabel> m_Prefixes;
+  protected List<JLabel> m_NormalPrefixes;
 
   /** the button for the actions. */
-  protected JButton m_ButtonActions;
+  protected JButton m_NormalButtonActions;
 
   /** the button for the guichooser. */
-  protected JButton m_ButtonGUIChooser;
+  protected JButton m_NormalButtonGUIChooser;
 
   /** the action menu. */
   protected JPopupMenu m_ActionMenu;
+
+  /** the compact layout. */
+  protected JPanel m_CompactPanel;
+
+  /** the name. */
+  protected JLabel m_CompactLabelName;
+
+  /** the button for the actions. */
+  protected JButton m_CompactButtonActions;
+
+  /** the button for the guichooser. */
+  protected JButton m_CompactButtonGUIChooser;
 
   /** the menu items. */
   protected List<AbstractGUICommand> m_Commands;
@@ -96,9 +114,10 @@ public class EnvironmentPanel
 
     setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
 
-    m_Environment = null;
-    m_Commands = new ArrayList<>();
-    group         = "";
+    m_CompactView   = false;
+    m_Environment   = null;
+    m_Commands      = new ArrayList<>();
+    group           = "";
     for (AbstractGUICommand cmd : AbstractGUICommand.getCommands()) {
       if (!cmd.requiresEnvironment())
         continue;
@@ -108,7 +127,7 @@ public class EnvironmentPanel
       group = cmd.getGroup();
     }
 
-    m_Prefixes = new ArrayList<>();
+    m_NormalPrefixes = new ArrayList<>();
   }
 
   /**
@@ -123,41 +142,67 @@ public class EnvironmentPanel
 
     setLayout(new BorderLayout());
 
+    // normal view
+    m_NormalPanel = new JPanel(new BorderLayout(0, 0));
+    add(m_NormalPanel, BorderLayout.CENTER);
+
     // labels
     panel = new JPanel(new GridLayout(0, 1));
-    add(panel, BorderLayout.CENTER);
+    m_NormalPanel.add(panel, BorderLayout.CENTER);
 
-    m_LabelName = new JLabel();
-    m_LabelName.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
-    font = m_LabelName.getFont();
+    m_NormalLabelName = new JLabel();
+    m_NormalLabelName.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
+    font = m_NormalLabelName.getFont();
     font = font.deriveFont(Font.BOLD);
     font = font.deriveFont(Math.round(font.getSize() * 1.1));
-    m_LabelName.setFont(font);
-    panel.add(m_LabelName);
+    m_NormalLabelName.setFont(font);
+    panel.add(m_NormalLabelName);
 
-    m_LabelJava = new JLabel();
-    panel.add(createEntry("Java", m_LabelJava));
+    m_NormalLabelJava = new JLabel();
+    panel.add(createEntry("Java", m_NormalLabelJava));
 
-    m_LabelMemory = new JLabel();
-    panel.add(createEntry("Memory", m_LabelMemory));
+    m_NormalLabelMemory = new JLabel();
+    panel.add(createEntry("Memory", m_NormalLabelMemory));
 
-    m_LabelWeka = new JLabel();
-    panel.add(createEntry("Weka", m_LabelWeka));
+    m_NormalLabelWeka = new JLabel();
+    panel.add(createEntry("Weka", m_NormalLabelWeka));
 
-    m_LabelEnvVars = new JLabel();
-    panel.add(createEntry("Env. vars", m_LabelEnvVars));
+    m_NormalLabelEnvVars = new JLabel();
+    panel.add(createEntry("Env. vars", m_NormalLabelEnvVars));
 
     // buttons
     panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-    add(panel, BorderLayout.SOUTH);
+    m_NormalPanel.add(panel, BorderLayout.SOUTH);
 
-    m_ButtonActions = new JButton("...");
-    m_ButtonActions.addActionListener((ActionEvent ae) -> showActions());
-    panel.add(m_ButtonActions);
+    m_NormalButtonActions = new JButton("...");
+    m_NormalButtonActions.addActionListener((ActionEvent ae) -> showActions(m_NormalButtonActions));
+    panel.add(m_NormalButtonActions);
 
-    m_ButtonGUIChooser = new JButton(IconHelper.getIcon("GUIChooser"));
-    m_ButtonGUIChooser.addActionListener((ActionEvent ae) -> startGuichooser());
-    panel.add(m_ButtonGUIChooser);
+    m_NormalButtonGUIChooser = new JButton(IconHelper.getIcon("GUIChooser"));
+    m_NormalButtonGUIChooser.addActionListener((ActionEvent ae) -> startGuichooser());
+    panel.add(m_NormalButtonGUIChooser);
+
+    // compact view
+    m_CompactPanel = new JPanel(new BorderLayout(0, 0));
+
+    m_CompactLabelName = new JLabel();
+    m_CompactLabelName.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
+    font = m_CompactLabelName.getFont();
+    font = font.deriveFont(Font.BOLD);
+    font = font.deriveFont(Math.round(font.getSize() * 1.1));
+    m_CompactLabelName.setFont(font);
+    m_CompactPanel.add(m_CompactLabelName, BorderLayout.WEST);
+
+    panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+    m_CompactPanel.add(panel, BorderLayout.EAST);
+
+    m_CompactButtonActions = new JButton("...");
+    m_CompactButtonActions.addActionListener((ActionEvent ae) -> showActions(m_CompactButtonActions));
+    panel.add(m_CompactButtonActions);
+
+    m_CompactButtonGUIChooser = new JButton(IconHelper.getIcon("GUIChooser"));
+    m_CompactButtonGUIChooser.addActionListener((ActionEvent ae) -> startGuichooser());
+    panel.add(m_CompactButtonGUIChooser);
   }
 
   /**
@@ -170,10 +215,10 @@ public class EnvironmentPanel
     super.finishInit();
 
     width = 0;
-    for (JLabel prefix: m_Prefixes)
+    for (JLabel prefix: m_NormalPrefixes)
       width = Math.max(width, prefix.getPreferredSize().width);
 
-    for (JLabel prefix: m_Prefixes)
+    for (JLabel prefix: m_NormalPrefixes)
       prefix.setPreferredSize(new Dimension(width, prefix.getPreferredSize().height));
   }
 
@@ -195,7 +240,7 @@ public class EnvironmentPanel
     font = labelPrefix.getFont();
     font = font.deriveFont(Font.PLAIN);
     labelPrefix.setFont(font);
-    m_Prefixes.add(labelPrefix);
+    m_NormalPrefixes.add(labelPrefix);
     result.add(labelPrefix);
     result.add(label);
 
@@ -240,29 +285,54 @@ public class EnvironmentPanel
   }
 
   /**
+   * Turns characters (<>&) into HTML entities.
+   *
+   * @param s		the string to process
+   * @return		the processed string
+   */
+  protected String toHTML(String s) {
+    return s
+      .replace("&", "&amp;")
+      .replace("<", "&lt;")
+      .replace(">", "&gt;");
+  }
+
+  /**
    * Updates the labels using the current environment object.
    */
   protected void updateLabels() {
     if (m_Environment == null) {
-      m_LabelName.setText("");
-      m_LabelJava.setText(Environment.DEFAULT);
-      m_LabelMemory.setText(Environment.DEFAULT);
-      m_LabelWeka.setText("");
-      m_LabelEnvVars.setText("");
+      m_NormalLabelName.setText("");
+      m_NormalLabelJava.setText(Environment.DEFAULT);
+      m_NormalLabelMemory.setText(Environment.DEFAULT);
+      m_NormalLabelWeka.setText("");
+      m_NormalLabelEnvVars.setText("");
+      m_CompactLabelName.setText("");
+      m_CompactLabelName.setToolTipText("");
+      m_CompactPanel.setToolTipText(m_CompactLabelName.getToolTipText());
     }
     else {
-      m_LabelName.setText(m_Environment.name);
-      m_LabelJava.setText(m_Environment.java.isEmpty() ? Environment.DEFAULT : m_Environment.java);
-      m_LabelMemory.setText(m_Environment.memory.isEmpty() ? Environment.DEFAULT : m_Environment.memory);
-      m_LabelWeka.setText(m_Environment.weka);
-      m_LabelEnvVars.setText(m_Environment.envvars.isEmpty() ? Environment.NONE : m_Environment.envvars);
+      m_NormalLabelName.setText(m_Environment.name);
+      m_NormalLabelJava.setText(m_Environment.java.isEmpty() ? Environment.DEFAULT : m_Environment.java);
+      m_NormalLabelMemory.setText(m_Environment.memory.isEmpty() ? Environment.DEFAULT : m_Environment.memory);
+      m_NormalLabelWeka.setText(m_Environment.weka);
+      m_NormalLabelEnvVars.setText(m_Environment.envvars.isEmpty() ? Environment.NONE : m_Environment.envvars);
+      m_CompactLabelName.setText(m_Environment.name);
+      m_CompactLabelName.setToolTipText(
+        "<html>"
+	  + "Java: " + toHTML(m_NormalLabelJava.getText()) + "<br>"
+	  + "Memory: " + toHTML(m_NormalLabelMemory.getText()) + "<br>"
+	  + "Weka: " + toHTML(m_NormalLabelWeka.getText()) + "<br>"
+	  + "EnvVars: " + toHTML(m_NormalLabelEnvVars.getText()) + "<br>"
+	  + "</html>");
+      m_CompactPanel.setToolTipText(m_CompactLabelName.getToolTipText());
     }
   }
 
   /**
    * Shows the action menu.
    */
-  protected void showActions() {
+  protected void showActions(JButton button) {
     JPopupMenu menu;
 
     if (m_ActionMenu != null) {
@@ -281,8 +351,9 @@ public class EnvironmentPanel
 	  menu.add(cmd.getAction());
 	}
       }
+      m_ActionMenu = menu;
     }
-    menu.show(this, 0, this.getHeight());
+    menu.show(button, 0, button.getHeight());
   }
 
   /**
@@ -297,5 +368,35 @@ public class EnvironmentPanel
     action.setTabbedPane(getOwner().getTabbedPane());
     action.setEnvironment(getEnvironment());
     action.getAction().actionPerformed(null);
+  }
+
+  /**
+   * Sets whether to show a compact view.
+   *
+   * @param value	true if to show compact
+   */
+  public void setCompactView(boolean value) {
+    m_CompactView = value;
+    if (m_CompactView) {
+      remove(m_NormalPanel);
+      add(m_CompactPanel, BorderLayout.CENTER);
+    }
+    else {
+      remove(m_CompactPanel);
+      add(m_NormalPanel, BorderLayout.CENTER);
+    }
+    invalidate();
+    revalidate();
+    doLayout();
+    repaint();
+  }
+
+  /**
+   * Returns whether the compact view is shown.
+   *
+   * @return		true if compact shown
+   */
+  public boolean isCompactView() {
+    return m_CompactView;
   }
 }
