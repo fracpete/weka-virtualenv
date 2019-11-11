@@ -293,7 +293,7 @@
         </executions>
       </plugin>
 
-      <plugin>
+      <!--plugin>
         <groupId>com.github.fracpete</groupId>
         <artifactId>debian-maven-plugin</artifactId>
         <version>1.0.19</version>
@@ -406,7 +406,7 @@
             <skip>true</skip>
           </signature>
         </configuration>
-      </plugin>
+      </plugin-->
     </plugins>
   </build>
 </project>
