@@ -255,6 +255,20 @@
               <outputDirectory>${project.build.directory}/sources</outputDirectory>
             </configuration>
           </execution>
+          <!-- get all binary jars -->
+          <!-- used for .rpm generation -->
+          <execution>
+            <id>linux-jars</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <failOnMissingClassifierArtifact>false</failOnMissingClassifierArtifact>
+              <outputDirectory>${project.build.directory}/linux-jars</outputDirectory>
+              <includeScope>compile</includeScope>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
 
@@ -320,6 +334,77 @@
           <packageDependencies>
             <packageDependency>openjdk-11-jre</packageDependency>
           </packageDependencies>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>de.dentrassi.maven</groupId>
+        <artifactId>rpm</artifactId>
+        <version>1.3.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>rpm</goal>
+            </goals>
+            <configuration>
+              <skip>false</skip>
+              <attach>false</attach>
+              <entries>
+                <entry>
+                  <file>${project.basedir}/src/deb/resources/usr/bin/wenv</file>
+                  <name>/usr/bin/wenv</name>
+                  <user>root</user>
+                  <group>root</group>
+                  <mode>0755</mode>
+                </entry>
+                <entry>
+                  <file>${project.basedir}/src/deb/resources/usr/bin/wenvarff</file>
+                  <name>/usr/bin/wenvarff</name>
+                  <user>root</user>
+                  <group>root</group>
+                  <mode>0755</mode>
+                </entry>
+                <entry>
+                  <file>${project.basedir}/src/deb/resources/usr/bin/wenvgui</file>
+                  <name>/usr/bin/wenvgui</name>
+                  <user>root</user>
+                  <group>root</group>
+                  <mode>0755</mode>
+                </entry>
+                <entry>
+                  <file>${project.basedir}/src/deb/resources/usr/share/pixmaps/weka-virtualenv.png</file>
+                  <name>/usr/share/pixmaps/weka-virtualenv.png</name>
+                  <user>root</user>
+                  <group>root</group>
+                  <mode>0644</mode>
+                </entry>
+                <entry>
+                  <file>${project.basedir}/src/deb/resources/usr/share/applications/weka-virtualenv.desktop</file>
+                  <name>/usr/share/pixmaps/weka-virtualenv.desktop</name>
+                  <user>root</user>
+                  <group>root</group>
+                  <mode>0644</mode>
+                </entry>
+                <entry>
+                  <collect>
+                    <from>${project.basedir}/target/linux-jars</from>
+                  </collect>
+                  <name>/usr/lib/${project.name}</name>
+                </entry>
+                <entry>
+                  <collect>
+                    <from>${project.basedir}/target/sources</from>
+                  </collect>
+                  <name>/usr/lib/${project.name}/src</name>
+                </entry>
+              </entries>
+            </configuration>
+          </execution>
+        </executions>
+        <configuration>
+          <signature>
+            <skip>true</skip>
+          </signature>
         </configuration>
       </plugin>
     </plugins>
