@@ -215,6 +215,7 @@ public class EnvironmentsPanel
 	panel = new EnvironmentPanel();
 	panel.setEnvironment(env);
 	panel.setOwner(this);
+	panel.setCompactView(isCompactView());
 	m_PanelEnvs.add(panel);
 	m_ListEnvs.add(panel);
       }
