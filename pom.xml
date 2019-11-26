@@ -266,7 +266,6 @@
             <configuration>
               <failOnMissingClassifierArtifact>false</failOnMissingClassifierArtifact>
               <outputDirectory>${project.build.directory}/linux-jars</outputDirectory>
-              <includeScope>compile</includeScope>
             </configuration>
           </execution>
         </executions>
@@ -293,10 +292,10 @@
         </executions>
       </plugin>
 
-      <!--plugin>
+      <plugin>
         <groupId>com.github.fracpete</groupId>
         <artifactId>debian-maven-plugin</artifactId>
-        <version>1.0.19</version>
+        <version>1.0.20</version>
         <configuration>
           <packageName>weka-virtualenv</packageName>
           <packageTitle>Weka virtual environments</packageTitle>
@@ -387,6 +386,15 @@
                 </entry>
                 <entry>
                   <collect>
+                    <from>${project.basedir}/target</from>
+                    <includes>
+                      <include>${project.artifactId}-${project.version}.jar</include>
+                    </includes>
+                  </collect>
+                  <name>/usr/lib/${project.name}</name>
+                </entry>
+                <entry>
+                  <collect>
                     <from>${project.basedir}/target/linux-jars</from>
                   </collect>
                   <name>/usr/lib/${project.name}</name>
@@ -394,6 +402,15 @@
                 <entry>
                   <collect>
                     <from>${project.basedir}/target/sources</from>
+                  </collect>
+                  <name>/usr/lib/${project.name}/src</name>
+                </entry>
+                <entry>
+                  <collect>
+                    <from>${project.basedir}/target</from>
+                    <includes>
+                      <include>${project.artifactId}-${project.version}-sources.jar</include>
+                    </includes>
                   </collect>
                   <name>/usr/lib/${project.name}/src</name>
                 </entry>
@@ -406,7 +423,7 @@
             <skip>true</skip>
           </signature>
         </configuration>
-      </plugin-->
+      </plugin>
     </plugins>
   </build>
 </project>
