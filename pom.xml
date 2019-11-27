@@ -5,7 +5,7 @@
 
   <groupId>com.github.fracpete</groupId>
   <artifactId>weka-virtualenv</artifactId>
-  <version>0.0.25-SNAPSHOT</version>
+  <version>0.0.24</version>
   <packaging>jar</packaging>
 
   <parent>
@@ -371,14 +371,14 @@
                   <mode>0755</mode>
                 </entry>
                 <entry>
-                  <file>${project.basedir}/src/deb/resources/usr/share/pixmaps/weka-virtualenv.png</file>
+                  <file>${project.basedir}/src/deb/resources/usr/share/pixmaps/wenvgui.png</file>
                   <name>/usr/share/pixmaps/weka-virtualenv.png</name>
                   <user>root</user>
                   <group>root</group>
                   <mode>0644</mode>
                 </entry>
                 <entry>
-                  <file>${project.basedir}/src/deb/resources/usr/share/applications/weka-virtualenv.desktop</file>
+                  <file>${project.basedir}/src/deb/resources/usr/share/applications/wenvgui.desktop</file>
                   <name>/usr/share/pixmaps/weka-virtualenv.desktop</name>
                   <user>root</user>
                   <group>root</group>

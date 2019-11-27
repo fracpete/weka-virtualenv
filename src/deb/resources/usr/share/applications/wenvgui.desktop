@@ -4,6 +4,6 @@
 Version=1.0
 Type=Application
 Terminal=true
-Icon=${packageName}
-Name=${packageName}
+Icon=wenvgui
+Name=Weka virtualenv
 Exec=/usr/bin/wenvgui
