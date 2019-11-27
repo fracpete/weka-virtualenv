@@ -1,5 +1,9 @@
 The following releases are available:
 
+* 0.0.24: [zip](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.24/weka-virtualenv-0.0.24-bin.zip), 
+  [deb](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.24/weka-virtualenv_0.0.24-1_all.deb), 
+  [rpm](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.24/weka-virtualenv-0.0.24-1.noarch.rpm)
+* [0.0.23](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.23/weka-virtualenv-0.0.23-bin.zip)
 * [0.0.22](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.22/weka-virtualenv-0.0.22-bin.zip)
 * [0.0.21](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.21/weka-virtualenv-0.0.21-bin.zip)
 * [0.0.20](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.20/weka-virtualenv-0.0.20-bin.zip)
@@ -19,3 +23,10 @@ The following releases are available:
 * [0.0.4](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.4/weka-virtualenv-0.0.4-bin.zip)
 * [0.0.3](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.3/weka-virtualenv-0.0.3-bin.zip)
 * [0.0.2](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.2/weka-virtualenv-0.0.2-bin.zip)
+
+
+Notes:
+
+* *zip* - cross-platform (Linux/Mac/Windows)
+* *deb* - installer for Debian-based systems (eg Ubuntu)
+* *rpm* - installer for Redhat-based systems (eg RHEL or Fedora)
