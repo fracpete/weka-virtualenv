@@ -15,13 +15,12 @@
 
 /*
  * Proxy.java
- * Copyright (C) 2018 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2018-2019 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.core;
 
-import com.github.fracpete.inetutils4j.api.Proxy;
-import com.github.fracpete.inetutils4j.api.Proxy.ProxyType;
+import com.github.fracpete.requests4j.request.Request;
 import nz.ac.waikato.cms.core.PropsUtils;
 
 import java.io.File;
@@ -36,6 +35,11 @@ public class ProxyUtils {
 
   /** the proxy file name. */
   public final static String PROXY_NAME = "proxy.props";
+
+  public enum ProxyType {
+    HTTP,
+    FTP
+  }
 
   /** the properties. */
   protected static Properties m_Properties;
@@ -117,10 +121,6 @@ public class ProxyUtils {
 	props.setProperty("ftp.proxyHost", host);
 	props.setProperty("ftp.proxyPort", "" + port);
 	break;
-      case SOCKS:
-	props.setProperty("socksProxyHost", host);
-	props.setProperty("socksProxyPort", "" + port);
-	break;
       default:
         throw new IllegalStateException("Unhandled proxy type: " + type);
     }
@@ -146,10 +146,6 @@ public class ProxyUtils {
 	props.remove("ftp.proxyHost");
 	props.remove("ftp.proxyPort");
 	break;
-      case SOCKS:
-	props.remove("socksProxyHost");
-	props.remove("socksProxyPort");
-	break;
       default:
         throw new IllegalStateException("Unhandled proxy type: " + type);
     }
@@ -171,8 +167,6 @@ public class ProxyUtils {
 	return props.getProperty("http.proxyHost", "");
       case FTP:
 	return props.getProperty("ftp.proxyHost", "");
-      case SOCKS:
-	return props.getProperty("socksProxyHost", "");
       default:
         throw new IllegalStateException("Unhandled proxy type: " + type);
     }
@@ -193,8 +187,6 @@ public class ProxyUtils {
 	return Integer.parseInt(props.getProperty("http.proxyPort", "-1"));
       case FTP:
 	return Integer.parseInt(props.getProperty("ftp.proxyPort", "-1"));
-      case SOCKS:
-	return Integer.parseInt(props.getProperty("socksProxyPort", "-1"));
       default:
         throw new IllegalStateException("Unhandled proxy type: " + type);
     }
@@ -203,24 +195,28 @@ public class ProxyUtils {
   /**
    * Initializes the proxy from the stored settings, if necessary.
    *
-   * @see	#m_Invalid
+   * @param request 	the request to apply the proxy settings to
+   * @return 		the request itself
+   * @see		#m_Invalid
    */
-  public static void applyProxy() {
+  public static Request applyProxy(Request request) {
     String	host;
     int		port;
 
     if (!m_Invalid)
-      return;
+      return request;
 
     for (ProxyType type: ProxyType.values()) {
       host = getProxyHost(type);
       port = getProxyPort(type);
       if (host.isEmpty() || (port == -1))
 	continue;
-      Proxy.setProxy(type, host, port);
+      request.proxy(host, port, type.toString().toLowerCase());
     }
 
     m_Invalid = false;
+
+    return request;
   }
 
   /**

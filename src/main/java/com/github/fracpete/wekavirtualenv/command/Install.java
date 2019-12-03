@@ -15,14 +15,16 @@
 
 /*
  * Install.java
- * Copyright (C) 2018 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2018-2019 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.command;
 
-import com.github.fracpete.inetutils4j.api.Internet;
+import com.github.fracpete.requests4j.Requests;
 import com.github.fracpete.simpleargparse4j.ArgumentParser;
 import com.github.fracpete.simpleargparse4j.Namespace;
+import com.github.fracpete.wekavirtualenv.core.FileDownload;
+import com.github.fracpete.wekavirtualenv.core.ProxyUtils;
 import com.github.fracpete.wekavirtualenv.core.Versions;
 import com.github.fracpete.wekavirtualenv.core.ZipUtils;
 import nz.ac.waikato.cms.core.Utils;
@@ -92,7 +94,7 @@ public class Install
   protected boolean update() {
     String	msg;
 
-    msg = Versions.update(true, this);
+    msg = Versions.update(this);
     if (msg != null)
       addError(msg);
 
@@ -140,17 +142,17 @@ public class Install
     boolean		result;
     String		url;
     String 		tmpZip;
-    String		msg;
     StringBuilder	errors;
+    FileDownload	response;
 
     result = true;
     try {
       // download file
       url    = Versions.getURL(version);
       tmpZip = System.getProperty("java.io.tmpdir") + File.separator + version + ".zip";
-      msg    = Internet.download(url, tmpZip, true, this);
-      if (msg != null) {
-        addError(msg);
+      response = ProxyUtils.applyProxy(Requests.get(url)).allowRedirects(true).execute(new FileDownload(tmpZip, this));
+      if (!response.ok()) {
+        addError("Failed to download '" + url + "': " + response.statusCode() + "/" + response.statusMessage());
         return false;
       }
 

@@ -15,13 +15,13 @@
 
 /*
  * Versions.java
- * Copyright (C) 2018 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2018-2019 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.core;
 
-import com.github.fracpete.inetutils4j.api.Internet;
-import com.github.fracpete.inetutils4j.core.OutputCapture;
+import com.github.fracpete.requests4j.Requests;
+import nz.ac.waikato.cms.core.Utils;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -62,13 +62,23 @@ public class Versions {
   /**
    * Updates the versions file.
    *
-   * @param verbose	whether to output some progress information
-   * @param capture 	for capturing output
+   * @param progress 	for outputting the progress
    * @return		null if successful, otherwise error message
    */
-  public static String update(boolean verbose, OutputCapture capture) {
+  public static String update(ConsoleOutputSupporter progress) {
+    FileDownload 	response;
+
     Project.createHomeDir();
-    return Internet.download(VERSIONS_URL, getVersionsFile(), verbose, capture);
+    try {
+      response = ProxyUtils.applyProxy(Requests.get(VERSIONS_URL)).allowRedirects(true).execute(new FileDownload(getVersionsFile(), progress));
+      if (response.ok())
+        return null;
+      else
+        return response.statusMessage();
+    }
+    catch (Exception e) {
+      return "Failed to download versions file '" + VERSIONS_URL + "':\n" + Utils.throwableToString(e);
+    }
   }
 
   /**

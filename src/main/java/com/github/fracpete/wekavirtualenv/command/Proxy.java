@@ -15,15 +15,15 @@
 
 /*
  * Proxy.java
- * Copyright (C) 2018 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2018-2019 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.command;
 
-import com.github.fracpete.inetutils4j.api.Proxy.ProxyType;
 import com.github.fracpete.simpleargparse4j.ArgumentParser;
 import com.github.fracpete.simpleargparse4j.Namespace;
 import com.github.fracpete.wekavirtualenv.core.ProxyUtils;
+import com.github.fracpete.wekavirtualenv.core.ProxyUtils.ProxyType;
 import nz.ac.waikato.cms.core.Utils;
 
 /**

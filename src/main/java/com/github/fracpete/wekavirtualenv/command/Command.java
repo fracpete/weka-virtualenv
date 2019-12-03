@@ -15,13 +15,13 @@
 
 /*
  * Command.java
- * Copyright (C) 2018 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2018-2019 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.command;
 
-import com.github.fracpete.inetutils4j.core.OutputCapture;
 import com.github.fracpete.simpleargparse4j.ArgumentParser;
+import com.github.fracpete.wekavirtualenv.core.ConsoleOutputSupporter;
 import com.github.fracpete.wekavirtualenv.env.Environment;
 
 /**
@@ -30,7 +30,7 @@ import com.github.fracpete.wekavirtualenv.env.Environment;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public interface Command
-  extends Comparable<Command>, ErrorHandler, OutputListenerSupporter, OutputCapture {
+  extends Comparable<Command>, ErrorHandler, OutputListenerSupporter, ConsoleOutputSupporter {
 
   /**
    * The name of the command (used on the commandline).
@@ -104,6 +104,7 @@ public interface Command
    * @param line	the line to output
    * @param stdout	whether to output on stdout or stderr
    */
+  @Override
   public void println(String line, boolean stdout);
 
   /**
@@ -112,6 +113,7 @@ public interface Command
    * @param msg		the message to output
    * @param t 		the exception
    */
+  @Override
   public void println(String msg, Throwable t);
 
   /**

@@ -20,10 +20,10 @@
 
 package com.github.fracpete.wekavirtualenv.gui.env;
 
-import com.github.fracpete.inetutils4j.api.Proxy.ProxyType;
-import com.github.fracpete.inetutils4j.core.DefaultCapture;
 import com.github.fracpete.wekavirtualenv.command.Install;
+import com.github.fracpete.wekavirtualenv.core.DefaultConsoleOutput;
 import com.github.fracpete.wekavirtualenv.core.ProxyUtils;
+import com.github.fracpete.wekavirtualenv.core.ProxyUtils.ProxyType;
 import com.github.fracpete.wekavirtualenv.core.Versions;
 import com.github.fracpete.wekavirtualenv.env.Environment;
 import com.github.fracpete.wekavirtualenv.env.Environments;
@@ -288,23 +288,11 @@ public class EnvironmentsPanel
     panel.setHelp(ProxyType.FTP + ".port", "The port of the proxy (0-65535)");
     props.setProperty(ProxyType.FTP + ".port", "" + ProxyUtils.getProxyPort(ProxyType.FTP));
 
-    // socks
-    panel.addPropertyType(ProxyType.SOCKS + ".host", PropertyType.STRING);
-    panel.setLabel(ProxyType.SOCKS + ".host", "Socks - host");
-    panel.setHelp(ProxyType.SOCKS + ".host", "The URL of the proxy");
-    props.setProperty(ProxyType.SOCKS + ".host", ProxyUtils.getProxyHost(ProxyType.SOCKS));
-    panel.addPropertyType(ProxyType.SOCKS + ".port", PropertyType.INTEGER);
-    panel.setLabel(ProxyType.SOCKS + ".port", "Socks - port");
-    panel.setHelp(ProxyType.SOCKS + ".port", "The port of the proxy (0-65535)");
-    props.setProperty(ProxyType.SOCKS + ".port", "" + ProxyUtils.getProxyPort(ProxyType.SOCKS));
-
     panel.setPropertyOrder(new String[]{
       ProxyType.HTTP + ".host",
       ProxyType.HTTP + ".port",
       ProxyType.FTP + ".host",
       ProxyType.FTP + ".port",
-      ProxyType.SOCKS + ".host",
-      ProxyType.SOCKS + ".port",
     });
     panel.setProperties(props);
 
@@ -324,7 +312,6 @@ public class EnvironmentsPanel
     props = panel.getProperties();
     setProxy(ProxyType.HTTP, props);
     setProxy(ProxyType.FTP, props);
-    setProxy(ProxyType.SOCKS, props);
   }
 
   /**
@@ -337,7 +324,7 @@ public class EnvironmentsPanel
       protected String msg;
       @Override
       protected Object doInBackground() throws Exception {
-	msg = Versions.update(true, new DefaultCapture());
+	msg = Versions.update(new DefaultConsoleOutput());
 	return null;
       }
       @Override
