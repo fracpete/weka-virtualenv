@@ -23,6 +23,22 @@
       <directory>${project.build.scriptSourceDirectory}</directory>
       <outputDirectory>/bin</outputDirectory>
     </fileSet>
+
+    <fileSet>
+      <directory>${project.build.directory}/sources</directory>
+      <outputDirectory>/src</outputDirectory>
+      <includes>
+        <include>*.jar</include>
+      </includes>
+    </fileSet>
+
+    <fileSet>
+      <directory>${project.build.directory}</directory>
+      <outputDirectory>/src</outputDirectory>
+      <includes>
+        <include>${project.artifactId}-${project.version}-sources.jar</include>
+      </includes>
+    </fileSet>
   </fileSets>
 
   <dependencySets>
