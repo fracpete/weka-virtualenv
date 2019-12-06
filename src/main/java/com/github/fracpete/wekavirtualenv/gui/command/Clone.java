@@ -15,7 +15,7 @@
 
 /*
  * Clone.java
- * Copyright (C) 2017-2018 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2019 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.gui.command;
@@ -120,12 +120,17 @@ public class Clone
     panel.setLabel("envvars", "Environment variables");
     panel.setHelp("envvars", "Additional environment variables, blank-separated list of key=value pairs");
 
+    panel.addPropertyType("setuponly", PropertyType.BOOLEAN);
+    panel.setLabel("setuponly", "Only setup");
+    panel.setHelp("setuponly", "Skips copying the 'wekafiles' directory, ie excludes any packages or props files");
+
     panel.setPropertyOrder(new String[]{
       "newname",
       "java",
       "memory",
       "weka",
       "envvars",
+      "setuponly",
     });
 
     props = new Properties();
@@ -134,6 +139,7 @@ public class Clone
     props.setProperty("memory", getEnvironment().memory);
     props.setProperty("weka", getEnvironment().weka);
     props.setProperty("envvars", getEnvironment().envvars);
+    props.setProperty("setuponly", "" + false);
     panel.setProperties(props);
     if (GUIHelper.getParentDialog(getTabbedPane()) != null)
       dialog = new ApprovalDialog(GUIHelper.getParentDialog(getTabbedPane()), ModalityType.DOCUMENT_MODAL);
@@ -175,6 +181,8 @@ public class Clone
     else {
       options.add("--no-envvars");
     }
+    if (props.getProperty("setuponly").equalsIgnoreCase("true"))
+      options.add("--setup-only");
     m_Command = new com.github.fracpete.wekavirtualenv.command.Clone();
     if (!m_Command.execute(options.toArray(new String[options.size()]))) {
       if (m_Command.hasErrors())
