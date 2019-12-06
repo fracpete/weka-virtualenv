@@ -82,6 +82,9 @@
     <a class="current" href="./">Releases</a>
     <ul class="subnav">
             
+    <li class="toctree-l2"><a href="#changes">Changes</a></li>
+    
+
     </ul>
 	    </li>
           
@@ -122,6 +125,9 @@
               
                 <p>The following releases are available:</p>
 <ul>
+<li>0.0.26: <a href="https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.26/weka-virtualenv-0.0.26-bin.zip">zip</a>, 
+  <a href="https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.26/weka-virtualenv_0.0.26-1_all.deb">deb</a>, 
+  <a href="https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.26/weka-virtualenv-0.0.26-1.noarch.rpm">rpm</a></li>
 <li>0.0.25: <a href="https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.25/weka-virtualenv-0.0.25-bin.zip">zip</a>, 
   <a href="https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.25/weka-virtualenv_0.0.25-1_all.deb">deb</a>, 
   <a href="https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.25/weka-virtualenv-0.0.25-1.noarch.rpm">rpm</a></li>
@@ -154,6 +160,105 @@
 <li><em>zip</em> - cross-platform (Linux/Mac/Windows)</li>
 <li><em>deb</em> - installer for Debian-based systems (eg Ubuntu)</li>
 <li><em>rpm</em> - installer for Redhat-based systems (eg RHEL or Fedora)</li>
+</ul>
+<h1 id="changes">Changes</h1>
+<ul>
+<li>
+<p>0.0.26</p>
+</li>
+<li>
+<p>the <code>Clone</code> action in the GUI now supports <em>setup-only</em> option as well (skips <code>wekafiles</code> dir, no props/no packages)</p>
+</li>
+<li>
+<p>0.0.25</p>
+</li>
+<li>
+<p>switched from <a href="https://github.com/fracpete/inetutils4j">inetutils4j</a> to <a href="https://github.com/fracpete/requests4j">requests4j</a></p>
+</li>
+<li>
+<p>0.0.24</p>
+</li>
+<li>
+<p>compact state is now kept when reloading environments</p>
+</li>
+<li>
+<p>0.0.23</p>
+</li>
+<li>
+<p>added ability to toggle between compact and full view of environments</p>
+</li>
+<li>
+<p>position/size of window and compact view state are now being stored/restored</p>
+</li>
+<li>
+<p>0.0.22</p>
+</li>
+<li>
+<p>added <code>list_pkgs</code> command, which simplifies listing installed/available/all packages</p>
+</li>
+<li>added <code>Installed packages</code> to user interface, to quickly list installed packages for an environment</li>
+<li>
+<p>using <a href="https://github.com/fracpete/inetutils4j">inetutils4j</a> library now</p>
+</li>
+<li>
+<p>0.0.21</p>
+</li>
+<li>
+<p>added ability to inject custom jars via <code>CLASSPATH</code> environment variable (specified in <code>envvars</code> of environment)</p>
+</li>
+<li>command-line to launch command is now being output (useful for debugging)</li>
+<li>
+<p>some minor GUI fixes</p>
+</li>
+<li>
+<p>0.0.20</p>
+</li>
+<li>
+<p>fixed redirect handling of Weka downloads</p>
+</li>
+<li>added <em>Create</em> button to GUI if no environment yet present</li>
+<li>proxy settings and download of Weka versions now work even if no environment has been created</li>
+<li>
+<p>all commands in GUI now refresh the environments panel</p>
+</li>
+<li>
+<p>0.0.19</p>
+</li>
+<li>
+<p>fixed unsetting of proxies in the user interface</p>
+</li>
+<li>
+<p>0.0.18</p>
+</li>
+<li>
+<p>added proxy support</p>
+</li>
+<li>
+<p>Weka versions can be installed through the user interface now</p>
+</li>
+<li>
+<p>0.0.17</p>
+</li>
+<li>
+<p>added <code>install</code> command for downloading and installing Weka zip files from sourceforge.net</p>
+</li>
+<li>
+<p>0.0.16</p>
+</li>
+<li>
+<p>added support for scripting via the <code>Script</code> command and in the GUI</p>
+</li>
+<li>some scripting commands:<ul>
+<li>variable support (string or string array), <code>set</code> and <code>unset</code></li>
+<li><code>for</code>-loop for iterating over a block of instructions</li>
+<li><code>foreach</code> for iterating over a string array variable</li>
+<li>simple piping of output (stdout or stderr) through filters (<code>grep</code>, <code>replace</code>, <code>tee</code>)</li>
+<li><code>read_lines</code> for reading text file into string array variable</li>
+<li>search for files (<code>list_files</code>) and directories (<code>list_dirs</code>)</li>
+<li>deleting of files (<code>del_file</code>) and directories (<code>del_dir</code>)</li>
+<li><code>calc</code> for calculating mathematical expressions</li>
+</ul>
+</li>
 </ul>
               
             </div>
