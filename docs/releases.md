@@ -1,5 +1,8 @@
 The following releases are available:
 
+* 0.0.26: [zip](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.26/weka-virtualenv-0.0.26-bin.zip), 
+  [deb](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.26/weka-virtualenv_0.0.26-1_all.deb), 
+  [rpm](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.26/weka-virtualenv-0.0.26-1.noarch.rpm)
 * 0.0.25: [zip](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.25/weka-virtualenv-0.0.25-bin.zip), 
   [deb](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.25/weka-virtualenv_0.0.25-1_all.deb), 
   [rpm](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.25/weka-virtualenv-0.0.25-1.noarch.rpm)
@@ -37,7 +40,7 @@ Notes:
 
 # Changes
 
-* ?.?.?
+* 0.0.26
 
   * the `Clone` action in the GUI now supports *setup-only* option as well (skips `wekafiles` dir, no props/no packages)
 
