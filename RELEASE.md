@@ -32,6 +32,7 @@
 ## Documentation
 
 * add new release link (`releases.md`)
+* add section to *Changes* section in `releases.md`
 * update artifact version (`maven.md`)
 * test 
   
