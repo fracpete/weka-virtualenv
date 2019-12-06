@@ -33,3 +33,69 @@ Notes:
 * *zip* - cross-platform (Linux/Mac/Windows)
 * *deb* - installer for Debian-based systems (eg Ubuntu)
 * *rpm* - installer for Redhat-based systems (eg RHEL or Fedora)
+
+
+# Changes
+
+* ?.?.?
+
+  * the `Clone` action in the GUI now supports *setup-only* option as well (skips `wekafiles` dir, no props/no packages)
+
+* 0.0.25
+
+  * switched from [inetutils4j](https://github.com/fracpete/inetutils4j) to [requests4j](https://github.com/fracpete/requests4j)
+  
+* 0.0.24
+
+  * compact state is now kept when reloading environments
+  
+* 0.0.23
+
+  * added ability to toggle between compact and full view of environments
+  * position/size of window and compact view state are now being stored/restored
+
+* 0.0.22
+
+  * added `list_pkgs` command, which simplifies listing installed/available/all packages
+  * added `Installed packages` to user interface, to quickly list installed packages for an environment
+  * using [inetutils4j](https://github.com/fracpete/inetutils4j) library now
+
+* 0.0.21
+
+  * added ability to inject custom jars via `CLASSPATH` environment variable (specified in `envvars` of environment)
+  * command-line to launch command is now being output (useful for debugging)
+  * some minor GUI fixes
+
+* 0.0.20
+
+  * fixed redirect handling of Weka downloads
+  * added *Create* button to GUI if no environment yet present
+  * proxy settings and download of Weka versions now work even if no environment has been created
+  * all commands in GUI now refresh the environments panel
+
+* 0.0.19
+
+  * fixed unsetting of proxies in the user interface
+  
+* 0.0.18
+
+  * added proxy support
+  * Weka versions can be installed through the user interface now
+
+* 0.0.17
+
+  * added `install` command for downloading and installing Weka zip files from sourceforge.net
+  
+* 0.0.16
+
+  * added support for scripting via the `Script` command and in the GUI
+  * some scripting commands:
+    * variable support (string or string array), `set` and `unset`
+    * `for`-loop for iterating over a block of instructions
+    * `foreach` for iterating over a string array variable
+    * simple piping of output (stdout or stderr) through filters (`grep`, `replace`, `tee`)
+    * `read_lines` for reading text file into string array variable
+    * search for files (`list_files`) and directories (`list_dirs`)
+    * deleting of files (`del_file`) and directories (`del_dir`)
+    * `calc` for calculating mathematical expressions
+  
