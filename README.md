@@ -25,5 +25,5 @@ interface.
 
 ## Licenses
 
-The scripts are licensed under [Apache 2.0](https://github.com/fracpete/weka-virtualenv/blob/master/APACHE.txt) 
+The shell scripts are licensed under [Apache 2.0](https://github.com/fracpete/weka-virtualenv/blob/master/APACHE.txt) 
 and all other source code under [GPL 3.0](https://github.com/fracpete/weka-virtualenv/blob/master/GPL.txt).
