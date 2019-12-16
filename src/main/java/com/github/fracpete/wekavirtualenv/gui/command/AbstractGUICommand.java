@@ -15,7 +15,7 @@
 
 /*
  * AbstractGUICommand.java
- * Copyright (C) 2017-2018 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2019 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.gui.command;
@@ -200,7 +200,7 @@ public abstract class AbstractGUICommand
 	  protected void done() {
 	    super.done();
 	    if (m_Error != null)
-	      GUIHelper.showErrorMessage(m_EnvironmentsPanel, m_Error);
+	      GUIHelper.showErrorMessage(m_EnvironmentsPanel.getParent(), m_Error);
 	  }
 	};
 	worker.execute();

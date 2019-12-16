@@ -431,7 +431,7 @@ public class EnvironmentsPanel
       protected void done() {
 	super.done();
 	if (!errors.isEmpty())
-	  GUIHelper.showErrorMessage(getTabbedPane(), Utils.flatten(errors, "\n"));
+	  GUIHelper.showErrorMessage(getParent(), Utils.flatten(errors, "\n"));
 	else
 	  JOptionPane.showMessageDialog(getParent(), "Successfully installed Weka " + installVersion + "!");
       }
