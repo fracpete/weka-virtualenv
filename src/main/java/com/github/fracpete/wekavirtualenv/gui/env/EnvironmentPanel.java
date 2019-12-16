@@ -73,8 +73,11 @@ public class EnvironmentPanel
   /** the weka jar. */
   protected JLabel m_NormalLabelWeka;
 
-  /** the Environmenr vars. */
+  /** the Environment vars. */
   protected JLabel m_NormalLabelEnvVars;
+
+  /** whether package manager is offline. */
+  protected JLabel m_NormalLabelPkgMgrOffline;
 
   /** the prefix labels .*/
   protected List<JLabel> m_NormalPrefixes;
@@ -169,6 +172,9 @@ public class EnvironmentPanel
 
     m_NormalLabelEnvVars = new JLabel();
     panel.add(createEntry("Env. vars", m_NormalLabelEnvVars));
+
+    m_NormalLabelPkgMgrOffline = new JLabel();
+    panel.add(createEntry("PkgMgr offline", m_NormalLabelPkgMgrOffline));
 
     // buttons
     panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -307,6 +313,7 @@ public class EnvironmentPanel
       m_NormalLabelMemory.setText(Environment.DEFAULT);
       m_NormalLabelWeka.setText("");
       m_NormalLabelEnvVars.setText("");
+      m_NormalLabelPkgMgrOffline.setText("no");
       m_CompactLabelName.setText("");
       m_CompactLabelName.setToolTipText("");
       m_CompactPanel.setToolTipText(m_CompactLabelName.getToolTipText());
@@ -317,6 +324,7 @@ public class EnvironmentPanel
       m_NormalLabelMemory.setText(m_Environment.memory.isEmpty() ? Environment.DEFAULT : m_Environment.memory);
       m_NormalLabelWeka.setText(m_Environment.weka);
       m_NormalLabelEnvVars.setText(m_Environment.envvars.isEmpty() ? Environment.NONE : m_Environment.envvars);
+      m_NormalLabelPkgMgrOffline.setText(m_Environment.pkgMgrOffline ? "yes" : "no");
       m_CompactLabelName.setText(m_Environment.name);
       m_CompactLabelName.setToolTipText(
         "<html>"
@@ -324,6 +332,7 @@ public class EnvironmentPanel
 	  + "Memory: " + toHTML(m_NormalLabelMemory.getText()) + "<br>"
 	  + "Weka: " + toHTML(m_NormalLabelWeka.getText()) + "<br>"
 	  + "EnvVars: " + toHTML(m_NormalLabelEnvVars.getText()) + "<br>"
+	  + "PkgMgr offline: " + toHTML(m_NormalLabelPkgMgrOffline.getText()) + "<br>"
 	  + "</html>");
       m_CompactPanel.setToolTipText(m_CompactLabelName.getToolTipText());
     }

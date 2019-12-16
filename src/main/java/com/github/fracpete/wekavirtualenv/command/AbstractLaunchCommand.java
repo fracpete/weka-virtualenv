@@ -115,7 +115,7 @@ public abstract class AbstractLaunchCommand
   }
 
   /**
-   * Builds the commands.
+   * Builds the command.
    *
    * @param cls		the class to launch
    * @param options	optional arguments for the class (null to ignore)
@@ -142,6 +142,8 @@ public abstract class AbstractLaunchCommand
       cmd.add("-Xmx" + m_Env.memory);
     cmd.add("-classpath");
     cmd.add(cp);
+    if (m_Env.pkgMgrOffline)
+      cmd.add("-Dweka.packageManager.offline=true");
     cmd.add(cls);
     if (options != null)
       cmd.addAll(Arrays.asList(options));

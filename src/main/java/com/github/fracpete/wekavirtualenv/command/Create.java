@@ -15,7 +15,7 @@
 
 /*
  * Create.java
- * Copyright (C) 2017-2018 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2019 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.command;
@@ -95,6 +95,11 @@ public class Create
       .dest("envvar")
       .help("optional environment variables to set (key=value)")
       .multiple(true);
+    result.addOption("--pkg-mgr-offline")
+      .dest("pkgmgroffline")
+      .argument(false)
+      .help("whether to run the package manager in offline mode")
+      .setDefault(false);
 
     return result;
   }
@@ -116,11 +121,12 @@ public class Create
 
     msg = null;
 
-    env        = new Environment();
-    env.name   = ns.getString("name");
-    env.java   = ns.getString("java");
-    env.memory = ns.getString("memory");
-    env.weka   = ns.getString("weka");
+    env               = new Environment();
+    env.name          = ns.getString("name");
+    env.java          = ns.getString("java");
+    env.memory        = ns.getString("memory");
+    env.weka          = ns.getString("weka");
+    env.pkgMgrOffline = ns.getBoolean("pkgmgroffline");
     if (ns.getList("envvar").size() > 0)
       env.envvars = OptionUtils.joinOptions(ns.getList("envvar").toArray(new String[0]));
 

@@ -15,7 +15,7 @@
 
 /*
  * Environment.java
- * Copyright (C) 2017-2018 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2019 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.env;
@@ -60,6 +60,9 @@ public class Environment
   /** the environment variables to set. */
   public final static String KEY_ENVVARS = "envvars";
 
+  /** whether to use the package manager in offline mode. */
+  public final static String KEY_PKGMGR_OFFLINE = "pkgmgr_offline";
+
   public static final String DEFAULT = "<default>";
 
   public static final String NONE = "<none>";
@@ -79,6 +82,9 @@ public class Environment
   /** the additional environment variables (blank-separated key=value pairs). */
   public String envvars;
 
+  /** whether to use the package manager offline. */
+  public boolean pkgMgrOffline;
+
   /**
    * Returns a clone.
    *
@@ -87,12 +93,13 @@ public class Environment
   public Environment clone() {
     Environment	result;
 
-    result         = new Environment();
-    result.name    = name;
-    result.java    = java;
-    result.memory  = memory;
-    result.weka    = weka;
-    result.envvars = envvars;
+    result               = new Environment();
+    result.name          = name;
+    result.java          = java;
+    result.memory        = memory;
+    result.weka          = weka;
+    result.envvars       = envvars;
+    result.pkgMgrOffline = pkgMgrOffline;
 
     return result;
   }
@@ -153,6 +160,7 @@ public class Environment
     result.append(prefix).append("Memory: ").append(memory.isEmpty() ? DEFAULT : memory).append("\n");
     result.append(prefix).append("Weka: ").append(weka).append("\n");
     result.append(prefix).append("Env. vars: ").append(envvars == null ? NONE : envvars).append("\n");
+    result.append(prefix).append("PkgMgr offline: ").append(pkgMgrOffline).append("\n");
     if (verbose) {
       version = version();
       if (version == null)
@@ -219,12 +227,13 @@ public class Environment
       props   = new Properties();
       props.load(freader);
       if ((props.getProperty(KEY_NAME) != null) && (props.getProperty(KEY_WEKA) != null)) {
-        result         = new Environment();
-        result.name    = props.getProperty(KEY_NAME);
-        result.java    = props.getProperty(KEY_JAVA, "");
-        result.memory  = props.getProperty(KEY_MEMORY, "");
-        result.weka    = props.getProperty(KEY_WEKA);
-        result.envvars = props.getProperty(KEY_ENVVARS, "");
+        result               = new Environment();
+        result.name          = props.getProperty(KEY_NAME);
+        result.java          = props.getProperty(KEY_JAVA, "");
+        result.memory        = props.getProperty(KEY_MEMORY, "");
+        result.weka          = props.getProperty(KEY_WEKA);
+        result.envvars       = props.getProperty(KEY_ENVVARS, "");
+        result.pkgMgrOffline = props.getProperty(KEY_PKGMGR_OFFLINE, "false").equalsIgnoreCase("true");
       }
     }
     catch (Exception e) {
@@ -259,6 +268,7 @@ public class Environment
     props.setProperty(KEY_MEMORY, (env.memory == null ? "" : env.memory));
     props.setProperty(KEY_WEKA, env.weka);
     props.setProperty(KEY_ENVVARS, (env.envvars == null ? "" : env.envvars));
+    props.setProperty(KEY_PKGMGR_OFFLINE, "" + env.pkgMgrOffline);
 
     fwriter = null;
     bwriter = null;

@@ -15,7 +15,7 @@
 
 /*
  * Update.java
- * Copyright (C) 2017-2018 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2019 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.gui.command;
@@ -116,11 +116,16 @@ public class Update
     panel.setLabel("envvars", "Environment variables");
     panel.setHelp("envvars", "Additional environment variables, blank-separated list of key=value pairs");
 
+    panel.addPropertyType("pkgmgroffline", PropertyType.BOOLEAN);
+    panel.setLabel("pkgmgroffline", "PkgMgr offline");
+    panel.setHelp("pkgmgroffline", "Whether to run the package manager in offline mode");
+
     panel.setPropertyOrder(new String[]{
       "java",
       "memory",
       "weka",
       "envvars",
+      "pkgmgroffline",
     });
 
     props = new Properties();
@@ -128,6 +133,7 @@ public class Update
     props.setProperty("memory", getEnvironment().memory);
     props.setProperty("weka", getEnvironment().weka);
     props.setProperty("envvars", getEnvironment().envvars);
+    props.setProperty("pkgmgroffline", "" + getEnvironment().pkgMgrOffline);
     panel.setProperties(props);
     if (GUIHelper.getParentDialog(getTabbedPane()) != null)
       dialog = new ApprovalDialog(GUIHelper.getParentDialog(getTabbedPane()), ModalityType.DOCUMENT_MODAL);
@@ -167,6 +173,8 @@ public class Update
     else {
       options.add("--no-envvars");
     }
+    if (props.getProperty("pkgmgroffline").equalsIgnoreCase("true"))
+      options.add("--pkg-mgr-offline");
     m_Command = new com.github.fracpete.wekavirtualenv.command.Update();
     m_Command.setEnv(getEnvironment());
     if (!m_Command.execute(options.toArray(new String[options.size()]))) {

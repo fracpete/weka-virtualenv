@@ -120,6 +120,10 @@ public class Clone
     panel.setLabel("envvars", "Environment variables");
     panel.setHelp("envvars", "Additional environment variables, blank-separated list of key=value pairs");
 
+    panel.addPropertyType("pkgmgroffline", PropertyType.BOOLEAN);
+    panel.setLabel("pkgmgroffline", "PkgMgr offline");
+    panel.setHelp("pkgmgroffline", "Whether to run the package manager in offline mode");
+
     panel.addPropertyType("setuponly", PropertyType.BOOLEAN);
     panel.setLabel("setuponly", "Only setup");
     panel.setHelp("setuponly", "Skips copying the 'wekafiles' directory, ie excludes any packages or props files");
@@ -130,6 +134,7 @@ public class Clone
       "memory",
       "weka",
       "envvars",
+      "pkgmgroffline",
       "setuponly",
     });
 
@@ -139,6 +144,7 @@ public class Clone
     props.setProperty("memory", getEnvironment().memory);
     props.setProperty("weka", getEnvironment().weka);
     props.setProperty("envvars", getEnvironment().envvars);
+    props.setProperty("pkgmgroffline", "" + getEnvironment().pkgMgrOffline);
     props.setProperty("setuponly", "" + false);
     panel.setProperties(props);
     if (GUIHelper.getParentDialog(getTabbedPane()) != null)
@@ -181,6 +187,8 @@ public class Clone
     else {
       options.add("--no-envvars");
     }
+    if (props.getProperty("pkgmgroffline").equalsIgnoreCase("true"))
+      options.add("--pkg-mgr-offline");
     if (props.getProperty("setuponly").equalsIgnoreCase("true"))
       options.add("--setup-only");
     m_Command = new com.github.fracpete.wekavirtualenv.command.Clone();

@@ -95,6 +95,11 @@ public class Clone
       .dest("envvar")
       .help("optional environment variables to set (key=value); override existing vars")
       .multiple(true);
+    result.addOption("--pkg-mgr-offline")
+      .dest("pkgmgroffline")
+      .argument(false)
+      .help("whether to run the package manager in offline mode")
+      .setDefault(false);
     result.addOption("--setup-only")
       .dest("setuponly")
       .help("if set, does not copy the 'wekafiles' directory of the environment")

@@ -15,7 +15,7 @@
 
 /*
  * Create.java
- * Copyright (C) 2017-2018 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2019 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.gui.command;
@@ -120,12 +120,17 @@ public class Create
     panel.setLabel("envvars", "Environment variables");
     panel.setHelp("envvars", "Additional environment variables, blank-separated list of key=value pairs");
 
+    panel.addPropertyType("pkgmgroffline", PropertyType.BOOLEAN);
+    panel.setLabel("pkgmgroffline", "PkgMgr offline");
+    panel.setHelp("pkgmgroffline", "Whether to run the package manager in offline mode");
+
     panel.setPropertyOrder(new String[]{
       "name",
       "java",
       "memory",
       "weka",
       "envvars",
+      "pkgmgroffline",
     });
 
     props = new Properties();
@@ -133,6 +138,7 @@ public class Create
     props.setProperty("java", "");
     props.setProperty("memory", "");
     props.setProperty("weka", "");
+    props.setProperty("pkgmgroffline", "" + false);
     props.setProperty("envvars", "");
     panel.setProperties(props);
     if (GUIHelper.getParentDialog(getTabbedPane()) != null)
@@ -170,6 +176,8 @@ public class Create
         return "Failed to split blank-separated list of environment variables (key=value) pairs: " + e;
       }
     }
+    if (props.getProperty("pkgmgroffline").equalsIgnoreCase("true"))
+      options.add("--pkg-mgr-offline");
     m_Command = new com.github.fracpete.wekavirtualenv.command.Create();
     if (!m_Command.execute(options.toArray(new String[options.size()]))) {
       if (m_Command.hasErrors())
