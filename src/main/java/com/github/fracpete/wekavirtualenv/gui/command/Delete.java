@@ -15,7 +15,7 @@
 
 /*
  * Delete.java
- * Copyright (C) 2017 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2020 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.gui.command;
@@ -92,7 +92,7 @@ public class Delete
 
     result    = null;
     m_Command = new com.github.fracpete.wekavirtualenv.command.Delete();
-    if (!m_Command.execute(new String[]{"--name", getEnvironment().name})) {
+    if (!m_Command.execute(new String[]{"--name", getEnvironment().name, "--quiet"})) {
       if (m_Command.hasErrors())
         result = m_Command.getErrors();
       else

@@ -15,7 +15,7 @@
 
 /*
  * Delete.java
- * Copyright (C) 2017 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2020 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.command;
@@ -65,6 +65,11 @@ public class Delete
       .dest("name")
       .help("the name of the environment to delete")
       .required(true);
+    result.addOption("--quiet")
+      .dest("quiet")
+      .argument(false)
+      .help("whether to suppress output when successfully finished")
+      .setDefault(false);
 
     return result;
   }
@@ -83,7 +88,7 @@ public class Delete
     msg = Environments.delete(ns.getString("name"));
     if (msg != null)
       addError("Failed to delete environment '" + ns.getString("name") + "':\n" + msg);
-    else
+    else if (!ns.getBoolean("quiet"))
       println("Environment successfully deleted: " + ns.getString("name"), true);
 
     return (msg == null);
