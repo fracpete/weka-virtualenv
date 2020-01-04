@@ -15,7 +15,7 @@
 
 /*
  * ListInstalledPackages.java
- * Copyright (C) 2018 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2018-2020 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.gui.command;
@@ -68,6 +68,20 @@ public class ListInstalledPackages
    */
   public boolean generatesOutput() {
     return true;
+  }
+
+  /**
+   * Returns whether the action is available.
+   *
+   * @return		true if available
+   */
+  public boolean isAvailable() {
+    com.github.fracpete.wekavirtualenv.command.PackageManagerGUI  cmd;
+
+    cmd = new com.github.fracpete.wekavirtualenv.command.PackageManagerGUI();
+    cmd.setEnv(getEnvironment());
+
+    return cmd.isAvailable();
   }
 
   /**
