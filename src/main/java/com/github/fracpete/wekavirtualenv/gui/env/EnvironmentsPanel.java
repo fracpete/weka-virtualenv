@@ -42,8 +42,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.BorderLayout;
 import java.awt.Dialog.ModalityType;
 import java.awt.FlowLayout;
@@ -66,6 +69,9 @@ public class EnvironmentsPanel
 
   /** the tabbed pane for output. */
   protected JTabbedPane m_TabbedPane;
+
+  /** the search field. */
+  protected JTextField m_TextSearch;
 
   /** the button for creating a new environment. */
   protected JButton m_ButtonCreate;
@@ -103,15 +109,41 @@ public class EnvironmentsPanel
    */
   @Override
   protected void initGUI() {
+    JPanel	panel;
+    JPanel	panelLeft;
+
     super.initGUI();
 
     setLayout(new BorderLayout());
+
+    panelLeft = new JPanel(new BorderLayout());
+    add(panelLeft, BorderLayout.CENTER);
 
     m_PanelAll = new JPanel(new BorderLayout());
     m_PanelEnvs = new JPanel(new GridLayout(0, 1, 5, 5));
     m_PanelAll.add(m_PanelEnvs, BorderLayout.NORTH);
     m_ScrollPaneEnvs = new BaseScrollPane(m_PanelAll);
-    add(m_ScrollPaneEnvs, BorderLayout.CENTER);
+    panelLeft.add(m_ScrollPaneEnvs, BorderLayout.CENTER);
+
+    m_TextSearch = new JTextField(20);
+    m_TextSearch.getDocument().addDocumentListener(new DocumentListener() {
+      @Override
+      public void insertUpdate(DocumentEvent e) {
+	search();
+      }
+      @Override
+      public void removeUpdate(DocumentEvent e) {
+	search();
+      }
+      @Override
+      public void changedUpdate(DocumentEvent e) {
+	search();
+      }
+    });
+    panel = new JPanel(new BorderLayout(5, 0));
+    panelLeft.add(panel, BorderLayout.SOUTH);
+    panel.add(new JLabel("Search"), BorderLayout.WEST);
+    panel.add(m_TextSearch, BorderLayout.CENTER);
 
     // buttons
     m_PanelButtons = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -194,6 +226,7 @@ public class EnvironmentsPanel
     JLabel		labelNone;
     JButton		buttonCreate;
     List<Environment>	envs;
+    String		search;
 
     m_PanelEnvs.removeAll();
     m_ListEnvs.clear();
@@ -211,18 +244,27 @@ public class EnvironmentsPanel
       m_PanelEnvs.add(panelNone);
     }
     else {
+      search = m_TextSearch.getText();
       for (Environment env : envs) {
 	panel = new EnvironmentPanel();
 	panel.setEnvironment(env);
 	panel.setOwner(this);
 	panel.setCompactView(isCompactView());
-	m_PanelEnvs.add(panel);
+	if (search.isEmpty() || env.matches(search))
+	  m_PanelEnvs.add(panel);
 	m_ListEnvs.add(panel);
       }
     }
 
     invalidate();
     revalidate();
+  }
+
+  /**
+   * Performs a search on the environments.
+   */
+  protected void search() {
+    reload();
   }
 
   /**

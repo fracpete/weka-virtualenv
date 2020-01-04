@@ -15,7 +15,7 @@
 
 /*
  * Environment.java
- * Copyright (C) 2017-2019 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2020 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.env;
@@ -142,6 +142,22 @@ public class Environment
    */
   public String toString() {
     return toString("", false);
+  }
+
+  /**
+   * Looks for the search string in its parameters whether they contain this
+   * sub-string (case-insensitive).
+   *
+   * @param search 	the search string
+   * @return		true if match
+   */
+  public boolean matches(String search) {
+    search = search.toLowerCase();
+    return name.toLowerCase().contains(search)
+      || java.toLowerCase().contains(search)
+      || memory.toLowerCase().contains(search)
+      || weka.toLowerCase().contains(search)
+      || envvars.toLowerCase().contains(search);
   }
 
   /**
