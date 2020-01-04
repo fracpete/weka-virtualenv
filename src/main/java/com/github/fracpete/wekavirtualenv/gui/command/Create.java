@@ -120,6 +120,10 @@ public class Create
     panel.setLabel("envvars", "Environment variables");
     panel.setHelp("envvars", "Additional environment variables, blank-separated list of key=value pairs");
 
+    panel.addPropertyType("comment", PropertyType.STRING);
+    panel.setLabel("comment", "Comment");
+    panel.setHelp("comment", "Optional comment for the environment");
+
     panel.addPropertyType("pkgmgroffline", PropertyType.BOOLEAN);
     panel.setLabel("pkgmgroffline", "PkgMgr offline");
     panel.setHelp("pkgmgroffline", "Whether to run the package manager in offline mode");
@@ -130,6 +134,7 @@ public class Create
       "memory",
       "weka",
       "envvars",
+      "comment",
       "pkgmgroffline",
     });
 
@@ -140,6 +145,7 @@ public class Create
     props.setProperty("weka", "");
     props.setProperty("pkgmgroffline", "" + false);
     props.setProperty("envvars", "");
+    props.setProperty("comment", "");
     panel.setProperties(props);
     if (GUIHelper.getParentDialog(getTabbedPane()) != null)
       dialog = new ApprovalDialog(GUIHelper.getParentDialog(getTabbedPane()), ModalityType.DOCUMENT_MODAL);
@@ -160,6 +166,7 @@ public class Create
     if (file.isDirectory())
       props.setProperty("java", "");
     options = new ArrayList<>();
+    options.add("--quiet");
     options.add("--name"); options.add(props.getProperty("name"));
     options.add("--java"); options.add(props.getProperty("java"));
     options.add("--memory"); options.add(props.getProperty("memory"));
@@ -178,6 +185,7 @@ public class Create
     }
     if (props.getProperty("pkgmgroffline").equalsIgnoreCase("true"))
       options.add("--pkg-mgr-offline");
+    options.add("--comment"); options.add(props.getProperty("comment"));
     m_Command = new com.github.fracpete.wekavirtualenv.command.Create();
     if (!m_Command.execute(options.toArray(new String[options.size()]))) {
       if (m_Command.hasErrors())

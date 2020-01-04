@@ -15,7 +15,7 @@
 
 /*
  * Clone.java
- * Copyright (C) 2017-2018 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2020 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.command;
@@ -95,6 +95,10 @@ public class Clone
       .dest("envvar")
       .help("optional environment variables to set (key=value); override existing vars")
       .multiple(true);
+    result.addOption("--comment")
+      .dest("comment")
+      .help("optional comment for the environment")
+      .setDefault("");
     result.addOption("--pkg-mgr-offline")
       .dest("pkgmgroffline")
       .argument(false)
@@ -108,6 +112,11 @@ public class Clone
       .dest("noenvvars")
       .help("if set, removes any existing environment variables")
       .argument(false);
+    result.addOption("--quiet")
+      .dest("quiet")
+      .argument(false)
+      .help("whether to suppress output when successfully finished")
+      .setDefault(false);
 
     return result;
   }
@@ -163,6 +172,7 @@ public class Clone
       newEnv.envvars = OptionUtils.joinOptions(ns.getList("envvar").toArray(new String[0]));
     if (ns.getBoolean("noenvvars"))
       newEnv.envvars = null;
+    newEnv.comment = ns.getString("comment");
 
     // create empty environment
     if (msg == null)
@@ -194,7 +204,7 @@ public class Clone
 
     if (msg != null)
       addError("Failed to create environment:\n" + msg);
-    else
+    else if (!ns.getBoolean("quiet"))
       println("Created environment:\n\n" + newEnv, true);
 
     return (msg == null);

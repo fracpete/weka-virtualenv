@@ -15,7 +15,7 @@
 
 /*
  * Clone.java
- * Copyright (C) 2017-2019 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2020 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.gui.command;
@@ -120,6 +120,10 @@ public class Clone
     panel.setLabel("envvars", "Environment variables");
     panel.setHelp("envvars", "Additional environment variables, blank-separated list of key=value pairs");
 
+    panel.addPropertyType("comment", PropertyType.STRING);
+    panel.setLabel("comment", "Comment");
+    panel.setHelp("comment", "Optional comment for the environment");
+
     panel.addPropertyType("pkgmgroffline", PropertyType.BOOLEAN);
     panel.setLabel("pkgmgroffline", "PkgMgr offline");
     panel.setHelp("pkgmgroffline", "Whether to run the package manager in offline mode");
@@ -134,6 +138,7 @@ public class Clone
       "memory",
       "weka",
       "envvars",
+      "comment",
       "pkgmgroffline",
       "setuponly",
     });
@@ -144,6 +149,7 @@ public class Clone
     props.setProperty("memory", getEnvironment().memory);
     props.setProperty("weka", getEnvironment().weka);
     props.setProperty("envvars", getEnvironment().envvars);
+    props.setProperty("comment", getEnvironment().comment);
     props.setProperty("pkgmgroffline", "" + getEnvironment().pkgMgrOffline);
     props.setProperty("setuponly", "" + false);
     panel.setProperties(props);
@@ -167,6 +173,7 @@ public class Clone
       props.setProperty("java", "");
 
     options = new ArrayList<>();
+    options.add("--quiet");
     options.add("--old"); options.add(getEnvironment().name);
     options.add("--new"); options.add(props.getProperty("newname"));
     options.add("--java"); options.add(props.getProperty("java"));
@@ -189,6 +196,7 @@ public class Clone
     }
     if (props.getProperty("pkgmgroffline").equalsIgnoreCase("true"))
       options.add("--pkg-mgr-offline");
+    options.add("--comment"); options.add(props.getProperty("comment"));
     if (props.getProperty("setuponly").equalsIgnoreCase("true"))
       options.add("--setup-only");
     m_Command = new com.github.fracpete.wekavirtualenv.command.Clone();

@@ -15,7 +15,7 @@
 
 /*
  * Update.java
- * Copyright (C) 2017-2019 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2020 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.gui.command;
@@ -116,6 +116,10 @@ public class Update
     panel.setLabel("envvars", "Environment variables");
     panel.setHelp("envvars", "Additional environment variables, blank-separated list of key=value pairs");
 
+    panel.addPropertyType("comment", PropertyType.STRING);
+    panel.setLabel("comment", "Comment");
+    panel.setHelp("comment", "Optional comment for the environment");
+
     panel.addPropertyType("pkgmgroffline", PropertyType.BOOLEAN);
     panel.setLabel("pkgmgroffline", "PkgMgr offline");
     panel.setHelp("pkgmgroffline", "Whether to run the package manager in offline mode");
@@ -125,6 +129,7 @@ public class Update
       "memory",
       "weka",
       "envvars",
+      "comment",
       "pkgmgroffline",
     });
 
@@ -133,6 +138,7 @@ public class Update
     props.setProperty("memory", getEnvironment().memory);
     props.setProperty("weka", getEnvironment().weka);
     props.setProperty("envvars", getEnvironment().envvars);
+    props.setProperty("comment", getEnvironment().comment);
     props.setProperty("pkgmgroffline", "" + getEnvironment().pkgMgrOffline);
     panel.setProperties(props);
     if (GUIHelper.getParentDialog(getTabbedPane()) != null)
@@ -155,6 +161,7 @@ public class Update
       props.setProperty("java", "");
 
     options = new ArrayList<>();
+    options.add("--quiet");
     options.add("--java"); options.add(props.getProperty("java"));
     options.add("--memory"); options.add(props.getProperty("memory"));
     options.add("--weka"); options.add(props.getProperty("weka"));
@@ -175,6 +182,7 @@ public class Update
     }
     if (props.getProperty("pkgmgroffline").equalsIgnoreCase("true"))
       options.add("--pkg-mgr-offline");
+    options.add("--comment"); options.add(props.getProperty("comment"));
     m_Command = new com.github.fracpete.wekavirtualenv.command.Update();
     m_Command.setEnv(getEnvironment());
     if (!m_Command.execute(options.toArray(new String[options.size()]))) {

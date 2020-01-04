@@ -60,6 +60,9 @@ public class Environment
   /** the environment variables to set. */
   public final static String KEY_ENVVARS = "envvars";
 
+  /** the comment. */
+  public final static String KEY_COMMENT = "comment";
+
   /** whether to use the package manager in offline mode. */
   public final static String KEY_PKGMGR_OFFLINE = "pkgmgr_offline";
 
@@ -78,6 +81,9 @@ public class Environment
 
   /** the weka jar (full path). */
   public String weka;
+
+  /** the comment. */
+  public String comment;
 
   /** the additional environment variables (blank-separated key=value pairs). */
   public String envvars;
@@ -99,6 +105,7 @@ public class Environment
     result.memory        = memory;
     result.weka          = weka;
     result.envvars       = envvars;
+    result.comment       = comment;
     result.pkgMgrOffline = pkgMgrOffline;
 
     return result;
@@ -157,7 +164,8 @@ public class Environment
       || java.toLowerCase().contains(search)
       || memory.toLowerCase().contains(search)
       || weka.toLowerCase().contains(search)
-      || envvars.toLowerCase().contains(search);
+      || envvars.toLowerCase().contains(search)
+      || comment.toLowerCase().contains(search);
   }
 
   /**
@@ -176,6 +184,7 @@ public class Environment
     result.append(prefix).append("Memory: ").append(memory.isEmpty() ? DEFAULT : memory).append("\n");
     result.append(prefix).append("Weka: ").append(weka).append("\n");
     result.append(prefix).append("Env. vars: ").append(envvars == null ? NONE : envvars).append("\n");
+    result.append(prefix).append("Comment: ").append(comment == null ? NONE : comment).append("\n");
     result.append(prefix).append("PkgMgr offline: ").append(pkgMgrOffline).append("\n");
     if (verbose) {
       version = version();
@@ -249,6 +258,7 @@ public class Environment
         result.memory        = props.getProperty(KEY_MEMORY, "");
         result.weka          = props.getProperty(KEY_WEKA);
         result.envvars       = props.getProperty(KEY_ENVVARS, "");
+        result.comment       = props.getProperty(KEY_COMMENT, "");
         result.pkgMgrOffline = props.getProperty(KEY_PKGMGR_OFFLINE, "false").equalsIgnoreCase("true");
       }
     }
@@ -284,6 +294,7 @@ public class Environment
     props.setProperty(KEY_MEMORY, (env.memory == null ? "" : env.memory));
     props.setProperty(KEY_WEKA, env.weka);
     props.setProperty(KEY_ENVVARS, (env.envvars == null ? "" : env.envvars));
+    props.setProperty(KEY_COMMENT, (env.comment == null ? "" : env.comment));
     props.setProperty(KEY_PKGMGR_OFFLINE, "" + env.pkgMgrOffline);
 
     fwriter = null;

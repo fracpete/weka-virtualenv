@@ -15,7 +15,7 @@
 
 /*
  * Update.java
- * Copyright (C) 2017-2019 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2020 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.command;
@@ -97,10 +97,19 @@ public class Update
       .dest("noenvvars")
       .help("if set, removes any existing environment variables")
       .argument(false);
+    result.addOption("--comment")
+      .dest("comment")
+      .help("optional comment string for the environment")
+      .setDefault("");
     result.addOption("--pkg-mgr-offline")
       .dest("pkgmgroffline")
       .argument(false)
       .help("whether to run the package manager in offline mode")
+      .setDefault(false);
+    result.addOption("--quiet")
+      .dest("quiet")
+      .argument(false)
+      .help("whether to suppress output when successfully finished")
       .setDefault(false);
 
     return result;
@@ -144,6 +153,7 @@ public class Update
       else
 	newEnv.weka = ns.getString("weka");
     }
+    newEnv.comment = ns.getString("comment");
     if (ns.getList("envvar").size() > 0)
       newEnv.envvars = OptionUtils.joinOptions(ns.getList("envvar").toArray(new String[0]));
     if (ns.getBoolean("noenvvars"))
@@ -156,7 +166,7 @@ public class Update
 
     if (msg != null)
       addError(msg);
-    else
+    else if (!ns.getBoolean("quiet"))
       println("Updated environment:\n" + newEnv, true);
 
     return (msg == null);
