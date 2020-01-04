@@ -37,10 +37,8 @@ import nz.ac.waikato.cms.gui.core.GUIHelper;
 import nz.ac.waikato.cms.gui.core.PropertiesParameterPanel;
 import nz.ac.waikato.cms.gui.core.PropertiesParameterPanel.PropertyType;
 
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -49,6 +47,7 @@ import javax.swing.SwingWorker;
 import java.awt.BorderLayout;
 import java.awt.Dialog.ModalityType;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,23 +73,17 @@ public class EnvironmentsPanel
   /** the button for reloading the environments. */
   protected JButton m_ButtonReload;
 
-  /** the panel with the environments. */
+  /** the panel . */
+  protected JPanel m_PanelAll;
+
+  /** the environments. */
   protected JPanel m_PanelEnvs;
 
-  /** the model with the environments. */
-  protected DefaultListModel<EnvironmentPanel> m_ModelEnvs;
-
-  /** the list with the environments. */
-  protected JList<EnvironmentPanel> m_ListEnvs;
-
   /** the list environments. */
-  protected List<EnvironmentPanel> m_ListOfEnvs;
+  protected List<EnvironmentPanel> m_ListEnvs;
 
   /** the scroll pane. */
   protected BaseScrollPane m_ScrollPaneEnvs;
-
-  /** the panel in case no environments. */
-  protected JPanel m_PanelNoEnvs;
 
   /** the panel for the buttons. */
   protected JPanel m_PanelButtons;
@@ -102,8 +95,7 @@ public class EnvironmentsPanel
   protected void initialize() {
     super.initialize();
 
-    m_ListOfEnvs = new ArrayList<>();
-    m_ModelEnvs  = new DefaultListModel<>();
+    m_ListEnvs = new ArrayList<>();
   }
 
   /**
@@ -115,15 +107,11 @@ public class EnvironmentsPanel
 
     setLayout(new BorderLayout());
 
-    m_PanelEnvs = new JPanel(new BorderLayout(0, 0));
-    add(m_PanelEnvs, BorderLayout.CENTER);
-
-    m_ListEnvs = new JList<>(m_ModelEnvs);
-    m_ListEnvs.setCellRenderer(new EnvironmentPanelCellRenderer());
-    m_ScrollPaneEnvs = new BaseScrollPane(m_ListEnvs);
-    m_PanelEnvs.add(m_ScrollPaneEnvs, BorderLayout.CENTER);
-
-    m_PanelNoEnvs = createNoEnvsPlaceholder();
+    m_PanelAll = new JPanel(new BorderLayout());
+    m_PanelEnvs = new JPanel(new GridLayout(0, 1, 5, 5));
+    m_PanelAll.add(m_PanelEnvs, BorderLayout.NORTH);
+    m_ScrollPaneEnvs = new BaseScrollPane(m_PanelAll);
+    add(m_ScrollPaneEnvs, BorderLayout.CENTER);
 
     // buttons
     m_PanelButtons = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -135,30 +123,6 @@ public class EnvironmentsPanel
     m_ButtonReload = new JButton(IconHelper.getIcon("Reload"));
     m_ButtonReload.addActionListener((ActionEvent e) -> reload());
     m_PanelButtons.add(m_ButtonReload);
-  }
-
-  /**
-   * Creates the placeholder panel for the case that there are no environments
-   * present.
-   *
-   * @return		the panel
-   */
-  protected JPanel createNoEnvsPlaceholder() {
-    BasePanel 	result;
-    BasePanel	panelInfo;
-    JLabel	labelNone;
-    JButton	buttonCreate;
-
-    result       = new BasePanel(new BorderLayout());
-    panelInfo    = new BasePanel(new FlowLayout(FlowLayout.CENTER));
-    labelNone    = new JLabel("No environment available");
-    buttonCreate = new JButton("Create");
-    buttonCreate.addActionListener((ActionEvent e) -> create());
-    panelInfo.add(labelNone);
-    panelInfo.add(buttonCreate);
-    result.add(panelInfo, BorderLayout.CENTER);
-
-    return result;
   }
 
   /**
@@ -225,30 +189,35 @@ public class EnvironmentsPanel
    */
   public void reload() {
     EnvironmentPanel	panel;
+    BasePanel 		panelNone;
+    BasePanel		panelInfo;
+    JLabel		labelNone;
+    JButton		buttonCreate;
     List<Environment>	envs;
 
-    m_ModelEnvs.clear();
-    m_ListOfEnvs.clear();
+    m_PanelEnvs.removeAll();
+    m_ListEnvs.clear();
 
     envs = Environments.list();
     if (envs.size() == 0) {
-      m_PanelNoEnvs.setVisible(true);
-      m_ScrollPaneEnvs.setVisible(false);
-      m_PanelEnvs.removeAll();
-      m_PanelEnvs.add(m_PanelNoEnvs, BorderLayout.CENTER);
+      panelNone = new BasePanel(new BorderLayout());
+      panelInfo = new BasePanel(new FlowLayout(FlowLayout.CENTER));
+      labelNone = new JLabel("No environment available");
+      buttonCreate = new JButton("Create");
+      buttonCreate.addActionListener((ActionEvent e) -> create());
+      panelInfo.add(labelNone);
+      panelInfo.add(buttonCreate);
+      panelNone.add(panelInfo, BorderLayout.CENTER);
+      m_PanelEnvs.add(panelNone);
     }
     else {
-      m_PanelNoEnvs.setVisible(false);
-      m_ScrollPaneEnvs.setVisible(true);
-      m_PanelEnvs.removeAll();
-      m_PanelEnvs.add(m_ScrollPaneEnvs, BorderLayout.CENTER);
       for (Environment env : envs) {
 	panel = new EnvironmentPanel();
 	panel.setEnvironment(env);
 	panel.setOwner(this);
 	panel.setCompactView(isCompactView());
-	m_ModelEnvs.addElement(panel);
-	m_ListOfEnvs.add(panel);
+	m_PanelEnvs.add(panel);
+	m_ListEnvs.add(panel);
       }
     }
 
@@ -295,10 +264,10 @@ public class EnvironmentsPanel
     ApprovalDialog		dialog;
     PropertiesParameterPanel	panel;
     Properties			props;
-    
+
     panel = new PropertiesParameterPanel();
     props = new Properties();
-    
+
     // http
     panel.addPropertyType(ProxyType.HTTP + ".host", PropertyType.STRING);
     panel.setLabel(ProxyType.HTTP + ".host", "Http - host");
@@ -477,9 +446,8 @@ public class EnvironmentsPanel
    */
   public void setCompactView(boolean value) {
     m_CompactView = value;
-    for (EnvironmentPanel env: m_ListOfEnvs)
+    for (EnvironmentPanel env: m_ListEnvs)
       env.setCompactView(m_CompactView);
-    m_ListEnvs.setCellRenderer(new EnvironmentPanelCellRenderer());
   }
 
   /**
