@@ -1,5 +1,8 @@
 The following releases are available:
 
+* 0.0.27: [zip](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.27/weka-virtualenv-0.0.27-bin.zip), 
+  [deb](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.27/weka-virtualenv_0.0.27-1_all.deb), 
+  [rpm](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.27/weka-virtualenv-0.0.27-1.noarch.rpm)
 * 0.0.26: [zip](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.26/weka-virtualenv-0.0.26-bin.zip), 
   [deb](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.26/weka-virtualenv_0.0.26-1_all.deb), 
   [rpm](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.26/weka-virtualenv-0.0.26-1.noarch.rpm)
@@ -39,6 +42,14 @@ Notes:
 
 
 # Changes
+
+* 0.0.27
+
+  * updated list of available downloads to include Weka 3.8.4 and 3.9.4
+  * added *comment* field in the environments
+  * added search box below the environments (GUI only), that allows searching in all fields for the entered substring (case-insensitive)
+  * the `create`, `update` and `delete` commands now have a `--quiet` flag that suppresses output when commands succeed
+  * reloading the environments in the GUI no longer leads to flickering
 
 * 0.0.26
 
