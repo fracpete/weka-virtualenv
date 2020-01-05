@@ -120,7 +120,7 @@ public class EnvironmentsPanel
     add(panelLeft, BorderLayout.CENTER);
 
     m_PanelAll = new JPanel(new BorderLayout());
-    m_PanelEnvs = new JPanel(new GridLayout(0, 1, 5, 5));
+    m_PanelEnvs = new JPanel(new BorderLayout());
     m_PanelAll.add(m_PanelEnvs, BorderLayout.NORTH);
     m_ScrollPaneEnvs = new BaseScrollPane(m_PanelAll);
     panelLeft.add(m_ScrollPaneEnvs, BorderLayout.CENTER);
@@ -220,44 +220,50 @@ public class EnvironmentsPanel
    * Reloads all environments.
    */
   public void reload() {
-    EnvironmentPanel	panel;
-    BasePanel 		panelNone;
-    BasePanel		panelInfo;
-    JLabel		labelNone;
-    JButton		buttonCreate;
-    List<Environment>	envs;
-    String		search;
+    SwingWorker		worker;
 
-    m_PanelEnvs.removeAll();
-    m_ListEnvs.clear();
-
-    envs = Environments.list();
-    if (envs.size() == 0) {
-      panelNone = new BasePanel(new BorderLayout());
-      panelInfo = new BasePanel(new FlowLayout(FlowLayout.CENTER));
-      labelNone = new JLabel("No environment available");
-      buttonCreate = new JButton("Create");
-      buttonCreate.addActionListener((ActionEvent e) -> create());
-      panelInfo.add(labelNone);
-      panelInfo.add(buttonCreate);
-      panelNone.add(panelInfo, BorderLayout.CENTER);
-      m_PanelEnvs.add(panelNone);
-    }
-    else {
-      search = m_TextSearch.getText();
-      for (Environment env : envs) {
-	panel = new EnvironmentPanel();
-	panel.setEnvironment(env);
-	panel.setOwner(this);
-	panel.setCompactView(isCompactView());
-	if (search.isEmpty() || env.matches(search))
-	  m_PanelEnvs.add(panel);
-	m_ListEnvs.add(panel);
+    worker = new SwingWorker() {
+      @Override
+      protected Object doInBackground() throws Exception {
+	m_PanelEnvs.removeAll();
+	m_ListEnvs.clear();
+	List<Environment> envs = Environments.list();
+	if (envs.size() == 0) {
+	  BasePanel panelNone = new BasePanel(new BorderLayout());
+	  BasePanel panelInfo = new BasePanel(new FlowLayout(FlowLayout.CENTER));
+	  JLabel labelNone = new JLabel("No environment available");
+	  JButton buttonCreate = new JButton("Create");
+	  buttonCreate.addActionListener((ActionEvent e) -> create());
+	  panelInfo.add(labelNone);
+	  panelInfo.add(buttonCreate);
+	  panelNone.add(panelInfo, BorderLayout.CENTER);
+	  m_PanelEnvs.add(panelNone);
+	}
+	else {
+	  JPanel panelEnvs = new JPanel(new GridLayout(0, 1, 5, 5));
+	  String search = m_TextSearch.getText();
+	  for (Environment env : envs) {
+	    EnvironmentPanel panel = new EnvironmentPanel();
+	    panel.setEnvironment(env);
+	    panel.setOwner(EnvironmentsPanel.this);
+	    panel.setCompactView(isCompactView());
+	    if (search.isEmpty() || env.matches(search))
+	      panelEnvs.add(panel);
+	    m_ListEnvs.add(panel);
+	  }
+	  m_PanelEnvs.add(panelEnvs);
+	}
+	return null;
       }
-    }
 
-    invalidate();
-    revalidate();
+      @Override
+      protected void done() {
+	super.done();
+	invalidate();
+	revalidate();
+      }
+    };
+    worker.execute();
   }
 
   /**
