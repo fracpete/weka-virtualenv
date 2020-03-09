@@ -1,5 +1,8 @@
 The following releases are available:
 
+* 0.0.28: [zip](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.28/weka-virtualenv-0.0.28-bin.zip), 
+  [deb](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.28/weka-virtualenv_0.0.28-1_all.deb), 
+  [rpm](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.28/weka-virtualenv-0.0.28-1.noarch.rpm)
 * 0.0.27: [zip](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.27/weka-virtualenv-0.0.27-bin.zip), 
   [deb](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.27/weka-virtualenv_0.0.27-1_all.deb), 
   [rpm](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.27/weka-virtualenv-0.0.27-1.noarch.rpm)
@@ -42,6 +45,11 @@ Notes:
 
 
 # Changes
+
+* 0.0.28
+
+  * added support for specifying JVM parameters
+  * environment variables can be cleared now
 
 * 0.0.27
 
