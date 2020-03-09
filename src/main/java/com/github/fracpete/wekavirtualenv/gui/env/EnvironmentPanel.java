@@ -70,6 +70,9 @@ public class EnvironmentPanel
   /** the memory to use. */
   protected JLabel m_NormalLabelMemory;
 
+  /** the JVM parameters to use. */
+  protected JLabel m_NormalLabelJVMParams;
+
   /** the weka jar. */
   protected JLabel m_NormalLabelWeka;
 
@@ -169,6 +172,9 @@ public class EnvironmentPanel
 
     m_NormalLabelMemory = new JLabel();
     panel.add(createEntry("Memory", m_NormalLabelMemory));
+
+    m_NormalLabelJVMParams = new JLabel();
+    panel.add(createEntry("JVM params", m_NormalLabelJVMParams));
 
     m_NormalLabelWeka = new JLabel();
     panel.add(createEntry("Weka", m_NormalLabelWeka));
@@ -317,6 +323,7 @@ public class EnvironmentPanel
       m_NormalLabelName.setText("");
       m_NormalLabelJava.setText(Environment.DEFAULT);
       m_NormalLabelMemory.setText(Environment.DEFAULT);
+      m_NormalLabelJVMParams.setText(Environment.DEFAULT);
       m_NormalLabelWeka.setText("");
       m_NormalLabelEnvVars.setText("");
       m_NormalLabelComment.setText("");
@@ -327,17 +334,19 @@ public class EnvironmentPanel
     }
     else {
       m_NormalLabelName.setText(m_Environment.name);
-      m_NormalLabelJava.setText(m_Environment.java.isEmpty() ? Environment.DEFAULT : m_Environment.java);
+      m_NormalLabelJava.setText((m_Environment.java.equals(".") || m_Environment.java.isEmpty()) ? Environment.DEFAULT : m_Environment.java);
       m_NormalLabelMemory.setText(m_Environment.memory.isEmpty() ? Environment.DEFAULT : m_Environment.memory);
+      m_NormalLabelJVMParams.setText((m_Environment.jvmparams == null | m_Environment.jvmparams.isEmpty()) ? Environment.NONE : m_Environment.jvmparams);
       m_NormalLabelWeka.setText(m_Environment.weka);
-      m_NormalLabelEnvVars.setText(m_Environment.envvars.isEmpty() ? Environment.NONE : m_Environment.envvars);
-      m_NormalLabelComment.setText(m_Environment.comment.isEmpty() ? Environment.NONE : m_Environment.comment);
+      m_NormalLabelEnvVars.setText((m_Environment.envvars == null || m_Environment.envvars.isEmpty()) ? Environment.NONE : m_Environment.envvars);
+      m_NormalLabelComment.setText((m_Environment.comment == null || m_Environment.comment.isEmpty()) ? Environment.NONE : m_Environment.comment);
       m_NormalLabelPkgMgrOffline.setText(m_Environment.pkgMgrOffline ? "offline" : "online");
       m_CompactLabelName.setText(m_Environment.name);
       m_CompactLabelName.setToolTipText(
         "<html>"
 	  + "Java: " + toHTML(m_NormalLabelJava.getText()) + "<br>"
 	  + "Memory: " + toHTML(m_NormalLabelMemory.getText()) + "<br>"
+	  + "JVM params: " + toHTML(m_NormalLabelJVMParams.getText()) + "<br>"
 	  + "Weka: " + toHTML(m_NormalLabelWeka.getText()) + "<br>"
 	  + "EnvVars: " + toHTML(m_NormalLabelEnvVars.getText()) + "<br>"
 	  + "Comment: " + toHTML(m_NormalLabelComment.getText()) + "<br>"

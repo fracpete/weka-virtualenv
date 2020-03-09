@@ -97,6 +97,7 @@ public class Clone
     List<String> 		options;
     File			file;
     String[]			envvars;
+    String[]			jvmparams;
 
     panel = new PropertiesParameterPanel();
 
@@ -111,6 +112,10 @@ public class Clone
     panel.addPropertyType("memory", PropertyType.STRING);
     panel.setLabel("memory", "Heap size");
     panel.setHelp("memory", "System default is used when empty");
+
+    panel.addPropertyType("jvmparams", PropertyType.STRING);
+    panel.setLabel("jvmparams", "JVM parameters");
+    panel.setHelp("jvmparams", "Additional parameters for the JVM");
 
     panel.addPropertyType("weka", PropertyType.FILE);
     panel.setLabel("weka", "Weka jar");
@@ -136,6 +141,7 @@ public class Clone
       "newname",
       "java",
       "memory",
+      "jvmparams",
       "weka",
       "envvars",
       "comment",
@@ -147,6 +153,7 @@ public class Clone
     props.setProperty("newname", getEnvironment().name + ".clone");
     props.setProperty("java", getEnvironment().java);
     props.setProperty("memory", getEnvironment().memory);
+    props.setProperty("jvmparams", getEnvironment().jvmparams);
     props.setProperty("weka", getEnvironment().weka);
     props.setProperty("envvars", getEnvironment().envvars);
     props.setProperty("comment", getEnvironment().comment);
@@ -179,6 +186,21 @@ public class Clone
     options.add("--java"); options.add(props.getProperty("java"));
     options.add("--memory"); options.add(props.getProperty("memory"));
     options.add("--weka"); options.add(props.getProperty("weka"));
+    if (!props.getProperty("jvmparams", "").trim().isEmpty()) {
+      try {
+        jvmparams = OptionUtils.splitOptions(props.getProperty("jvmparams"));
+        for (String jvmparam : jvmparams) {
+	  options.add("--jvmparam");
+	  options.add(jvmparam);
+	}
+      }
+      catch (Exception e) {
+        return "Failed to split blank-separated list of environment variables (key=value) pairs: " + e;
+      }
+    }
+    else {
+      options.add("--no-jvmparams");
+    }
     if (!props.getProperty("envvars", "").trim().isEmpty()) {
       try {
         envvars = OptionUtils.splitOptions(props.getProperty("envvars"));

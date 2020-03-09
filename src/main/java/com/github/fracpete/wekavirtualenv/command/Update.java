@@ -85,6 +85,14 @@ public class Update
       .help("the heap size to use for launching Weka (eg '1024m' or '2g')\n"
         + "Use " + Environment.DEFAULT + " to reset to default")
       .setDefault("");
+    result.addOption("--jvmparam")
+      .dest("jvmparams")
+      .multiple(true)
+      .help("the JVM parameters to use");
+    result.addOption("--no-jvmparams")
+      .dest("nojvmparams")
+      .help("if set, removes any existing JVM parameters")
+      .argument(false);
     result.addOption("--weka")
       .dest("weka")
       .help("the full path to the weka.jar to use")
@@ -146,6 +154,10 @@ public class Update
       newEnv.memory = "";
     else
       newEnv.memory = ns.getString("memory");
+    if (!ns.getList("jvmparams").isEmpty())
+      newEnv.jvmparams = OptionUtils.joinOptions(ns.getList("jvmparams").toArray(new String[0]));
+    if (ns.getBoolean("nojvmparams"))
+      newEnv.jvmparams = null;
     if (!ns.getString("weka").isEmpty()) {
       file = new File(ns.getString("weka"));
       if (!file.exists())
@@ -154,7 +166,7 @@ public class Update
 	newEnv.weka = ns.getString("weka");
     }
     newEnv.comment = ns.getString("comment");
-    if (ns.getList("envvar").size() > 0)
+    if (!ns.getList("envvar").isEmpty())
       newEnv.envvars = OptionUtils.joinOptions(ns.getList("envvar").toArray(new String[0]));
     if (ns.getBoolean("noenvvars"))
       newEnv.envvars = null;

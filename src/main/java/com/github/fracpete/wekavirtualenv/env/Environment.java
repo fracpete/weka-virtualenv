@@ -54,6 +54,9 @@ public class Environment
   /** the heap size. */
   public final static String KEY_MEMORY = "memory";
 
+  /** the jvm parameters. */
+  public final static String KEY_JVMPARAMS = "jvmparams";
+
   /** the weka jar to use. */
   public final static String KEY_WEKA = "weka";
 
@@ -79,6 +82,9 @@ public class Environment
   /** the heap size ("" if default). */
   public String memory;
 
+  /** the jvm parameters ("" if default). */
+  public String jvmparams;
+
   /** the weka jar (full path). */
   public String weka;
 
@@ -103,6 +109,7 @@ public class Environment
     result.name          = name;
     result.java          = java;
     result.memory        = memory;
+    result.jvmparams     = jvmparams;
     result.weka          = weka;
     result.envvars       = envvars;
     result.comment       = comment;
@@ -163,9 +170,10 @@ public class Environment
     return name.toLowerCase().contains(search)
       || java.toLowerCase().contains(search)
       || memory.toLowerCase().contains(search)
+      || ((jvmparams != null) && jvmparams.toLowerCase().contains(search))
       || weka.toLowerCase().contains(search)
-      || envvars.toLowerCase().contains(search)
-      || comment.toLowerCase().contains(search);
+      || ((envvars != null) && envvars.toLowerCase().contains(search))
+      || ((comment != null) && comment.toLowerCase().contains(search));
   }
 
   /**
@@ -182,9 +190,10 @@ public class Environment
     result.append(prefix).append("Name: ").append(name).append("\n");
     result.append(prefix).append("Java: ").append(java.isEmpty() ? DEFAULT : java).append("\n");
     result.append(prefix).append("Memory: ").append(memory.isEmpty() ? DEFAULT : memory).append("\n");
+    result.append(prefix).append("JVM params: ").append((jvmparams == null) || jvmparams.isEmpty() ? NONE : jvmparams).append("\n");
     result.append(prefix).append("Weka: ").append(weka).append("\n");
-    result.append(prefix).append("Env. vars: ").append(envvars == null ? NONE : envvars).append("\n");
-    result.append(prefix).append("Comment: ").append(comment == null ? NONE : comment).append("\n");
+    result.append(prefix).append("Env. vars: ").append((envvars == null) || envvars.isEmpty() ? NONE : envvars).append("\n");
+    result.append(prefix).append("Comment: ").append((comment == null) || comment.isEmpty() ? NONE : comment).append("\n");
     result.append(prefix).append("PkgMgr offline: ").append(pkgMgrOffline).append("\n");
     if (verbose) {
       version = version();
@@ -215,11 +224,15 @@ public class Environment
       try {
 	vars = OptionUtils.splitOptions(envvars);
 	for (String var : vars) {
-	  parts = var.split("=");
-	  if (parts.length == 2)
+	  if (var.contains("=")) {
+	    parts = new String[2];
+	    parts[0] = var.substring(0, var.indexOf("="));
+	    parts[1] = var.substring(var.indexOf("=") + 1);
 	    result.put(parts[0], parts[1]);
-	  else
-	    cmd.println("Wrong format for environment variable (key=value)? " + var, true);
+          }
+	  else {
+            cmd.println("Wrong format for environment variable (key=value)? " + var, true);
+          }
 	}
       }
       catch (Exception e) {
@@ -256,6 +269,7 @@ public class Environment
         result.name          = props.getProperty(KEY_NAME);
         result.java          = props.getProperty(KEY_JAVA, "");
         result.memory        = props.getProperty(KEY_MEMORY, "");
+        result.jvmparams     = props.getProperty(KEY_JVMPARAMS, "");
         result.weka          = props.getProperty(KEY_WEKA);
         result.envvars       = props.getProperty(KEY_ENVVARS, "");
         result.comment       = props.getProperty(KEY_COMMENT, "");
@@ -292,6 +306,7 @@ public class Environment
     props.setProperty(KEY_NAME, env.name);
     props.setProperty(KEY_JAVA, (env.java == null ? "" : env.java));
     props.setProperty(KEY_MEMORY, (env.memory == null ? "" : env.memory));
+    props.setProperty(KEY_JVMPARAMS, (env.jvmparams == null ? "" : env.jvmparams));
     props.setProperty(KEY_WEKA, env.weka);
     props.setProperty(KEY_ENVVARS, (env.envvars == null ? "" : env.envvars));
     props.setProperty(KEY_COMMENT, (env.comment == null ? "" : env.comment));

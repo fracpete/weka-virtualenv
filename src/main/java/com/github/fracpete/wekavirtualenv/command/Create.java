@@ -83,6 +83,10 @@ public class Create
       .dest("memory")
       .help("the heap size to use for launching Weka (eg '1024m' or '2g')")
       .setDefault("");
+    result.addOption("--jvmparam")
+      .dest("jvmparams")
+      .multiple(true)
+      .help("the additional JVM parameters to use");
     result.addOption("--weka")
       .dest("weka")
       .help("the full path to the weka.jar to use")
@@ -137,7 +141,9 @@ public class Create
     env.weka          = ns.getString("weka");
     env.comment       = ns.getString("comment");
     env.pkgMgrOffline = ns.getBoolean("pkgmgroffline");
-    if (ns.getList("envvar").size() > 0)
+    if (!ns.getList("jvmparams").isEmpty())
+      env.jvmparams = OptionUtils.joinOptions(ns.getList("jvmparams").toArray(new String[0]));
+    if (!ns.getList("envvar").isEmpty())
       env.envvars = OptionUtils.joinOptions(ns.getList("envvar").toArray(new String[0]));
 
     // check weka.jar

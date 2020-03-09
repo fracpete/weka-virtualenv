@@ -28,6 +28,7 @@ import com.github.fracpete.wekavirtualenv.command.filter.FilterChain;
 import com.github.fracpete.wekavirtualenv.core.Destroyable;
 import com.github.fracpete.wekavirtualenv.env.Environments;
 import nz.ac.waikato.cms.core.Utils;
+import nz.ac.waikato.cms.jenericcmdline.core.OptionUtils;
 import org.apache.commons.lang3.SystemUtils;
 
 import java.io.File;
@@ -140,6 +141,14 @@ public abstract class AbstractLaunchCommand
     cmd.add(getJava());
     if (!m_Env.memory.isEmpty())
       cmd.add("-Xmx" + m_Env.memory);
+    if (!m_Env.jvmparams.isEmpty()) {
+      try {
+        cmd.addAll(Arrays.asList(OptionUtils.splitOptions(m_Env.jvmparams)));
+      }
+      catch (Exception e) {
+        addError("Failed to split JVM options '" + m_Env.jvmparams + "' into separate options!", e);
+      }
+    }
     cmd.add("-classpath");
     cmd.add(cp);
     if (m_Env.pkgMgrOffline)
