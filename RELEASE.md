@@ -11,6 +11,7 @@
 
 ## Github
 
+* switch to Java 8
 * downgrade version in `pom.xml` to just released version
 * run the following command to generate Debian package
 
