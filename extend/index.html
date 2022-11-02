@@ -7,24 +7,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   
+  
   <link rel="shortcut icon" href="../img/favicon.ico">
   <title>Extend - weka-virtualenv</title>
-  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
-  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
-  <link rel="stylesheet" href="../css/highlight.css">
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
   
   <script>
     // Current page data
     var mkdocs_page_name = "Extend";
     var mkdocs_page_input_path = "extend.md";
-    var mkdocs_page_url = "/extend/";
+    var mkdocs_page_url = null;
   </script>
   
-  <script src="../js/jquery-2.1.1.min.js"></script>
-  <script src="../js/modernizr-2.8.3.min.js"></script>
-  <script type="text/javascript" src="../js/highlight.pack.js"></script> 
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
   
 </head>
 
@@ -34,85 +36,49 @@
 
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
         <a href=".." class="icon icon-home"> weka-virtualenv</a>
         <div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
   </form>
 </div>
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-	<ul class="current">
-	  
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="..">Home</a>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="../commands/">Commands</a>
-	    </li>
-          
-            <li class="toctree-l1 current">
-		
-    <a class="current" href="./">Extend</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l2"><a href="#automatic-class-discovery">Automatic class discovery</a></li>
-    
-
-    <li class="toctree-l2"><a href="#command-line">Command-line</a></li>
-    
-        <ul>
-        
-            <li><a class="toctree-l3" href="#dataset-filenames">Dataset filenames</a></li>
-        
-            <li><a class="toctree-l3" href="#handling-arguments">Handling arguments</a></li>
-        
-            <li><a class="toctree-l3" href="#executing-class-with-main-method">Executing class with main method</a></li>
-        
-        </ul>
-    
-
-    <li class="toctree-l2"><a href="#script-command">Script command</a></li>
-    
-
-    <li class="toctree-l2"><a href="#filter">Filter</a></li>
-    
-
-    <li class="toctree-l2"><a href="#user-interface">User interface</a></li>
-    
-
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../commands/">Commands</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Extend</a>
+    <ul class="current">
     </ul>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="../examples/">Examples</a>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="../scripting/">Scripting</a>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="../maven/">Maven</a>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="../releases/">Releases</a>
-	    </li>
-          
-        </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../examples/">Examples</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../scripting/">Scripting</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../maven/">Maven</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../releases/">Releases</a>
+                    </li>
+                </ul>
       </div>
-      &nbsp;
+    </div>
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
@@ -140,6 +106,7 @@
       
     </li>
   </ul>
+  
   <hr/>
 </div>
           <div role="main">
@@ -168,7 +135,7 @@ environment to delete. In order for the parsing to work, you have to define
 a <code>ArgumentParser</code> object in the <code>getParser</code> method and then access the
 parsed options in the <code>doExecute</code> method, using the <code>Namespace</code> object.</p>
 <p>Here is the <code>Delete</code> command's code:</p>
-<pre><code class="java">public class Delete extends AbstractCommand {
+<pre><code class="language-java">public class Delete extends AbstractCommand {
 
   public String getName() {
     return &quot;delete&quot;;
@@ -197,7 +164,6 @@ parsed options in the <code>doExecute</code> method, using the <code>Namespace</
   }
 }
 </code></pre>
-
 <p>For more information on the parsing, check out the 
 <a href="https://github.com/fracpete/simple-argparse4j">simple-argparse4j</a>
 project page.</p>
@@ -205,7 +171,7 @@ project page.</p>
 <p>The <code>AbstractLaunchCommand</code> class makes it easier to execute a class that
 has a <code>main</code> method.</p>
 <p>The class for launching the Weka Explorer is quite simple:</p>
-<pre><code class="java">public class Explorer extends AbstractLaunchCommand implements DatasetHandler {
+<pre><code class="language-java">public class Explorer extends AbstractLaunchCommand implements DatasetHandler {
 
   public String getName() {
     return &quot;explorer&quot;;
@@ -226,7 +192,6 @@ has a <code>main</code> method.</p>
 }
 
 </code></pre>
-
 <p>In the <code>doExecute</code> method, the <code>build</code> method takes the class name and any
 options that the class should process. In the Explorer's case an optional 
 dataset to load.</p>
@@ -236,7 +201,7 @@ dataset to load.</p>
 super class and place it in the <code>com.github.fracpete.wekavirtualenv.command.script</code>
 package.</p>
 <p>Here is the code for the <code>DirName</code> command:</p>
-<pre><code class="java">public class DirName extends AbstractScriptCommand {
+<pre><code class="language-java">public class DirName extends AbstractScriptCommand {
 
   public String getName() {
     return &quot;dir_name&quot;;
@@ -266,14 +231,13 @@ package.</p>
   }
 }
 </code></pre>
-
 <h1 id="filter">Filter</h1>
 <p>If you want to add a custom output filter (like grep or tee), then you only
 have to implement the <code>com.github.fracpete.wekavirtualenv.command.filter.Filter</code>
 interface (or use the abstract superclass <code>AbstractFilter</code> for convenience)
 and place it in the <code>com.github.fracpete.wekavirtualenv.command.filter</code> package.</p>
 <p>Here is the code for the <code>Grep</code> filter:</p>
-<pre><code class="java">public class Grep
+<pre><code class="language-java">public class Grep
   extends AbstractFilter {
 
   /** the pattern for matching. */
@@ -327,7 +291,6 @@ and place it in the <code>com.github.fracpete.wekavirtualenv.command.filter</cod
   }
 }
 </code></pre>
-
 <h1 id="user-interface">User interface</h1>
 <p>For adding a command in the user interface, you have to subclass the
 abstract class <code>com.github.fracpete.wekavirtualenv.gui.command.AbstractGUICommand</code>
@@ -341,7 +304,7 @@ an environment. Ones that return <code>false</code>, show up in the main menu.</
 <p>The <code>destroy()</code> method is used for stopping any process that got launched.</p>
 <p>Here is the code for launching the Weka Explorer, which requires an environment
 and also captures the output of the launched process:</p>
-<pre><code class="java">public class Explorer
+<pre><code class="language-java">public class Explorer
   extends AbstractGUICommand {
 
   protected com.github.fracpete.wekavirtualenv.command.Explorer m_Command;
@@ -406,20 +369,20 @@ and also captures the output of the launched process:</p>
     
   </div>
 
-  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
 </footer>
-	  
+      
         </div>
       </div>
 
     </section>
-    
+
   </div>
 
-  <div class="rst-versions" role="note" style="cursor: pointer">
+  <div class="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
       
-          <a href="https://github.com/fracpete/weka-virtualenv" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+          <a href="https://github.com/fracpete/weka-virtualenv/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
         <span><a href="../commands/" style="color: #fcfcfc;">&laquo; Previous</a></span>
@@ -429,7 +392,14 @@ and also captures the output of the launched process:</p>
       
     </span>
 </div>
-    <script src="../js/theme.js"></script>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
 
 </body>
 </html>

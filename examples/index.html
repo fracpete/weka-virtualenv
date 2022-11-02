@@ -7,24 +7,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   
+  
   <link rel="shortcut icon" href="../img/favicon.ico">
   <title>Examples - weka-virtualenv</title>
-  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
-  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
-  <link rel="stylesheet" href="../css/highlight.css">
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
   
   <script>
     // Current page data
     var mkdocs_page_name = "Examples";
     var mkdocs_page_input_path = "examples.md";
-    var mkdocs_page_url = "/examples/";
+    var mkdocs_page_url = null;
   </script>
   
-  <script src="../js/jquery-2.1.1.min.js"></script>
-  <script src="../js/modernizr-2.8.3.min.js"></script>
-  <script type="text/javascript" src="../js/highlight.pack.js"></script> 
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
   
 </head>
 
@@ -34,84 +36,49 @@
 
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
         <a href=".." class="icon icon-home"> weka-virtualenv</a>
         <div role="search">
   <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
   </form>
 </div>
       </div>
 
       <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-	<ul class="current">
-	  
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="..">Home</a>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="../commands/">Commands</a>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="../extend/">Extend</a>
-	    </li>
-          
-            <li class="toctree-l1 current">
-		
-    <a class="current" href="./">Examples</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l2"><a href="#installing-weka">Installing Weka</a></li>
-    
-
-    <li class="toctree-l2"><a href="#environments">Environments</a></li>
-    
-
-    <li class="toctree-l2"><a href="#launching-user-interfaces">Launching user interfaces</a></li>
-    
-
-    <li class="toctree-l2"><a href="#executing-classes">Executing classes</a></li>
-    
-
-    <li class="toctree-l2"><a href="#aliases-global">Aliases (global)</a></li>
-    
-
-    <li class="toctree-l2"><a href="#aliases-environment-specific">Aliases (environment-specific)</a></li>
-    
-
-    <li class="toctree-l2"><a href="#aliases-list">Aliases (list)</a></li>
-    
-
-    <li class="toctree-l2"><a href="#environment-locations">Environment locations</a></li>
-    
-
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../commands/">Commands</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../extend/">Extend</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Examples</a>
+    <ul class="current">
     </ul>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="../scripting/">Scripting</a>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="../maven/">Maven</a>
-	    </li>
-          
-            <li class="toctree-l1">
-		
-    <a class="" href="../releases/">Releases</a>
-	    </li>
-          
-        </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../scripting/">Scripting</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../maven/">Maven</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../releases/">Releases</a>
+                    </li>
+                </ul>
       </div>
-      &nbsp;
+    </div>
     </nav>
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
@@ -139,6 +106,7 @@
       
     </li>
   </ul>
+  
   <hr/>
 </div>
           <div role="main">
@@ -154,15 +122,13 @@ specify. Each zip file contains a directory with the Weka version, so you only
 need to supply a top-level directory as the installation directory.</p>
 <p>To start with, you need to update the list of available updates (downloads
 a CSV file from github.com):</p>
-<pre><code class="bash">wenv.sh install \
+<pre><code class="language-bash">wenv.sh install \
   --action update
 </code></pre>
-
 <p>Once downloaded, you can list the versions for which we have download links:</p>
-<pre><code class="bash">wenv.sh install \
+<pre><code class="language-bash">wenv.sh install \
   --action list
 </code></pre>
-
 <p>This will output something like this:</p>
 <pre><code>Available versions:
 3.6.0
@@ -175,97 +141,81 @@ a CSV file from github.com):</p>
 3.9.1
 3.9.2
 </code></pre>
-
 <p>Choose a version and install it in a directory, e.g., <code>/home/fracpete/weka</code>:</p>
-<pre><code class="bash">wenv.sh install \
+<pre><code class="language-bash">wenv.sh install \
   --action download \
   --version 3.6.10 \
   --install-dir /home/fracpete/weka
 </code></pre>
-
 <p>Once successfully finished, you will have the following directory containing
 Weka 3.6.10:</p>
 <pre><code>/home/fracpete/weka/weka-3-6-10
 </code></pre>
-
 <p>You can use this directory now for environments.</p>
 <h2 id="environments">Environments</h2>
 <p>Create an environment for Weka 3.8.1:</p>
-<pre><code class="bash">wenv.sh create \
+<pre><code class="language-bash">wenv.sh create \
   --name weka381 \
   --weka /home/fracpete/programs/weka/weka-3-8-1/weka.jar
 </code></pre>
-
 <p>Create an environment for Weka 3.9.1 with a custom java binary to use
 and 4GB of heap size:</p>
-<pre><code class="bash">wenv.sh create \
+<pre><code class="language-bash">wenv.sh create \
   --name weka391 \
   --weka /home/fracpete/programs/weka/weka-3-9-1/weka.jar \
   --java /home/fracpete/programs/jdk/jdk1.8.0_144-64bit/bin/java \
   --memory 4g
 </code></pre>
-
 <p><strong>Custom CLASSPATH:</strong> It is possible to inject custom jars, which will precede
 the <code>weka.jar</code> of the environment. For this, you only need to define the
 <code>CLASSPATH</code> environment variable (via <code>--envvar</code>) when creating (or updating)
 an environment.</p>
 <h2 id="launching-user-interfaces">Launching user interfaces</h2>
 <p>Launch the GUIChooser from the <code>weka381</code> environment:</p>
-<pre><code class="bash">wenv.sh guichooser weka381
+<pre><code class="language-bash">wenv.sh guichooser weka381
 </code></pre>
-
 <p>Launch the Explorer from the <code>weka391</code> environment:</p>
-<pre><code class="bash">wenv.sh explorer weka391
+<pre><code class="language-bash">wenv.sh explorer weka391
 </code></pre>
-
 <h2 id="executing-classes">Executing classes</h2>
 <p>Cross-validate J48 from the <code>weka381</code> environment on the <em>iris</em> dataset:</p>
-<pre><code class="bash">wenv.sh run weka381 --class weka.classifiers.trees.J48 \
+<pre><code class="language-bash">wenv.sh run weka381 --class weka.classifiers.trees.J48 \
   -t /home/fracpete/development/datasets/uci/nominal/iris.arff
 </code></pre>
-
 <h2 id="aliases-global">Aliases (global)</h2>
 <p>Create a global alias called <code>j48</code>:</p>
-<pre><code class="bash">wenv.sh alias-add --name j48 run --class weka.classifiers.trees.J48 -C 0.3
+<pre><code class="language-bash">wenv.sh alias-add --name j48 run --class weka.classifiers.trees.J48 -C 0.3
 </code></pre>
-
 <p>If the command of a global alias requires an environment for executing, then
 the environment needs to get injected via the <code>--inject-env</code> option. 
 The following command executes the global alias <code>j48</code>, cross-validating the 
 <code>J48</code> classifier on the UCI dataset <em>iris</em>:</p>
-<pre><code class="bash">wenv.sh alias-exec --inject-env weka381 --name j48 -t iris.arff
+<pre><code class="language-bash">wenv.sh alias-exec --inject-env weka381 --name j48 -t iris.arff
 </code></pre>
-
 <h2 id="aliases-environment-specific">Aliases (environment-specific)</h2>
 <p>Create an alias called <code>j48</code> in the <code>weka381</code> environment:</p>
-<pre><code class="bash">wenv.sh alias-add --env weka381 --name j48 run --class weka.classifiers.trees.J48 -C 0.3
+<pre><code class="language-bash">wenv.sh alias-add --env weka381 --name j48 run --class weka.classifiers.trees.J48 -C 0.3
 </code></pre>
-
 <p>The following command executes the alias <code>j48</code> from the <code>weka381</code> environment, 
 cross-validating the <code>J48</code> classifier on the UCI dataset <em>iris</em>:</p>
-<pre><code class="bash">wenv.sh alias-exec --env weka381 --name j48 -t iris.arff
+<pre><code class="language-bash">wenv.sh alias-exec --env weka381 --name j48 -t iris.arff
 </code></pre>
-
 <h2 id="aliases-list">Aliases (list)</h2>
 <p>You can list all aliases, global and for all environments, as follows:</p>
-<pre><code class="bash">wenv.sh alias-list --all
+<pre><code class="language-bash">wenv.sh alias-list --all
 </code></pre>
-
 <p>Which will output something like this:</p>
 <pre><code>Environment | Name | Command                                      
 ------------+------+----------------------------------------------
 &lt;global&gt;    | j48  | run --class weka.classifiers.trees.J48 -C 0.3
 weka381     | j48  | run -class weka.classifiers.trees.J48 -C 0.3 
 </code></pre>
-
 <p>You can list all global aliases as follows:</p>
-<pre><code class="bash">wenv.sh alias-list
+<pre><code class="language-bash">wenv.sh alias-list
 </code></pre>
-
 <p>You can list the aliases for environment <code>weka381</code> as follows:</p>
-<pre><code class="bash">wenv.sh alias-list --env weka381
+<pre><code class="language-bash">wenv.sh alias-list --env weka381
 </code></pre>
-
 <h1 id="environment-locations">Environment locations</h1>
 <p>The environments get created in the following directory:</p>
 <ul>
@@ -300,20 +250,20 @@ weka381     | j48  | run -class weka.classifiers.trees.J48 -C 0.3
     
   </div>
 
-  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
 </footer>
-	  
+      
         </div>
       </div>
 
     </section>
-    
+
   </div>
 
-  <div class="rst-versions" role="note" style="cursor: pointer">
+  <div class="rst-versions" role="note" aria-label="versions">
     <span class="rst-current-version" data-toggle="rst-current-version">
       
-          <a href="https://github.com/fracpete/weka-virtualenv" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+          <a href="https://github.com/fracpete/weka-virtualenv/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
         <span><a href="../extend/" style="color: #fcfcfc;">&laquo; Previous</a></span>
@@ -323,7 +273,14 @@ weka381     | j48  | run -class weka.classifiers.trees.J48 -C 0.3
       
     </span>
 </div>
-    <script src="../js/theme.js"></script>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
 
 </body>
 </html>
