@@ -48,6 +48,7 @@ the right-click mouse context menu):
 
 ![Screenshot](img/arffcommandselector.png)
 
+
 ## Videos
 
 You can find videos for the tool in the following YouTube playlist:
