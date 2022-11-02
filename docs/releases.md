@@ -1,5 +1,8 @@
 The following releases are available:
 
+* 0.0.29: [zip](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.29/weka-virtualenv-0.0.29-bin.zip), 
+  [deb](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.29/weka-virtualenv_0.0.29-1_all.deb), 
+  [rpm](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.29/weka-virtualenv-0.0.29-1.noarch.rpm)
 * 0.0.28: [zip](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.28/weka-virtualenv-0.0.28-bin.zip), 
   [deb](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.28/weka-virtualenv_0.0.28-1_all.deb), 
   [rpm](https://github.com/fracpete/weka-virtualenv/releases/download/weka-virtualenv-0.0.28/weka-virtualenv-0.0.28-1.noarch.rpm)
