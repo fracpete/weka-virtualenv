@@ -15,19 +15,15 @@
 
 /*
  * FileDownload.java
- * Copyright (C) 2019 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2019-2022 University of Waikato, Hamilton, NZ
  * Copyright (C) Apache Software Foundation
  */
 
 package com.github.fracpete.wekavirtualenv.core;
 
 import com.github.fracpete.requests4j.response.AbstractResponse;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.tika.io.IOUtils;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -144,40 +140,5 @@ public class FileDownload
     if (progress)
       m_Progress.println(dformat.format((double) count / 1024.0) + "KB", true);
     return count;
-  }
-
-  /**
-   * Initializes the response object.
-   *
-   * @param response		the response
-   */
-  @Override
-  public void init(CloseableHttpResponse response) {
-    FileOutputStream fos;
-    BufferedOutputStream bos;
-
-    super.init(response);
-
-    if (m_Progress != null)
-      m_Progress.println("Downloading to: " + m_OutputFile, true);
-
-    fos = null;
-    bos = null;
-    try {
-      fos = new FileOutputStream(m_OutputFile.getAbsolutePath());
-      if (m_BufferSize <= 0)
-	bos = new BufferedOutputStream(fos);
-      else
-	bos = new BufferedOutputStream(fos, m_BufferSize);
-      copy(response.getEntity().getContent(), bos);
-    }
-    catch (Exception e) {
-      if (m_Progress != null)
-	m_Progress.println("Failed to retrieve data!", e);
-    }
-    finally {
-      IOUtils.closeQuietly(bos);
-      IOUtils.closeQuietly(fos);
-    }
   }
 }

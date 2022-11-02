@@ -15,7 +15,7 @@
 
 /*
  * WekaVirtualEnv.java
- * Copyright (C) 2017-2019 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2017-2022 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.gui;
@@ -131,7 +131,7 @@ public class WekaVirtualEnv
       menu.add(menuitem);
     }
 
-    checkmenuitem = new JCheckBoxMenuItem("Compact", IconHelper.getEmptyIcon());
+    checkmenuitem = new JCheckBoxMenuItem("Compact");
     checkmenuitem.addActionListener((ActionEvent e) -> m_PanelEnvs.setCompactView(m_MenuItemCompact.isSelected()));
     menu.add(checkmenuitem);
     m_MenuItemCompact = checkmenuitem;
@@ -238,6 +238,7 @@ public class WekaVirtualEnv
    * @param args	ignored
    */
   public static void main(String[] args) {
+    com.formdev.flatlaf.FlatLightLaf.setup();
     final WekaVirtualEnv panel = new WekaVirtualEnv();
     BaseFrame frame = new BaseFrame("Weka virtualenv");
     frame.setIconImage(IconHelper.getIcon("wenv").getImage());

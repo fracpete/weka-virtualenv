@@ -15,7 +15,7 @@
   </parent>
 
   <name>weka-virtualenv</name>
-  <description>Java library of multi-way algorithms.</description>
+  <description>Virtual environment managment for Weka.</description>
   <organization>
     <name>University of Waikato, Hamilton, NZ</name>
     <url>http://www.waikato.ac.nz/</url>
@@ -90,43 +90,35 @@
   </properties>
 
   <scm>
-    <connection>scm:git:https://github.com/fracpete/weka-virtualenv</connection>
-    <developerConnection>scm:git:https://github.com/fracpete/weka-virtualenv</developerConnection>
+    <connection>scm:git:ssh://git@github.com/fracpete/weka-virtualenv</connection>
+    <developerConnection>scm:git:ssh://git@github.com/fracpete/weka-virtualenv</developerConnection>
     <url>https://github.com/fracpete/weka-virtualenv</url>
     <tag>HEAD</tag>
   </scm>
 
   <dependencies>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.13.1</version>
-      <type>jar</type>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
       <groupId>com.github.fracpete</groupId>
       <artifactId>processoutput4j</artifactId>
-      <version>0.0.10</version>
+      <version>0.0.11</version>
     </dependency>
 
     <dependency>
       <groupId>com.github.fracpete</groupId>
       <artifactId>simple-argparse4j</artifactId>
-      <version>0.0.12</version>
+      <version>0.0.13</version>
     </dependency>
 
     <dependency>
       <groupId>com.github.waikato</groupId>
       <artifactId>jclasslocator</artifactId>
-      <version>0.0.14</version>
+      <version>0.0.22</version>
     </dependency>
 
     <dependency>
       <groupId>com.github.waikato</groupId>
       <artifactId>fcms-widgets</artifactId>
-      <version>0.0.17</version>
+      <version>0.0.23</version>
     </dependency>
 
     <dependency>
@@ -138,31 +130,37 @@
     <dependency>
       <groupId>com.github.fracpete</groupId>
       <artifactId>requests4j</artifactId>
-      <version>0.1.1</version>
+      <version>0.2.3</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.7</version>
+      <version>3.12.0</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-compress</artifactId>
-      <version>1.21</version>
+      <version>1.22</version>
     </dependency>
 
     <dependency>
       <groupId>net.sf.trove4j</groupId>
-      <artifactId>trove4j</artifactId>
-      <version>3.0.3</version>
+      <artifactId>core</artifactId>
+      <version>3.1.0</version>
     </dependency>
 
     <dependency>
       <groupId>org.mariuszgromada.math</groupId>
       <artifactId>MathParser.org-mXparser</artifactId>
-      <version>4.1.1</version>
+      <version>5.0.7</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.formdev</groupId>
+      <artifactId>flatlaf</artifactId>
+      <version>2.6</version>
     </dependency>
   </dependencies>
 

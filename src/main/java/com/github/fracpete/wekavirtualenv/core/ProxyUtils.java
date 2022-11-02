@@ -15,7 +15,7 @@
 
 /*
  * Proxy.java
- * Copyright (C) 2018-2019 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2018-2022 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.core;
@@ -24,6 +24,8 @@ import com.github.fracpete.requests4j.request.Request;
 import nz.ac.waikato.cms.core.PropsUtils;
 
 import java.io.File;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.util.Properties;
 
 /**
@@ -211,7 +213,11 @@ public class ProxyUtils {
       port = getProxyPort(type);
       if (host.isEmpty() || (port == -1))
 	continue;
-      request.proxy(host, port, type.toString().toLowerCase());
+      switch (type) {
+        case FTP:
+        case HTTP:
+          request.proxy(new Proxy(Proxy.Type.DIRECT, new InetSocketAddress(host, port)));
+      }
     }
 
     m_Invalid = false;

@@ -15,7 +15,7 @@
 
 /*
  * ArffCommandSelector.java
- * Copyright (C) 2018 University of Waikato, Hamilton, NZ
+ * Copyright (C) 2018-2022 University of Waikato, Hamilton, NZ
  */
 
 package com.github.fracpete.wekavirtualenv.gui;
@@ -221,6 +221,7 @@ public class ArffCommandSelector
    * @param args	ignored
    */
   public static void main(String[] args) {
+    com.formdev.flatlaf.FlatLightLaf.setup();
     final ArffCommandSelector panel = new ArffCommandSelector();
     BaseFrame frame = new BaseFrame("Arff Command Selector");
     frame.setIconImage(IconHelper.getIcon("wenv").getImage());
