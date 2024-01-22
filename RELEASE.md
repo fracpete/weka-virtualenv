@@ -1,12 +1,13 @@
 # How to make a release
 
-* Run the following command to deploy the artifact:
+* switch to Java 8
+* run the following command to deploy the artifact:
 
   ```
   mvn release:clean release:prepare release:perform
   ```
 
-* Push all changes
+* push all changes
 
 
 ## Github
